@@ -1,0 +1,18 @@
+.display-2 {
+    margin-bottom: 1rem;
+    text-transform: capitalize;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+
+    &--intro {
+        display: inline-block;
+        font-weight: 700;
+    }
+
+    &--description {
+        font-size: 1.5rem;
+        display: block;
+        margin-top: 1.2rem;
+        text-transform: none;
+    }
+}

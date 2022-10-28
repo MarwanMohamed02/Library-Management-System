@@ -1,0 +1,14 @@
+@use '../custom' as *;
+
+//GRADIENT MIXIN
+@mixin gradient {
+    background: linear-gradient(to right, rgba($primary, 0.95), rgba($secondary, 0.95));
+}
+
+//CENTERING MIXIN
+@mixin down {
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

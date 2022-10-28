@@ -1,0 +1,52 @@
+@use '../custom' as *;
+@use '../components/mixins' as *;
+@use '../components/animations' as *;
+
+.home {
+    @include gradient;
+    padding: 10rem 0 0 0;
+    width: 100%;
+    height: 100%;
+}
+
+.welcome {
+
+    .illustration {
+
+        position: relative;
+
+        a {
+
+            @include down;
+
+            span {
+
+                i {
+
+                    font-size: 6rem;
+                    color: $secondary
+                }
+            }
+        }
+    }
+}
+
+.border-animation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6rem;
+    height: 6rem;
+    border: 0.55rem solid white;
+    border-radius: 50%;
+    animation: pulse-border 1.5s linear infinite;
+
+    &--inner-border {
+        animation-delay: 1s;
+    }
+
+    &--outer-border {
+        animation-delay: 1.5s;
+    }
+
+}

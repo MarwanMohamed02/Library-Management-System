@@ -1,0 +1,11 @@
+@use "custom" as *;
+
+//IMPORT THE COMPONENTS
+@use 'components/animations';
+@use 'components/button';
+@use 'components/mixins';
+@use 'components/typography';
+
+//IMPORT THE SECTIONS
+@use 'sections/navbar';
+@use 'sections/home';

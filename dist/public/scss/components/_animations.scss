@@ -1,0 +1,13 @@
+//PULSING BORDER
+
+@keyframes pulse-border {
+    0% {
+        tranform: scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
