@@ -1,0 +1,41 @@
+@use "../custom" as *;
+
+.services-section {
+
+    h1 {
+        padding-bottom: 5rem;
+        color: black;
+    }
+
+    .card {
+
+        border: none;
+        outline: none;
+        padding-bottom: 5rem;
+        -webkit-box-shadow: -11px 25px 54px -34px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: -11px 25px 54px -34px rgba(0, 0, 0, 0.75);
+        box-shadow: -11px 25px 54px -34px rgba(0, 0, 0, 0.75);
+
+        & :hover .circle {
+            background-color: $secondary;
+            color: white;
+            transition: 0.5s;
+        }
+
+        .circle {
+            height: 70px;
+            width: 70px;
+            color: $primary;
+            padding: 12px;
+            font-size: 30px;
+            display: inline-block;
+            margin-bottom: 20px;
+            border-radius: 50%;
+        }
+
+        p {
+            color: black;
+        }
+    }
+
+}
