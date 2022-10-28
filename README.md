@@ -1,5 +1,6 @@
 # Library-Management-System
 
+## Description
 In this project, we are going to build a web application that is going to serve as
 a library management system. The mini-world we are considering consists of
 a single library, one that allows its members to borrow books and to enroll in
