@@ -2,20 +2,15 @@ import express from "express"
 import { db } from "../db/connect"
 import { booksSearch } from "../db/queries/bookSearch"
 import { insertBooks } from "../db/inserts/insertBooks"
+import {IBook, IBookQuery} from "../utils/interfaces/Book"
 
 const booksRouter = express.Router();
 
 // GET
 booksRouter.get("/books", async (req, res) => {
-    const {
-        book_name,
-        genre,
-        author,
-        status,
-        sort
-    } = req.query;
+    const bookQuery = req.query as IBookQuery;
 
-    const sql = booksSearch(book_name, genre, author, status, sort);
+    const sql = booksSearch(bookQuery);
     
     try {
         const [books] = await db.query(sql)
@@ -33,9 +28,9 @@ booksRouter.get("/books", async (req, res) => {
 
 // POST
 booksRouter.post("/books", async(req, res) => {
-    const { book_name, genre, book_description, author, quantity, avg_rating } = req.body;
+    const bookData = req.body as IBook;
 
-    const sql = insertBooks(book_name, genre, book_description, author, quantity, avg_rating);
+    const sql = insertBooks(bookData);
     
     try {
         const [result] = await db.query(sql);

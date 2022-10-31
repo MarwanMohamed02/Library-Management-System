@@ -21,8 +21,8 @@ const booksRouter = express_1.default.Router();
 exports.booksRouter = booksRouter;
 // GET
 booksRouter.get("/books", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { book_name, genre, author, status, sort } = req.query;
-    const sql = (0, bookSearch_1.booksSearch)(book_name, genre, author, status, sort);
+    const bookQuery = req.query;
+    const sql = (0, bookSearch_1.booksSearch)(bookQuery);
     try {
         const [books] = yield connect_1.db.query(sql);
         console.log(books);
@@ -34,8 +34,8 @@ booksRouter.get("/books", (req, res) => __awaiter(void 0, void 0, void 0, functi
 }));
 // POST
 booksRouter.post("/books", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { book_name, genre, book_description, author, quantity, avg_rating } = req.body;
-    const sql = (0, insertBooks_1.insertBooks)(book_name, genre, book_description, author, quantity, avg_rating);
+    const bookData = req.body;
+    const sql = (0, insertBooks_1.insertBooks)(bookData);
     try {
         const [result] = yield connect_1.db.query(sql);
         res.status(201).json(result);

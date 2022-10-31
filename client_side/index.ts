@@ -49,20 +49,20 @@ const socket = io();
 
 // func();
 
-let cardsContainer = document.getElementById("cards-container");
-const CardTemplate = document.getElementById("card-template")?.innerHTML as string;
+// let cardsContainer = document.getElementById("cards-container");
+// const CardTemplate = document.getElementById("card-template")?.innerHTML as string;
 
-function createCard() {
-    const data = {
-        title: "Harry Potter",
-        description: "Wizards and Witches"
-    }
+// function createCard() {
+//     const data = {
+//         title: "Harry Potter",
+//         description: "Wizards and Witches"
+//     }
 
-    const updatedHTML = Mustache.render(CardTemplate, data);
+//     const updatedHTML = Mustache.render(CardTemplate, data);
 
-    cardsContainer?.insertAdjacentHTML("beforeend",updatedHTML);
-}
+//     cardsContainer?.insertAdjacentHTML("beforeend",updatedHTML);
+// }
 
-createCard();
-createCard();
-createCard();
+// createCard();
+// createCard();
+// createCard();

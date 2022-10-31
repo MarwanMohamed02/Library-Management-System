@@ -1,5 +1,9 @@
+import { IBookQuery } from "../../utils/interfaces/Book";
 
-export function booksSearch(book_name: any, genre: any, author: any, status: any, sort: any): string {
+export function booksSearch(bookQuery: IBookQuery): string {
+
+    const { book_name, genre, author, status, sort } = bookQuery;
+
     let query =
         `SELECT book_name, genre, book_description, author, quantity, avg_rating FROM Books `;
     

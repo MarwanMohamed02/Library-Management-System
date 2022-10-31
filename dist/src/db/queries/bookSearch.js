@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.booksSearch = void 0;
-function booksSearch(book_name, genre, author, status, sort) {
+function booksSearch(bookQuery) {
+    const { book_name, genre, author, status, sort } = bookQuery;
     let query = `SELECT book_name, genre, book_description, author, quantity, avg_rating FROM Books `;
     const filters = [book_name, genre, author];
     const filterNames = ["book_name", "genre", "author"];
