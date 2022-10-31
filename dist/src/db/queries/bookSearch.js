@@ -14,6 +14,7 @@ function booksSearch(bookQuery) {
         query += !query.includes("WHERE") ? `WHERE quantity > 0 ` : `AND quantity > 0 `;
     if (sort)
         query += `ORDER BY avg_rating ${sort} `;
+    query += ";";
     return query;
 }
 exports.booksSearch = booksSearch;

@@ -1,4 +1,4 @@
-import { IBookQuery } from "../../utils/interfaces/Book";
+import { IBookQuery } from "../interfaces/Book";
 
 export function booksSearch(bookQuery: IBookQuery): string {
 
@@ -21,5 +21,6 @@ export function booksSearch(bookQuery: IBookQuery): string {
     if (sort)
         query += `ORDER BY avg_rating ${sort} `;
 
+    query += ";";
     return query
 }

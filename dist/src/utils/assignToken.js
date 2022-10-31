@@ -8,22 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.db = void 0;
-const promise_1 = require("mysql2/promise");
-function connect() {
+exports.assignToken = void 0;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const connect_1 = require("../db/connect");
+const memberSearch_1 = require("../db/queries/memberSearch");
+const updateMember_1 = require("../db/updates/updateMember");
+function assignToken({ username }) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { HOST, USER, PASSWORD, DATABASE_NAME } = process.env;
-        return yield (0, promise_1.createConnection)({
-            host: HOST,
-            user: USER,
-            password: PASSWORD,
-            database: DATABASE_NAME
-        });
+        const [found] = yield connect_1.db.query((0, memberSearch_1.memberSearch)({ username }));
+        const member = found[0];
+        member.token = jsonwebtoken_1.default.sign({ uuid: member.uuid }, process.env.JWT_SECRET);
+        // console.log(member);
+        yield connect_1.db.query((0, updateMember_1.updateMember)(member.uuid, member));
     });
 }
-let db;
-exports.db = db;
-connect()
-    .then(connection => exports.db = db = connection)
-    .catch(err => console.log(err));
+exports.assignToken = assignToken;

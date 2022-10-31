@@ -3,6 +3,7 @@ import http from "http"
 import path from "path";
 import { Server } from "socket.io"
 import { booksRouter } from "./routers/booksRouter"
+import { membersRouter } from "./routers/membersRouter"
 
 
 const app = express();
@@ -27,7 +28,7 @@ app.use(express.json());
 
 // Routers
 app.use(booksRouter);
-
+app.use(membersRouter)
 
 
 app.get("/", (req, res) => {

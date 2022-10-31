@@ -2,7 +2,7 @@ import express from "express"
 import { db } from "../db/connect"
 import { booksSearch } from "../db/queries/bookSearch"
 import { insertBooks } from "../db/inserts/insertBooks"
-import {IBook, IBookQuery} from "../utils/interfaces/Book"
+import {IBook, IBookQuery} from "../db/interfaces/Book"
 
 const booksRouter = express.Router();
 

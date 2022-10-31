@@ -8,22 +8,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.db = void 0;
-const promise_1 = require("mysql2/promise");
-function connect() {
+exports.insertMember = void 0;
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
+function insertMember(member) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { HOST, USER, PASSWORD, DATABASE_NAME } = process.env;
-        return yield (0, promise_1.createConnection)({
-            host: HOST,
-            user: USER,
-            password: PASSWORD,
-            database: DATABASE_NAME
-        });
+        let { username, email, password, membership_type, follower_count = 0, warning_count = 0 } = member;
+        // Hashing Password
+        password = yield bcryptjs_1.default.hash(password, 12);
+        return "INSERT INTO Members(id, username, email, pass, membership_type, follower_count, warning_count) "
+            + `VALUES (UUID_TO_BIN(uuid(),true), "${username}", "${email}", "${password}", ${membership_type}, ${follower_count}, ${warning_count});`;
     });
 }
-let db;
-exports.db = db;
-connect()
-    .then(connection => exports.db = db = connection)
-    .catch(err => console.log(err));
+exports.insertMember = insertMember;

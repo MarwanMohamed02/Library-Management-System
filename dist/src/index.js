@@ -8,6 +8,7 @@ const http_1 = __importDefault(require("http"));
 const path_1 = __importDefault(require("path"));
 const socket_io_1 = require("socket.io");
 const booksRouter_1 = require("./routers/booksRouter");
+const membersRouter_1 = require("./routers/membersRouter");
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 const io = new socket_io_1.Server(server, {
@@ -21,6 +22,7 @@ app.use(express_1.default.static(publicDir));
 app.use(express_1.default.json());
 // Routers
 app.use(booksRouter_1.booksRouter);
+app.use(membersRouter_1.membersRouter);
 app.get("/", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "../public/index.html"));
 });

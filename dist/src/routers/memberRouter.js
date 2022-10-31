@@ -12,21 +12,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.booksRouter = void 0;
 const express_1 = __importDefault(require("express"));
+const insertMember_1 = require("../db/inserts/insertMember");
 const connect_1 = require("../db/connect");
-const bookSearch_1 = require("../db/queries/bookSearch");
-const booksRouter = express_1.default.Router();
-exports.booksRouter = booksRouter;
-booksRouter.get("/books", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name = "?", genre = "?", author = "?", sort = "?", status = "?" } = req.query;
-    const sql = (0, bookSearch_1.bookSearch)(name, genre, author, status, sort);
+const memberRouter = express_1.default.Router();
+// GET
+// POST
+memberRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const member = req.body;
+    const sql = (0, insertMember_1.insertMember)(member);
     try {
-        const [books] = yield connect_1.db.query(sql);
-        console.log(books);
-        res.json({ books });
+        yield connect_1.db.query(sql);
+        res.status(201);
     }
     catch (err) {
-        console.log(err);
+        res.status(400).json(err);
     }
 }));
