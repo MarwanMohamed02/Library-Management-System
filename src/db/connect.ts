@@ -1,11 +1,13 @@
 import {createConnection, Connection} from "mysql2/promise"
 
 async function connect() {
+    const { PORT, HOST, USER, PASSWORD, DATABASE_NAME } = process.env;
+
     return await createConnection({
-        host: "localhost",
-        user: "Marwan",
-        password: "marwanisamazing",
-        database: "Booker"
+        host: HOST,
+        user: USER,
+        password: PASSWORD,
+        database: DATABASE_NAME
     })
 }
 

@@ -13,11 +13,12 @@ exports.db = void 0;
 const promise_1 = require("mysql2/promise");
 function connect() {
     return __awaiter(this, void 0, void 0, function* () {
+        const { PORT, HOST, USER, PASSWORD, DATABASE_NAME } = process.env;
         return yield (0, promise_1.createConnection)({
-            host: "localhost",
-            user: "Marwan",
-            password: "marwanisamazing",
-            database: "Booker"
+            host: HOST,
+            user: USER,
+            password: PASSWORD,
+            database: DATABASE_NAME
         });
     });
 }
