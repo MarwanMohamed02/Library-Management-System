@@ -10816,6 +10816,25 @@ textarea.form-control-lg {
   background-color: rgba(0, 0, 0, 0.6);
 }
 
+.btn-rect {
+  border: none;
+  outline: none;
+  padding-left: 7rem;
+  padding-right: 7rem;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  background-color: #E1C699;
+  color: black;
+  border-radius: 4px;
+  font-weight: bold;
+}
+.btn-rect:hover {
+  background: linear-gradient(to right, rgba(103, 52, 0, 0.95), rgba(181, 101, 29, 0.95));
+  border-radius: 1px;
+  color: white;
+  transition: 0.5s;
+}
+
 .display-2 {
   margin-bottom: 1rem;
   text-transform: capitalize;
@@ -10980,6 +10999,15 @@ textarea.form-control-lg {
 .footer .contact-info .info .subtitle {
   font-size: 0.9rem;
   color: white;
+}
+
+#login-page {
+  background: linear-gradient(to right, rgba(103, 52, 0, 0.95), rgba(181, 101, 29, 0.95));
+}
+
+.login-row {
+  background-color: white;
+  border-radius: 2rem;
 }
 
 /*# sourceMappingURL=style.css.map */

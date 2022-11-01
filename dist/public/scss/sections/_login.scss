@@ -1,0 +1,14 @@
+@use "../custom" as *;
+@use "../components/mixins" as *;
+
+#login-page {
+
+    @include gradient;
+
+}
+
+.login-row {
+
+    background-color: white;
+    border-radius: 2rem;
+}
