@@ -10786,8 +10786,10 @@ textarea.form-control-lg {
   padding: 0.9rem 4rem 0.9rem 1.25rem;
   font-weight: 700;
   margin-left: 1rem;
-  border-radius: 0.1rem solid rgba(255, 255, 255, 0.6);
   background-color: #fff;
+  border-style: solid;
+  border-color: black;
+  color: black !important;
 }
 .btn-rounded span {
   position: absolute;
@@ -10803,10 +10805,11 @@ textarea.form-control-lg {
   color: #fff;
   font-size: 1rem !important;
   line-height: 2.5rem !important;
+  padding-left: 0.7rem;
 }
 .btn-rounded:hover {
   background: linear-gradient(to right, rgba(103, 52, 0, 0.95), rgba(181, 101, 29, 0.95));
-  color: #fff;
+  color: #fff !important;
   transition: 0.5s;
 }
 .btn-rounded:hover span {
@@ -10830,6 +10833,25 @@ textarea.form-control-lg {
   text-transform: none;
 }
 
+.heading-line::before {
+  content: "";
+  width: 20rem;
+  height: 0.2rem;
+  display: block;
+  margin: 0 auto;
+  background-color: white;
+}
+
+.heading-line::after {
+  content: "";
+  padding-top: 0.5rem;
+  width: 2rem;
+  height: 0.1rem;
+  display: block;
+  margin: 0 auto;
+  background-color: white;
+}
+
 .menu {
   background: linear-gradient(to right, rgba(103, 52, 0, 0.95), rgba(181, 101, 29, 0.95));
 }
@@ -10840,14 +10862,12 @@ textarea.form-control-lg {
 }
 .menu li {
   padding: 0 0.7rem;
-}
-.menu li a {
-  color: #fff !important;
+  color: #fff;
   text-transform: capitalize;
-  font-weight: 600 !important;
+  font-weight: 600;
 }
 .menu div a {
-  color: #fff !important;
+  color: #fff;
 }
 
 .home {
@@ -10858,6 +10878,9 @@ textarea.form-control-lg {
 }
 .home .rounded-pill {
   margin-top: 3rem;
+}
+.home h1 {
+  padding-bottom: 2rem;
 }
 
 .welcome .illustration {
@@ -10924,6 +10947,39 @@ textarea.form-control-lg {
 
 .footer {
   background-color: #B5651D;
+}
+.footer h1 {
+  font-size: 3rem;
+  color: white;
+  padding-bottom: 0.5rem;
+}
+.footer .heading-line {
+  padding-bottom: 1rem;
+}
+.footer .contact-info {
+  padding-left: 3.5rem;
+}
+.footer .contact-info .icon {
+  color: white;
+  padding: 0.5rem;
+  font-size: 30px;
+  display: inline-block;
+}
+.footer .contact-info .icon :hover {
+  color: #673400;
+  transition: 0.5s;
+}
+.footer .contact-info .info {
+  padding: 0.5rem;
+  font-weight: 500;
+}
+.footer .contact-info .info .title {
+  font-size: 1.4rem;
+  color: white;
+}
+.footer .contact-info .info .subtitle {
+  font-size: 0.9rem;
+  color: white;
 }
 
 /*# sourceMappingURL=style.css.map */

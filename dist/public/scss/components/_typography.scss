@@ -16,3 +16,26 @@
         text-transform: none;
     }
 }
+
+.heading-line::before {
+
+    content: "";
+    width: 20rem;
+    height: 0.2rem;
+    display: block;
+    margin: 0 auto;
+    background-color: white;
+
+}
+
+.heading-line::after {
+
+    content: "";
+    padding-top: 0.5rem;
+    width: 2rem;
+    height: 0.1rem;
+    display: block;
+    margin: 0 auto;
+    background-color: white;
+
+}

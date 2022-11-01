@@ -3,4 +3,58 @@
 
 .footer {
     background-color: $secondary;
+
+    h1 {
+        font-size: 3rem;
+        color: white;
+        padding-bottom: 0.5rem;
+    }
+
+    .heading-line {
+
+        padding-bottom: 1rem;
+
+    }
+
+    .contact-info {
+
+        padding-left: 3.5rem;
+
+        .icon {
+
+            color: white;
+            padding: 0.5rem;
+            font-size: 30px;
+            display: inline-block;
+
+            & :hover {
+                color: $primary;
+
+                transition: 0.5s;
+            }
+
+        }
+
+        .info {
+
+            padding: 0.5rem;
+            font-weight: 500;
+
+            .title {
+
+                font-size: 1.4rem;
+                color: white;
+
+            }
+
+            .subtitle {
+
+                font-size: 0.9rem;
+                color: white;
+
+            }
+
+        }
+
+    }
 }

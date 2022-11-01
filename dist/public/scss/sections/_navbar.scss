@@ -12,17 +12,14 @@
 
     li {
         padding: 0 0.7rem;
-
-        a {
-            color: $white !important;
-            text-transform: capitalize;
-            font-weight: 600 !important;
-        }
+        color: $white;
+        text-transform: capitalize;
+        font-weight: 600;
     }
 
     div {
         a {
-            color: $white !important;
+            color: $white;
         }
     }
 
