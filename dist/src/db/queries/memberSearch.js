@@ -2,10 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.memberSearch = void 0;
 function memberSearch(memberQuery) {
-    const { username, membership_type, warning_count, follower_count } = memberQuery;
+    const { uuid, username, membership_type, warning_count, follower_count } = memberQuery;
     const sorts = [warning_count, follower_count];
     const sortNames = ["warning_count", "follower_count"];
     let query = "SELECT uuid,username,email,membership_type,warning_count,follower_count FROM Members ";
+    if (uuid)
+        query += `WHERE id = UUID_TO_BIN("${uuid}")`;
     if (username)
         query += query.includes("WHERE") ? `AND username = "${username}" ` : `WHERE username = "${username}" `;
     if (membership_type)
@@ -21,7 +23,6 @@ function memberSearch(memberQuery) {
         }
     }
     query += ";";
-    console.log(query);
     return query;
 }
 exports.memberSearch = memberSearch;

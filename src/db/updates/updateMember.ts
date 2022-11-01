@@ -5,7 +5,7 @@ export function updateMember(uuid: string, updatedMemberData: IMember) {
     let sql = "UPDATE Members "
     let { membership_type, warning_count, follower_count, token } = updatedMemberData;
 
-    token = `"${token}"`;
+    token = token? `"${token}"`: token;
     
     const updates = [membership_type, warning_count, follower_count, token];
     const updatesNames = ['membership_type', "warning_count", "follower_count", "token"];

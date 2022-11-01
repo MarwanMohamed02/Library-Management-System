@@ -5,7 +5,7 @@ function updateMember(uuid, updatedMemberData) {
     console.log(updatedMemberData);
     let sql = "UPDATE Members ";
     let { membership_type, warning_count, follower_count, token } = updatedMemberData;
-    token = `"${token}"`;
+    token = token ? `"${token}"` : token;
     const updates = [membership_type, warning_count, follower_count, token];
     const updatesNames = ['membership_type', "warning_count", "follower_count", "token"];
     for (let i = 0; i < updates.length; i++) {

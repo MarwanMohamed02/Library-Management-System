@@ -11,6 +11,7 @@ export interface IMember {
 
 
 export interface IMemberQuery {
+    uuid?: string,
     username?: string,
     email?: string,
     membership_type?: string,
