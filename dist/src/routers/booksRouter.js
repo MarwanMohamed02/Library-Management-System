@@ -17,6 +17,7 @@ const express_1 = __importDefault(require("express"));
 const connect_1 = require("../db/connect");
 const bookSearch_1 = require("../db/queries/bookSearch");
 const insertBooks_1 = require("../db/inserts/insertBooks");
+const updateBook_1 = require("../db/updates/updateBook");
 const booksRouter = express_1.default.Router();
 exports.booksRouter = booksRouter;
 // GET
@@ -39,6 +40,18 @@ booksRouter.post("/books", (req, res) => __awaiter(void 0, void 0, void 0, funct
     try {
         const [result] = yield connect_1.db.query(sql);
         res.status(201).json(result);
+    }
+    catch (err) {
+        res.status(400).json(err);
+    }
+}));
+// PATCH
+booksRouter.patch("/books", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const updatedBookData = req.body;
+    const sql = (0, updateBook_1.updateBookData)(updatedBookData);
+    try {
+        yield connect_1.db.query(sql);
+        res.status(200).send();
     }
     catch (err) {
         res.status(400).json(err);

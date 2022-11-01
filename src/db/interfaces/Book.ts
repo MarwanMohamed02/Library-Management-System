@@ -1,10 +1,11 @@
 export interface IBook {
     book_name: string,
-    genre: string, 
+    genre?: string, 
     book_description?: string,
-    author: string,
-    quantity: number,
-    avg_rating: number,
+    author?: string,
+    quantity?: number,
+    avg_rating?: number,
+    ratings_count?: number
 }
 
 

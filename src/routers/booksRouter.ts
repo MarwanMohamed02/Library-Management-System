@@ -3,6 +3,7 @@ import { db } from "../db/connect"
 import { booksSearch } from "../db/queries/bookSearch"
 import { insertBooks } from "../db/inserts/insertBooks"
 import {IBook, IBookQuery} from "../db/interfaces/Book"
+import { updateBookData } from "../db/updates/updateBook"
 
 const booksRouter = express.Router();
 
@@ -43,6 +44,22 @@ booksRouter.post("/books", async(req, res) => {
 
 })
 
+
+// PATCH
+booksRouter.patch("/books", async (req, res) => {
+    const updatedBookData = req.body as IBook;
+
+    const sql = updateBookData(updatedBookData);
+
+    try {
+        await db.query(sql);
+        res.status(200).send();
+    }
+    catch (err) {
+        res.status(400).json(err);
+    }
+    
+})
 
 
 
