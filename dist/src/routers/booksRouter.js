@@ -18,6 +18,8 @@ const connect_1 = require("../db/connect");
 const bookSearch_1 = require("../db/queries/bookSearch");
 const insertBooks_1 = require("../db/inserts/insertBooks");
 const updateBook_1 = require("../db/updates/updateBook");
+const callDibs_1 = require("../db/inserts/callDibs");
+const getMemberDibs_1 = require("../db/joins/getMemberDibs");
 const booksRouter = express_1.default.Router();
 exports.booksRouter = booksRouter;
 // GET
@@ -33,6 +35,18 @@ booksRouter.get("/books", (req, res) => __awaiter(void 0, void 0, void 0, functi
         res.json(err);
     }
 }));
+booksRouter.get("/books/mydibs", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { uuid, sort = "ASC" } = req.query;
+    const sql = (0, getMemberDibs_1.getMemberDibs)(uuid, sort);
+    console.log(sql);
+    try {
+        const [books] = yield connect_1.db.query(sql);
+        res.status(200).json(books);
+    }
+    catch (err) {
+        res.status(400).json(err);
+    }
+}));
 // POST
 booksRouter.post("/books", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const bookData = req.body;
@@ -40,6 +54,17 @@ booksRouter.post("/books", (req, res) => __awaiter(void 0, void 0, void 0, funct
     try {
         const [result] = yield connect_1.db.query(sql);
         res.status(201).json(result);
+    }
+    catch (err) {
+        res.status(400).json(err);
+    }
+}));
+booksRouter.post("/books/callDibs", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { isbn, uuid } = req.body;
+    const sql = (0, callDibs_1.callDibs)(isbn, uuid);
+    try {
+        yield connect_1.db.query(sql);
+        res.status(201).send();
     }
     catch (err) {
         res.status(400).json(err);

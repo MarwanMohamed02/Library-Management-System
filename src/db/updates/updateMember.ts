@@ -19,7 +19,7 @@ export function updateMember(uuid: string, updatedMemberData: IMember) {
 
     sql += ` WHERE id = UUID_TO_BIN("${uuid}");`;
 
-    console.log(sql);
+    // console.log(sql);
     return sql;
 }
 

@@ -4,6 +4,8 @@ import { booksSearch } from "../db/queries/bookSearch"
 import { insertBooks } from "../db/inserts/insertBooks"
 import {IBook, IBookQuery} from "../db/interfaces/Book"
 import { updateBookData } from "../db/updates/updateBook"
+import { callDibs } from "../db/inserts/callDibs"
+import { getMemberDibs } from "../db/joins/getMemberDibs"
 
 const booksRouter = express.Router();
 
@@ -25,6 +27,23 @@ booksRouter.get("/books", async (req, res) => {
 })
 
 
+booksRouter.get("/books/mydibs", async (req, res) => {
+    const { uuid, sort = "ASC" } = req.query;
+
+    const sql = getMemberDibs(uuid, sort);
+    console.log(sql);
+
+    try {
+        const [books] = await db.query(sql);
+        res.status(200).json(books);
+    }
+    catch (err) {
+        res.status(400).json(err);
+    }
+
+})
+
+
 
 
 // POST
@@ -42,6 +61,19 @@ booksRouter.post("/books", async(req, res) => {
         res.status(400).json(err);
     }
 
+})
+
+booksRouter.post("/books/callDibs", async (req, res) => {
+    const { isbn, uuid } = req.body;
+    const sql = callDibs(isbn, uuid);
+
+    try {
+        await db.query(sql);
+        res.status(201).send();
+    }
+    catch (err) {
+        res.status(400).json(err);
+    }
 })
 
 

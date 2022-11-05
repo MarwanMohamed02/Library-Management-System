@@ -2,13 +2,13 @@ import { IBookQuery } from "../interfaces/Book";
 
 export function booksSearch(bookQuery: IBookQuery): string {
 
-    const { book_name, genre, author, status, sort } = bookQuery;
+    const { isbn, book_name, genre, author, status, sort } = bookQuery;
 
     let query =
-        `SELECT book_name, genre, book_description, author, quantity, avg_rating FROM Books `;
+        `SELECT isbn, book_name, genre, book_description, author, quantity, avg_rating FROM Books `;
     
-    const filters = [book_name, genre, author];
-    const filterNames = ["book_name", "genre", "author"]
+    const filters = [isbn, book_name, genre, author];
+    const filterNames = ["isbn" ,"book_name", "genre", "author"]
 
     for (let i = 0; i < filters.length; i++) {
         if (filters[i]) 

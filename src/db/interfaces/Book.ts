@@ -1,4 +1,5 @@
 export interface IBook {
+    isbn: string,
     book_name: string,
     genre?: string, 
     book_description?: string,
@@ -11,6 +12,7 @@ export interface IBook {
 
 
 export interface IBookQuery {
+    isbn?: string,
     book_name?: string,
     genre?: string,
     author?: string,

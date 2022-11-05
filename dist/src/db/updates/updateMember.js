@@ -15,7 +15,7 @@ function updateMember(uuid, updatedMemberData) {
     }
     sql = sql.substring(0, sql.length - 2);
     sql += ` WHERE id = UUID_TO_BIN("${uuid}");`;
-    console.log(sql);
+    // console.log(sql);
     return sql;
 }
 exports.updateMember = updateMember;

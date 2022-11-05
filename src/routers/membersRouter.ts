@@ -27,7 +27,6 @@ membersRouter.get("/members", async(req, res) => {
 
 
 
-
 // POST
 membersRouter.post("/signup", async (req, res) => {
     const member = req.body as IMember;
