@@ -23,19 +23,19 @@
 
         position: relative;
 
-        a {
+        // a {
 
-            @include down;
+        //     @include down;
 
-            span {
+        //     span {
 
-                i {
+        //         i {
 
-                    font-size: 6rem;
-                    color: $secondary
-                }
-            }
-        }
+        //             font-size: 6rem;
+        //             color: $secondary
+        //         }
+        //     }
+        // }
     }
 }
 

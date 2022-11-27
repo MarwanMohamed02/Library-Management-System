@@ -10905,16 +10905,6 @@ textarea.form-control-lg {
 .welcome .illustration {
   position: relative;
 }
-.welcome .illustration a {
-  position: absolute;
-  top: 75%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.welcome .illustration a span i {
-  font-size: 6rem;
-  color: #B5651D;
-}
 
 .border-animation {
   position: absolute;
