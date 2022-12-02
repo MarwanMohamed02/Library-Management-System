@@ -9,6 +9,8 @@ import { getMemberDibs } from "../db/joins/getMemberDibs"
 
 const booksRouter = express.Router();
 
+
+
 // GET
 booksRouter.get("/books", async (req, res) => {
     const bookQuery = req.query as IBookQuery;
@@ -16,9 +18,9 @@ booksRouter.get("/books", async (req, res) => {
     const sql = booksSearch(bookQuery);
     
     try {
-        const [books] = await db.query(sql)
-        console.log(books);
-        res.json(books);
+        const {rows} = await db.query(sql)
+        console.log(rows);
+        res.json(rows);
     }
     catch (err) {
         res.json(err);
@@ -34,7 +36,7 @@ booksRouter.get("/books/mydibs", async (req, res) => {
     console.log(sql);
 
     try {
-        const [books] = await db.query(sql);
+        const books = await db.query(sql);
         res.status(200).json(books);
     }
     catch (err) {
@@ -53,7 +55,7 @@ booksRouter.post("/books", async(req, res) => {
     const sql = insertBooks(bookData);
     
     try {
-        const [result] = await db.query(sql);
+        const result = await db.query(sql);
     
         res.status(201).json(result);
     }
