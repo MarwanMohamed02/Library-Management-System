@@ -3,15 +3,15 @@ import { IMemberQuery } from "../interfaces/Member";
 
 export function memberSearch(memberQuery: IMemberQuery): string {
     
-    const { uuid, username, membership_type, warning_count, follower_count} = memberQuery;
+    const { uuid, username, email, membership_type, warning_count, follower_count} = memberQuery;
     
     const sorts = [warning_count, follower_count]
     const sortNames = ["warning_count", "follower_count"]
 
-    let query = "SELECT uuid,username,email,membership_type,warning_count,follower_count FROM Members ";
+    let query = "SELECT id,username,membership_type,warning_count,follower_count FROM Members ";
 
     if (uuid)
-        query += `WHERE id = UUID_TO_BIN("${uuid}")`;
+        query += `WHERE id::UUID = '${uuid}' `;
 
     if (username) 
         query += query.includes("WHERE") ? `AND username = "${username}" ` : `WHERE username = "${username}" `;

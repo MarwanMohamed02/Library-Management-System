@@ -9,7 +9,7 @@ const path_1 = __importDefault(require("path"));
 const socket_io_1 = require("socket.io");
 // import { adminsRouter } from "./routers/adminsRouter";
 const booksRouter_1 = require("./routers/booksRouter");
-// import { membersRouter } from "./routers/membersRouter"
+const membersRouter_1 = require("./routers/membersRouter");
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 const io = new socket_io_1.Server(server, {
@@ -24,7 +24,7 @@ app.use(express_1.default.json());
 console.log();
 // Routers
 app.use(booksRouter_1.booksRouter);
-// app.use(membersRouter);
+app.use(membersRouter_1.membersRouter);
 // app.use(adminsRouter);
 app.get("/", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "../public/index.html"));

@@ -1,17 +1,14 @@
-// import jwt from "jsonwebtoken"
-// import { db } from "../db/connect"
-// import { IMember } from "../db/interfaces/Member";
-// import { memberSearch } from "../db/queries/memberSearch"
-// import { updateMember } from "../db/updates/updateMember";
+import jwt from "jsonwebtoken"
+import { db } from "../db/connect"
+import { updateMember } from "../db/updates/updateMember";
 
-// export async function assignToken({ username }: { username: string }) {
-//     const [found] = await db.query(memberSearch({ username })) ;
+export async function assignToken(uuid: string) {
 
-//     const member = (found as IMember[])[0];
+    const token = jwt.sign({ uuid }, process.env.JWT_SECRET as string);
 
-//     member.token = jwt.sign({ uuid: member.uuid as string }, process.env.JWT_SECRET as string);
+    console.log(token);
 
-//     // console.log(member);
+    await db.query(updateMember(uuid, { token }));
 
-//     await db.query(updateMember(member.uuid, member));
-// }
+    return token;
+}
