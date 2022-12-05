@@ -13,20 +13,20 @@ const membersRouter = express.Router();
 
 
 // GET
-// membersRouter.get("/members", async(req, res) => {
-//     const membersData = req.query as IMemberQuery;
+membersRouter.get("/members", async(req, res) => {
+    const membersData = req.query as IMemberQuery;
 
-//     const sql = memberSearch(membersData);
+    const sql = memberSearch(membersData);
 
-//     try {
-//         const [members] = await db.query(sql);
-//         res.status(200).json(members);    
-//     }
-//     catch (err) {
-//         res.status(400).json(err);
-//     }
+    try {
+        const {rows}= await db.query(sql);
+        res.status(200).json({ members: rows });    
+    }
+    catch (err) {
+        res.status(400).json(err);
+    }
 
-// })
+})
 
 
 
@@ -54,14 +54,14 @@ membersRouter.post("/signup", async (req, res) => {
         const { id: uuid } = results[1].rows[0];        // extracting uuid from second query
         const { username , password, membership_type } = req.body as IMember;
 
-        const member: IMember = {
+        const member = {
             uuid,
             username,
             password,
             membership_type 
         }
 
-        const memSQL = await insertMember(member);
+        const memSQL = await insertMember(member as IMember);
         await db.query(memSQL);
         
         // After successful insertion a token is assigned to the member

@@ -16,22 +16,23 @@ exports.membersRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const insertMember_1 = require("../db/inserts/insertMember");
 const connect_1 = require("../db/connect");
+const memberSearch_1 = require("../db/queries/memberSearch");
 const assignToken_1 = require("../utils/assignToken");
 const insertSystemUser_1 = require("../db/inserts/insertSystemUser");
 const membersRouter = express_1.default.Router();
 exports.membersRouter = membersRouter;
 // GET
-// membersRouter.get("/members", async(req, res) => {
-//     const membersData = req.query as IMemberQuery;
-//     const sql = memberSearch(membersData);
-//     try {
-//         const [members] = await db.query(sql);
-//         res.status(200).json(members);    
-//     }
-//     catch (err) {
-//         res.status(400).json(err);
-//     }
-// })
+membersRouter.get("/members", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const membersData = req.query;
+    const sql = (0, memberSearch_1.memberSearch)(membersData);
+    try {
+        const { rows } = yield connect_1.db.query(sql);
+        res.status(200).json({ members: rows });
+    }
+    catch (err) {
+        res.status(400).json(err);
+    }
+}));
 // POST
 membersRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // Setting up system user data
