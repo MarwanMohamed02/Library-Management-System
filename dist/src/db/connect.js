@@ -10,20 +10,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.db = void 0;
-const promise_1 = require("mysql2/promise");
-function connect() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const { HOST, USER, PASSWORD, DATABASE_NAME } = process.env;
-        return yield (0, promise_1.createConnection)({
-            host: HOST,
-            user: USER,
-            password: PASSWORD,
-            database: DATABASE_NAME
-        });
-    });
-}
+const pg_1 = require("pg");
 let db;
 exports.db = db;
+function connect() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { DATABASE_URL } = process.env;
+        const client = new pg_1.Client(DATABASE_URL);
+        yield client.connect();
+        yield client.query("USE booker ");
+        console.log("done");
+        return client;
+    });
+}
 connect()
-    .then(connection => exports.db = db = connection)
+    .then(client => exports.db = db = client)
     .catch(err => console.log(err));
+// const { Client } = require("pg");
+// const client = new Client(process.env.DATABASE_URL);
+// (async () => {
+//     await client.connect();
+//     try {
+//         const results = await client.query("SELECT NOW()");
+//         console.log(results);
+//     } catch (err) {
+//         console.error("error executing query:", err);
+//     } finally {
+//         client.end();
+//     }
+// })();

@@ -16,11 +16,11 @@ exports.insertMember = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 function insertMember(member) {
     return __awaiter(this, void 0, void 0, function* () {
-        let { username, email, password, membership_type, follower_count = 0, warning_count = 0 } = member;
+        let { uuid, username, password, membership_type, follower_count = 0, warning_count = 0 } = member;
         // Hashing Password
         password = yield bcryptjs_1.default.hash(password, 12);
-        return "INSERT INTO Members(id, username, email, pass, membership_type, follower_count, warning_count) "
-            + `VALUES (UUID_TO_BIN(uuid(),true), "${username}", "${email}", "${password}", ${membership_type}, ${follower_count}, ${warning_count});`;
+        return "INSERT INTO Members(id, username, pass, membership_type, follower_count, warning_count) "
+            + ` VALUES ('${uuid}'::UUID::BYTES, '${username}', '${password}', ${membership_type}, ${follower_count}, ${warning_count});`;
     });
 }
 exports.insertMember = insertMember;

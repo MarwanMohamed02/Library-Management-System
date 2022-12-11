@@ -1,20 +1,40 @@
-import {createConnection, Connection} from "mysql2/promise"
+import { Client } from "pg"
+
+let db: Client;
 
 async function connect() {
-    const { HOST, USER, PASSWORD, DATABASE_NAME } = process.env;
+    const { DATABASE_URL } = process.env;
 
-    return await createConnection({
-        host: HOST,
-        user: USER,
-        password: PASSWORD,
-        database: DATABASE_NAME
-    })
+    const client = new Client(DATABASE_URL as string);
+
+    await client.connect();
+
+    await client.query("USE booker ")
+
+    console.log("done")
+
+    return client;
 }
 
-let db: Connection;
 connect()
-    .then(connection => db = connection)
-    .catch(err => console.log(err))
+    .then(client => db = client)
+    .catch(err => console.log(err));
 
 
 export { db };
+
+// const { Client } = require("pg");
+
+// const client = new Client(process.env.DATABASE_URL);
+
+// (async () => {
+//     await client.connect();
+//     try {
+//         const results = await client.query("SELECT NOW()");
+//         console.log(results);
+//     } catch (err) {
+//         console.error("error executing query:", err);
+//     } finally {
+//         client.end();
+//     }
+// })();

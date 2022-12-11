@@ -3,34 +3,51 @@ import { IMemberQuery } from "../interfaces/Member";
 
 export function memberSearch(memberQuery: IMemberQuery): string {
     
-    const { uuid, username, membership_type, warning_count, follower_count} = memberQuery;
-    
-    const sorts = [warning_count, follower_count]
-    const sortNames = ["warning_count", "follower_count"]
+    const {
+        uuid, firstname, lastname, phone_number, email,
+        username, membership_type, warning_count, follower_count
+    } = memberQuery;
 
-    let query = "SELECT uuid,username,email,membership_type,warning_count,follower_count FROM Members ";
+
+    const attributes =  [firstname, lastname, phone_number, email,
+                         username, membership_type];
+                         
+                          
+    const attNames =    ['firstname', 'lastname', 'phone_number', 'email',
+                        'username', 'membership_type']
+
+    const sorts =       [ warning_count,   follower_count];
+    const sortNames =   ["warning_count", "follower_count"];
+
+    let query = `SELECT 
+                        Members.id::UUID AS uuid, firstname, lastname, phone_number, email,
+                        username, membership_type, warning_count, follower_count
+                 FROM System_Users, Members
+                 WHERE System_Users.id = Members.id `;
+
 
     if (uuid)
-        query += `WHERE id = UUID_TO_BIN("${uuid}")`;
-
-    if (username) 
-        query += query.includes("WHERE") ? `AND username = "${username}" ` : `WHERE username = "${username}" `;
+        query += `AND Members.id::UUID = '${uuid}' `;
     
-    if (membership_type)
-        query += query.includes("WHERE") ? `AND membership_type = "${membership_type}" ` : `WHERE membership_type = "${membership_type}" `;
-
-    for (let i = 0; i < sorts.length; i++) 
-        if (sorts[i]) 
-            query += query.includes("WHERE") ? `AND ${sortNames[i]} > ${sorts[i]} ` : `WHERE ${sortNames[i]} > ${sorts[i]} `;
-
-    for (let i = 0; i < sorts.length; i++) {
-        if (sorts[i]) {
-            query += query.includes("ORDER BY") ? `AND ${sortNames[i]} ` : `ORDER BY ${sortNames[i]} ` 
-            if (i === sorts.length - 1)
-            query += "DESC";
+    for (let i = 0; i < attributes.length; i++){
+        if (attributes[i]) {
+            attributes[i] = attNames[i].includes("name") || attNames[i] === "email" ? `'${attributes[i]}'` : attributes[i];
+            query += `AND ${attNames[i]} = ${attributes[i]} `;            
         }
     }
-    query += ";";
-   
+
+    
+    for (let i = 0; i < sorts.length; i++) {
+        if (sorts[i]) {
+            query += `ORDER BY ${sortNames[i]} `
+            query += sorts[i] == 1 ? "ASC" : "DESC "; 
+            break;
+        }
+    }
+    
+    query += ";"  
+
+    console.log(query);
     return query;
+
 }

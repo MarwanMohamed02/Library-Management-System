@@ -18,6 +18,7 @@ const insertMember_1 = require("../db/inserts/insertMember");
 const connect_1 = require("../db/connect");
 const memberSearch_1 = require("../db/queries/memberSearch");
 const assignToken_1 = require("../utils/assignToken");
+const insertSystemUser_1 = require("../db/inserts/insertSystemUser");
 const membersRouter = express_1.default.Router();
 exports.membersRouter = membersRouter;
 // GET
@@ -25,8 +26,8 @@ membersRouter.get("/members", (req, res) => __awaiter(void 0, void 0, void 0, fu
     const membersData = req.query;
     const sql = (0, memberSearch_1.memberSearch)(membersData);
     try {
-        const [members] = yield connect_1.db.query(sql);
-        res.status(200).json(members);
+        const { rows } = yield connect_1.db.query(sql);
+        res.status(200).json({ members: rows });
     }
     catch (err) {
         res.status(400).json(err);
@@ -34,12 +35,32 @@ membersRouter.get("/members", (req, res) => __awaiter(void 0, void 0, void 0, fu
 }));
 // POST
 membersRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const member = req.body;
-    const sql = yield (0, insertMember_1.insertMember)(member);
+    // Setting up system user data
+    let { firstname, lastname, email, phone_number } = req.body;
+    const sysUser = {
+        firstname,
+        lastname,
+        email,
+        phone_number
+    };
+    const sysSQL = (0, insertSystemUser_1.insertSystemUser)(sysUser);
     try {
-        yield connect_1.db.query(sql);
-        yield (0, assignToken_1.assignToken)(member);
-        res.status(201).send();
+        // First inserting into System_Users
+        const results = yield connect_1.db.query(sysSQL);
+        // If all is well, set up member data and insert into Members
+        const { id: uuid } = results[1].rows[0]; // extracting uuid from second query
+        const { username, password, membership_type } = req.body;
+        const member = {
+            uuid,
+            username,
+            password,
+            membership_type
+        };
+        const memSQL = yield (0, insertMember_1.insertMember)(member);
+        yield connect_1.db.query(memSQL);
+        // After successful insertion a token is assigned to the member
+        const token = yield (0, assignToken_1.assignToken)(uuid);
+        res.status(201).json({ token });
     }
     catch (err) {
         console.log(err);

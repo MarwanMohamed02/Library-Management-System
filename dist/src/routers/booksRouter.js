@@ -27,9 +27,9 @@ booksRouter.get("/books", (req, res) => __awaiter(void 0, void 0, void 0, functi
     const bookQuery = req.query;
     const sql = (0, bookSearch_1.booksSearch)(bookQuery);
     try {
-        const [books] = yield connect_1.db.query(sql);
-        console.log(books);
-        res.json(books);
+        const { rows } = yield connect_1.db.query(sql);
+        console.log(rows);
+        res.json(rows);
     }
     catch (err) {
         res.json(err);
@@ -40,7 +40,7 @@ booksRouter.get("/books/mydibs", (req, res) => __awaiter(void 0, void 0, void 0,
     const sql = (0, getMemberDibs_1.getMemberDibs)(uuid, sort);
     console.log(sql);
     try {
-        const [books] = yield connect_1.db.query(sql);
+        const books = yield connect_1.db.query(sql);
         res.status(200).json(books);
     }
     catch (err) {
@@ -52,7 +52,7 @@ booksRouter.post("/books", (req, res) => __awaiter(void 0, void 0, void 0, funct
     const bookData = req.body;
     const sql = (0, insertBooks_1.insertBooks)(bookData);
     try {
-        const [result] = yield connect_1.db.query(sql);
+        const result = yield connect_1.db.query(sql);
         res.status(201).json(result);
     }
     catch (err) {

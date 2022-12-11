@@ -2,3 +2,5 @@ node_modules/
 .vscode/
 dev.session.sql
 config/
+prod.session.sql
+Schema.pdf
