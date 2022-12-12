@@ -1,0 +1,19 @@
+@use "../custom" as *;
+@use "../components/mixins" as *;
+
+#signup-page {
+
+    @include gradient;
+
+}
+
+.signup-row {
+
+    background-color: white;
+    border-radius: 2rem;
+}
+
+#signup-button {
+    position: relative;
+    margin-top: 1.5rem;
+}

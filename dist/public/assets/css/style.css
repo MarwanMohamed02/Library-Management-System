@@ -11000,4 +11000,18 @@ textarea.form-control-lg {
   border-radius: 2rem;
 }
 
+#signup-page {
+  background: linear-gradient(to right, rgba(103, 52, 0, 0.95), rgba(181, 101, 29, 0.95));
+}
+
+.signup-row {
+  background-color: white;
+  border-radius: 2rem;
+}
+
+#signup-button {
+  position: relative;
+  margin-top: 1.5rem;
+}
+
 /*# sourceMappingURL=style.css.map */
