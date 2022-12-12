@@ -12,7 +12,7 @@
 
     li {
         padding: 0 0.7rem;
-        color: $white;
+        color: white;
         text-transform: capitalize;
         font-weight: 600;
     }
@@ -23,4 +23,12 @@
         }
     }
 
+    .dropdown-button {
+
+        div {
+            a {
+                color: black !important;
+            }
+        }
+    }
 }

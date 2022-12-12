@@ -10835,6 +10835,10 @@ textarea.form-control-lg {
   transition: 0.5s;
 }
 
+.dropdown-toggle {
+  background-color: white;
+}
+
 .display-2 {
   margin-bottom: 1rem;
   text-transform: capitalize;
@@ -10881,12 +10885,15 @@ textarea.form-control-lg {
 }
 .menu li {
   padding: 0 0.7rem;
-  color: #fff;
+  color: white;
   text-transform: capitalize;
   font-weight: 600;
 }
 .menu div a {
   color: #fff;
+}
+.menu .dropdown-button div a {
+  color: black !important;
 }
 
 .home {
@@ -11012,6 +11019,19 @@ textarea.form-control-lg {
 #signup-button {
   position: relative;
   margin-top: 1.5rem;
+}
+
+.table-section {
+  background-color: white;
+  padding: 10rem 0 0 0;
+  width: 100%;
+  height: 100%;
+}
+.table-section .rounded-pill {
+  margin-top: 3rem;
+}
+.table-section h1 {
+  padding-bottom: 2rem;
 }
 
 /*# sourceMappingURL=style.css.map */
