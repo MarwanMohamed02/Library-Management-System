@@ -47,6 +47,8 @@ membersRouter.post("/members/signup", async (req, res) => {
         const { rows } = await db.query(checkIfAlreadyExistsSQL);
         
         let uuid = undefined;
+
+        console.log()
         
         // If this is the member's first time signing up, insert him/her into the System_User table 
         if (!rows[0]) {
@@ -68,9 +70,12 @@ membersRouter.post("/members/signup", async (req, res) => {
             const { uuid: id } = results[1].rows[0];        // extracting uuid from second query
             uuid = id;
         }
-
-        uuid = rows[0].uuid;
+        else 
+            uuid = rows[0].uuid;
+        
+        
         const { username , pass, membership_type } = req.body as IMember;
+
 
         const member = {
             uuid,

@@ -36,5 +36,4 @@ io.on("connection", (socket) => {
     console.log("connected");
     socket.on("clicked", () => console.log("clicked!"));
 });
-console.log(undefined === null);
 server.listen(port, () => console.log(`Server is up on port ${port}`));
