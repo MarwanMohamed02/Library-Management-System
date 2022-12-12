@@ -19,10 +19,14 @@ const connect_1 = require("../db/connect");
 const memberSearch_1 = require("../db/queries/memberSearch");
 const assignToken_1 = require("../utils/assignToken");
 const insertSystemUser_1 = require("../db/inserts/insertSystemUser");
+const login_1 = require("../utils/login");
+const auth_1 = require("../utils/auth");
+const updateMember_1 = require("../db/updates/updateMember");
+const systemUserSearch_1 = require("../db/queries/systemUserSearch");
 const membersRouter = express_1.default.Router();
 exports.membersRouter = membersRouter;
 // GET
-membersRouter.get("/members", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+membersRouter.get("/members", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const membersData = req.query;
     const sql = (0, memberSearch_1.memberSearch)(membersData);
     try {
@@ -34,26 +38,34 @@ membersRouter.get("/members", (req, res) => __awaiter(void 0, void 0, void 0, fu
     }
 }));
 // POST
-membersRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // Setting up system user data
+membersRouter.post("/members/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { firstname, lastname, email, phone_number } = req.body;
-    const sysUser = {
-        firstname,
-        lastname,
-        email,
-        phone_number
-    };
-    const sysSQL = (0, insertSystemUser_1.insertSystemUser)(sysUser);
     try {
-        // First inserting into System_Users
-        const results = yield connect_1.db.query(sysSQL);
-        // If all is well, set up member data and insert into Members
-        const { id: uuid } = results[1].rows[0]; // extracting uuid from second query
-        const { username, password, membership_type } = req.body;
+        const checkIfAlreadyExistsSQL = (0, systemUserSearch_1.systemUserSearch)({ email });
+        const { rows } = yield connect_1.db.query(checkIfAlreadyExistsSQL);
+        let uuid = undefined;
+        // If this is the member's first time signing up, insert him/her into the System_User table 
+        if (!rows[0]) {
+            // Setting up system user data
+            const sysUser = {
+                firstname,
+                lastname,
+                email,
+                phone_number
+            };
+            const sysSQL = (0, insertSystemUser_1.insertSystemUser)(sysUser);
+            // First inserting into System_Users
+            const results = yield connect_1.db.query(sysSQL);
+            // If all is well, set up member data and insert into Members
+            const { uuid: id } = results[1].rows[0]; // extracting uuid from second query
+            uuid = id;
+        }
+        uuid = rows[0].uuid;
+        const { username, pass, membership_type } = req.body;
         const member = {
             uuid,
             username,
-            password,
+            pass,
             membership_type
         };
         const memSQL = yield (0, insertMember_1.insertMember)(member);
@@ -67,3 +79,31 @@ membersRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, fu
         res.status(400).json(err);
     }
 }));
+membersRouter.post("/members/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // storing data used to login
+    const memberData = req.body;
+    try {
+        // Waiting for token | null to determine next action
+        const token = yield (0, login_1.login)(memberData);
+        console.log(token);
+        if (token)
+            res.status(201).send({ token }); // if token was returned send it to client for future requests
+        else
+            res.status(400).send({ error: "Username or password is incorrect" }); // in case of null, deny access and display error message
+    }
+    catch (err) {
+        res.status(400).send({ error: "Unauthorized Access!" });
+    }
+}));
+membersRouter.post("/members/logout", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const removeTokenSQL = (0, updateMember_1.updateMember)({ uuid: req.member_uuid }, { token: null });
+        yield connect_1.db.query(removeTokenSQL);
+        res.status(200).send();
+    }
+    catch (err) {
+        res.status(500).send("An error from our side... Please refresh the page");
+    }
+}));
+membersRouter.post("/members/delete/account", auth_1.auth, (req, res) => {
+});

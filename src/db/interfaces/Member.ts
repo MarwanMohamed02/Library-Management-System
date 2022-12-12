@@ -2,7 +2,7 @@ import { ISystemUser, ISystemUserQuery } from "./System_User";
 
 export interface IMember extends ISystemUser {
     username: string,
-    password: string,
+    pass: string,
     membership_type: string,
     warning_count?: number, 
     follower_count?: number,
@@ -12,7 +12,9 @@ export interface IMember extends ISystemUser {
 
 export interface IMemberQuery extends ISystemUserQuery {
     username?: string,
+    pass?: string,
     membership_type?: string,
     warning_count?: number,
     follower_count?: number,
+    token?: string
 }

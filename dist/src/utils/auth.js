@@ -12,32 +12,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.assignToken = void 0;
+exports.auth = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const connect_1 = require("../db/connect");
-const updateMember_1 = require("../db/updates/updateMember");
-/**
- * Assigns a token to member corresponding to the uuid and returns the token for future requests
- * @param uuid
- * @returns token after assigning it to the member
- */
-function assignToken(uuid) {
+const memberSearch_1 = require("../db/queries/memberSearch");
+function auth(req, res, next) {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        const token = yield genToken(uuid);
-        const sql = (0, updateMember_1.updateMember)({ uuid }, { token });
-        if (sql)
-            yield connect_1.db.query(sql);
-        return token;
+        try {
+            const token = (_a = req.header("Authorization")) === null || _a === void 0 ? void 0 : _a.replace("Bearer ", "");
+            if (!token)
+                throw new Error();
+            jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET, (error, decoded) => __awaiter(this, void 0, void 0, function* () {
+                if (error) {
+                    throw error;
+                }
+                const { rows } = yield connect_1.db.query((0, memberSearch_1.memberSearch)({ uuid: decoded.uuid, token: token }));
+                const member = rows[0];
+                if (!member)
+                    throw new Error();
+                req.member_uuid = member.uuid;
+                next();
+            }));
+        }
+        catch (err) {
+            res.status(401).send({ error: "Unauthorized Access!" });
+        }
     });
 }
-exports.assignToken = assignToken;
-/**
- * A promise wrapper for the synchronus jwt.sign function
- * @param uuid payload
- * @returns generated token
- */
-function genToken(uuid) {
-    return new Promise(function (resolve, reject) {
-        resolve(jsonwebtoken_1.default.sign({ uuid }, process.env.JWT_SECRET));
-    });
-}
+exports.auth = auth;

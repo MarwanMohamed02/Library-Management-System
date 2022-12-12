@@ -9,7 +9,7 @@ export function insertSystemUser(sysUser: ISystemUser): string {
     return `INSERT INTO System_Users(firstname,lastname,email,phone_number)
             VALUES  ('${firstname}', '${lastname}', '${email}', ${phone_number}); 
             
-            SELECT id::UUID
+            SELECT id::UUID as uuid
             FROM System_Users
             WHERE email = '${email}'; `;
 }
