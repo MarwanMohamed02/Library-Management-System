@@ -12,32 +12,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.assignToken = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+exports.login = void 0;
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const connect_1 = require("../db/connect");
-const updateMember_1 = require("../db/updates/updateMember");
+const memberSearch_1 = require("../db/queries/memberSearch");
+const assignToken_1 = require("./assignToken");
 /**
- * Assigns a token to member corresponding to the uuid and returns the token for future requests
- * @param uuid
- * @returns token after assigning it to the member
+ * Returns token if username & password match and null otherwise
+ * @param memberQuery an object containing username & password
+ * @returns token | null
  */
-function assignToken(uuid) {
+function login(memberQuery) {
     return __awaiter(this, void 0, void 0, function* () {
-        const token = yield genToken(uuid);
-        const sql = (0, updateMember_1.updateMember)({ uuid }, { token });
-        if (sql)
-            yield connect_1.db.query(sql);
-        return token;
+        const { username, pass } = memberQuery;
+        const { rows } = yield connect_1.db.query((0, memberSearch_1.memberSearch)({ username }));
+        let member = rows[0];
+        console.log(member.token);
+        if (member.token)
+            return null;
+        const found = yield bcryptjs_1.default.compare(pass, member.pass);
+        if (found) {
+            return yield (0, assignToken_1.assignToken)(member.uuid);
+        }
+        return null;
     });
 }
-exports.assignToken = assignToken;
-/**
- * A promise wrapper for the synchronus jwt.sign function
- * @param uuid payload
- * @returns generated token
- */
-function genToken(uuid) {
-    return new Promise(function (resolve, reject) {
-        resolve(jsonwebtoken_1.default.sign({ uuid }, process.env.JWT_SECRET));
-    });
-}
+exports.login = login;

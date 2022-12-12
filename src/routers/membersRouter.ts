@@ -6,14 +6,19 @@ import { memberSearch } from "../db/queries/memberSearch";
 import { assignToken } from "../utils/assignToken";
 import { ISystemUser } from "../db/interfaces/System_User";
 import { insertSystemUser } from "../db/inserts/insertSystemUser";
-import { QueryArrayResult, QueryResult } from "pg";
+import { QueryResult } from "pg";
+import { login } from "../utils/login";
+import { auth, AuthRequest } from "../utils/auth";
+import { updateMember } from "../db/updates/updateMember";
+import { systemUserSearch } from "../db/queries/systemUserSearch";
 
 const membersRouter = express.Router();
 
 
 
 // GET
-membersRouter.get("/members", async(req, res) => {
+membersRouter.get("/members", auth, async (req: AuthRequest, res) => {
+
     const membersData = req.query as IMemberQuery;
 
     const sql = memberSearch(membersData);
@@ -31,33 +36,46 @@ membersRouter.get("/members", async(req, res) => {
 
 
 // POST
-membersRouter.post("/signup", async (req, res) => {
+membersRouter.post("/members/signup", async (req, res) => {
 
-    // Setting up system user data
     let { firstname, lastname, email, phone_number } = req.body as ISystemUser;
-
-    const sysUser: ISystemUser = {
-        firstname,
-        lastname,
-        email,
-        phone_number
-    }
     
-    const sysSQL = insertSystemUser(sysUser);
-
+    
     try {
-
-        // First inserting into System_Users
-        const results = await db.query(sysSQL) as unknown as QueryResult[];
+        const checkIfAlreadyExistsSQL = systemUserSearch({ email }) as string
         
-        // If all is well, set up member data and insert into Members
-        const { id: uuid } = results[1].rows[0];        // extracting uuid from second query
-        const { username , password, membership_type } = req.body as IMember;
+        const { rows } = await db.query(checkIfAlreadyExistsSQL);
+        
+        let uuid = undefined;
+        
+        // If this is the member's first time signing up, insert him/her into the System_User table 
+        if (!rows[0]) {
+            
+            // Setting up system user data
+            const sysUser: ISystemUser = {
+                firstname,
+                lastname,
+                email,
+                phone_number
+            }
+
+            const sysSQL = insertSystemUser(sysUser);
+        
+            // First inserting into System_Users
+            const results = await db.query(sysSQL) as unknown as QueryResult[];
+        
+            // If all is well, set up member data and insert into Members
+            const { uuid: id } = results[1].rows[0];        // extracting uuid from second query
+            uuid = id;
+        }
+
+        uuid = rows[0].uuid;
+        const { username , pass, membership_type } = req.body as IMember;
 
         const member = {
             uuid,
             username,
-            password,
+            pass,
             membership_type 
         }
 
@@ -73,6 +91,49 @@ membersRouter.post("/signup", async (req, res) => {
         console.log(err);
         res.status(400).json(err);
     }
+    
+})
+
+
+membersRouter.post("/members/login", async (req, res) => {
+
+    // storing data used to login
+    const memberData = req.body as IMemberQuery;
+
+    try {
+
+        // Waiting for token | null to determine next action
+        const token = await login(memberData);
+
+        console.log(token);
+        
+        if (token)
+            res.status(201).send({ token });                                        // if token was returned send it to client for future requests
+        else 
+            res.status(400).send({ error: "Username or password is incorrect" })    // in case of null, deny access and display error message
+    }
+    catch (err) {
+        res.status(400).send({ error: "Unauthorized Access!" });
+    }
+})
+
+
+membersRouter.post("/members/logout", auth, async (req: AuthRequest, res) => {
+
+    try {
+        const removeTokenSQL = updateMember({ uuid: req.member_uuid }, { token: null }) as string;
+
+        await db.query(removeTokenSQL);
+        
+        res.status(200).send();
+    }
+    catch (err) {
+        res.status(500).send("An error from our side... Please refresh the page");
+    }
+})
+
+
+membersRouter.post("/members/delete/account", auth, (req: AuthRequest, res) => {
     
 })
 

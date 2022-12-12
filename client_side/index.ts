@@ -35,20 +35,16 @@ const socket = io();
 
 
 // async function func() {
-//     const test_data = await fetch("/test", {
-//         method: "POST",
-//         headers: {
-//             "Content-Type":"application/json"
-//         },
-//         body: JSON.stringify({
-//             test_data: 'HIIII'
-//         })
-//     });
-//     console.log(await test_data.json());
+//     const test_data = await fetch("/test");
+//     return test_data
 // }
 
-// func();
-
+// func().then(test_data => {
+//     console.log(`Hiii  `)
+//     let html = document.e
+//     html = test_data as unknown as HTMLElement
+// });
+// console.log(`Hiii  `)
 // let cardsContainer = document.getElementById("cards-container");
 // const CardTemplate = document.getElementById("card-template")?.innerHTML as string;
 

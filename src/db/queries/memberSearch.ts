@@ -21,17 +21,18 @@ export function memberSearch(memberQuery: IMemberQuery): string {
 
     let query = `SELECT 
                         Members.id::UUID AS uuid, firstname, lastname, phone_number, email,
-                        username, membership_type, warning_count, follower_count
+                        username, pass, membership_type, warning_count, follower_count, token
                  FROM System_Users, Members
                  WHERE System_Users.id = Members.id `;
 
-
+    // Special Attributes
     if (uuid)
         query += `AND Members.id::UUID = '${uuid}' `;
+ 
     
     for (let i = 0; i < attributes.length; i++){
         if (attributes[i]) {
-            attributes[i] = attNames[i].includes("name") || attNames[i] === "email" ? `'${attributes[i]}'` : attributes[i];
+            attributes[i] = attNames[i] !== "phone_number" ? `'${attributes[i]}'` : attributes[i];
             query += `AND ${attNames[i]} = ${attributes[i]} `;            
         }
     }
@@ -47,7 +48,9 @@ export function memberSearch(memberQuery: IMemberQuery): string {
     
     query += ";"  
 
-    console.log(query);
+    // console.log(query);
     return query;
 
 }
+
+

@@ -39,10 +39,8 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "../public/index.html"));
 })
 
-app.post("/test", (req, res) => {
-    const { test_data } = req.body;
-    console.log(test_data);
-    res.status(201).json({ test_data });
+app.get("/test", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/login.html"));
 })
 
 io.on("connection", (socket) => {
@@ -50,5 +48,5 @@ io.on("connection", (socket) => {
     socket.on("clicked", () => console.log("clicked!"))
 })
 
-
+console.log(undefined === null);
 server.listen(port, () => console.log(`Server is up on port ${port}`))
