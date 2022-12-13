@@ -44,6 +44,7 @@ membersRouter.post("/members/signup", (req, res) => __awaiter(void 0, void 0, vo
         const checkIfAlreadyExistsSQL = (0, systemUserSearch_1.systemUserSearch)({ email });
         const { rows } = yield connect_1.db.query(checkIfAlreadyExistsSQL);
         let uuid = undefined;
+        console.log();
         // If this is the member's first time signing up, insert him/her into the System_User table 
         if (!rows[0]) {
             // Setting up system user data
@@ -60,7 +61,8 @@ membersRouter.post("/members/signup", (req, res) => __awaiter(void 0, void 0, vo
             const { uuid: id } = results[1].rows[0]; // extracting uuid from second query
             uuid = id;
         }
-        uuid = rows[0].uuid;
+        else
+            uuid = rows[0].uuid;
         const { username, pass, membership_type } = req.body;
         const member = {
             uuid,

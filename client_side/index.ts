@@ -34,11 +34,17 @@ const socket = io();
 
 
 
-// async function func() {
-//     const test_data = await fetch("/test");
-//     return test_data
-// }
+async function func() {
+    const test_data = await fetch("/books");
+    return await test_data.json()
+}
 
+async function test() {
+    const data = await func();
+    console.log(data);
+}
+
+test();
 // func().then(test_data => {
 //     console.log(`Hiii  `)
 //     let html = document.e

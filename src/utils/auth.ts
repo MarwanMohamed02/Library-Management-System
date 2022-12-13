@@ -8,6 +8,7 @@ interface AuthRequest extends Request {
     member_uuid?: string
 }
 
+
 async function auth(req: AuthRequest, res: Response, next: NextFunction) {
 
     try {
@@ -20,15 +21,18 @@ async function auth(req: AuthRequest, res: Response, next: NextFunction) {
         jwt.verify(token, process.env.JWT_SECRET as string, async (error: VerifyErrors | null, decoded: any) => {
 
             if (error) {
-                throw error;
+                next(error);
+                return;
             }
             
             const { rows } = await db.query(memberSearch({ uuid: decoded.uuid as string, token: token }))
 
             const member: IMember = rows[0];
 
-            if (!member)
-                throw new Error();
+            if (!member) {
+                next(new Error());
+                return;
+            }
             
             req.member_uuid = member.uuid
 

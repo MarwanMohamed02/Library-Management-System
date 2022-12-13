@@ -20,7 +20,7 @@ function insertMember(member) {
         // Hashing Password
         pass = yield bcryptjs_1.default.hash(pass, 12);
         return "INSERT INTO Members(id, username, pass, membership_type, follower_count, warning_count) "
-            + ` VALUES ('${uuid}'::UUID::BYTES, '${username}', '${pass}', ${membership_type}, ${follower_count}, ${warning_count});`;
+            + ` VALUES ('${uuid}'::UUID::BYTES, '${username}', '${pass}', '${membership_type}', ${follower_count}, ${warning_count});`;
     });
 }
 exports.insertMember = insertMember;

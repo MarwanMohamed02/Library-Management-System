@@ -25,12 +25,15 @@ function auth(req, res, next) {
                 throw new Error();
             jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET, (error, decoded) => __awaiter(this, void 0, void 0, function* () {
                 if (error) {
-                    throw error;
+                    next(error);
+                    return;
                 }
                 const { rows } = yield connect_1.db.query((0, memberSearch_1.memberSearch)({ uuid: decoded.uuid, token: token }));
                 const member = rows[0];
-                if (!member)
-                    throw new Error();
+                if (!member) {
+                    next(new Error());
+                    return;
+                }
                 req.member_uuid = member.uuid;
                 next();
             }));
