@@ -1,0 +1,28 @@
+@use '../custom' as *;
+@use "../components/mixins" as *;
+
+.box {
+    padding-top: 7rem;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 30px;
+
+    input {
+        width: 0;
+        outline: none;
+        border: none;
+        font-weight: 500;
+        transition: 0.8s;
+        background: transparent;
+    }
+
+    a .fas {
+        color: $secondary;
+        font-size: 18px;
+    }
+
+    &:hover input {
+        width: 400px;
+
+    }
+}

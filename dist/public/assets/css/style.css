@@ -10875,6 +10875,28 @@ textarea.form-control-lg {
   background-color: white;
 }
 
+.box {
+  padding-top: 7rem;
+  height: 30px;
+  cursor: pointer;
+  border-radius: 30px;
+}
+.box input {
+  width: 0;
+  outline: none;
+  border: none;
+  font-weight: 500;
+  transition: 0.8s;
+  background: transparent;
+}
+.box a .fas {
+  color: #B5651D;
+  font-size: 18px;
+}
+.box:hover input {
+  width: 400px;
+}
+
 .menu {
   background: linear-gradient(to right, rgba(103, 52, 0, 0.95), rgba(181, 101, 29, 0.95));
 }
@@ -11023,7 +11045,7 @@ textarea.form-control-lg {
 
 .table-section {
   background-color: white;
-  padding: 10rem 0 0 0;
+  padding: 5rem 0 0 0;
   width: 100%;
   height: 100%;
 }
