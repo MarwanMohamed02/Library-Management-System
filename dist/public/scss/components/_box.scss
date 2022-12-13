@@ -2,10 +2,12 @@
 @use "../components/mixins" as *;
 
 .box {
+    position: relative;
     padding-top: 7rem;
     height: 30px;
     cursor: pointer;
     border-radius: 30px;
+    align-items: center;
 
     input {
         width: 0;
@@ -19,10 +21,10 @@
     a .fas {
         color: $secondary;
         font-size: 18px;
+        border-radius: 20px;
     }
 
     &:hover input {
         width: 400px;
-
     }
 }

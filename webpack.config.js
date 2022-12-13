@@ -3,7 +3,7 @@ const path = require("path")
 module.exports = {
     entry: {
         index: "./client_side/index.ts",
-        Home: "./client_side/Home.ts",
+        Home: "./client_side/DataTable.ts",
     },
     output: {
         filename: "[name].js",
@@ -21,5 +21,7 @@ module.exports = {
     },
     resolve: {
         extensions: [".ts", ".js"]
-    }
+    },
+
+    mode: 'development'
 }
