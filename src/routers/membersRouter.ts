@@ -11,6 +11,7 @@ import { login } from "../utils/login";
 import { auth, AuthRequest } from "../utils/auth";
 import { updateMember } from "../db/updates/updateMember";
 import { systemUserSearch } from "../db/queries/systemUserSearch";
+import { callDibs } from "../db/inserts/callDibs";
 
 const membersRouter = express.Router();
 
@@ -126,7 +127,7 @@ membersRouter.post("/members/login", async (req, res) => {
 membersRouter.post("/members/logout", auth, async (req: AuthRequest, res) => {
 
     try {
-        const removeTokenSQL = updateMember({ uuid: req.member_uuid }, { token: null }) as string;
+        const removeTokenSQL = updateMember({ uuid: req.member?.uuid }, { token: null }) as string;
 
         await db.query(removeTokenSQL);
         
@@ -142,6 +143,22 @@ membersRouter.post("/members/delete/account", auth, (req: AuthRequest, res) => {
     
 })
 
+
+membersRouter.post("/calldibs", auth, async(req: AuthRequest, res) => {
+    const { isbn } = req.body;
+
+    try {
+        const {verification_code, error} = await callDibs(isbn, req.member as IMember)
+        
+        if (error)
+            throw error;
+        
+        res.status(201).json({ verification_code });
+    }
+    catch (err: any) {
+        res.status(400).send(err.message)
+    }
+})
 
 
 

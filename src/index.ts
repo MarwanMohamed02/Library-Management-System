@@ -2,6 +2,7 @@ import express from "express"
 import http from "http"
 import path from "path";
 import { Server } from "socket.io"
+import { db } from "./db/connect";
 // import { adminsRouter } from "./routers/adminsRouter";
 import { booksRouter } from "./routers/booksRouter"
 import { membersRouter } from "./routers/membersRouter"
@@ -25,8 +26,16 @@ app.use(express.static(publicDir));
 // Automatically Parses Request Body
 app.use(express.json());
 
+// async function test() {
+//     console.log(db)
+//     await db.query("select count(*) from Members");
+// }
+// test().then(count => console.log(count));
 
-console.log();
+// const date = Date.now();
+// console.log(date)
+console.log(new Date(1671046520795).toLocaleString())
+console.log(new Date(1671305720795).toLocaleString())
 
 // Routers
 app.use(booksRouter);

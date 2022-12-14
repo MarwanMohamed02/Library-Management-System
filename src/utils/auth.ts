@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import jwt, { JwtPayload, VerifyErrors } from "jsonwebtoken"
+import jwt, { VerifyErrors } from "jsonwebtoken"
 import { db } from "../db/connect";
 import { IMember } from "../db/interfaces/Member";
 import { memberSearch } from "../db/queries/memberSearch";
 
 interface AuthRequest extends Request {
-    member_uuid?: string
+    member?: IMember
 }
 
 
@@ -34,7 +34,7 @@ async function auth(req: AuthRequest, res: Response, next: NextFunction) {
                 return;
             }
             
-            req.member_uuid = member.uuid
+            req.member = member;
 
             next();
         });

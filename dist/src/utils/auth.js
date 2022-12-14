@@ -34,7 +34,7 @@ function auth(req, res, next) {
                     next(new Error());
                     return;
                 }
-                req.member_uuid = member.uuid;
+                req.member = member;
                 next();
             }));
         }

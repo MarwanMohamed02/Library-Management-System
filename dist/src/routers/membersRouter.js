@@ -23,6 +23,7 @@ const login_1 = require("../utils/login");
 const auth_1 = require("../utils/auth");
 const updateMember_1 = require("../db/updates/updateMember");
 const systemUserSearch_1 = require("../db/queries/systemUserSearch");
+const callDibs_1 = require("../db/inserts/callDibs");
 const membersRouter = express_1.default.Router();
 exports.membersRouter = membersRouter;
 // GET
@@ -98,8 +99,9 @@ membersRouter.post("/members/login", (req, res) => __awaiter(void 0, void 0, voi
     }
 }));
 membersRouter.post("/members/logout", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
-        const removeTokenSQL = (0, updateMember_1.updateMember)({ uuid: req.member_uuid }, { token: null });
+        const removeTokenSQL = (0, updateMember_1.updateMember)({ uuid: (_a = req.member) === null || _a === void 0 ? void 0 : _a.uuid }, { token: null });
         yield connect_1.db.query(removeTokenSQL);
         res.status(200).send();
     }
@@ -109,3 +111,15 @@ membersRouter.post("/members/logout", auth_1.auth, (req, res) => __awaiter(void 
 }));
 membersRouter.post("/members/delete/account", auth_1.auth, (req, res) => {
 });
+membersRouter.post("/calldibs", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { isbn } = req.body;
+    try {
+        const { verification_code, error } = yield (0, callDibs_1.callDibs)(isbn, req.member);
+        if (error)
+            throw error;
+        res.status(201).json({ verification_code });
+    }
+    catch (err) {
+        res.status(400).send(err.message);
+    }
+}));

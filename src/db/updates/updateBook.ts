@@ -1,10 +1,21 @@
-import { BookType, IBook } from "../interfaces/Book"
+import { BookType, IBook, IBookstoreBook, ILibraryBook } from "../interfaces/Book"
 
-export function updateBookData(updatedBookData: IBook): string {
+export function updateBookData(updatedBookData: any, type: BookType): string {
 
-    const { book_name ,avg_rating, quantity, ratings_count, price, type } = updatedBookData;
-
+    let { isbn, avg_rating, ratings_count } = updatedBookData as IBook;
+    let quantity , price;
     
+    if (type === BookType.LIBRARY_BOOK) {
+        const { borrow_quantity } = updatedBookData as ILibraryBook;
+        quantity = borrow_quantity
+    }
+    else {
+        const { selling_quantity, price: p } = updatedBookData as IBookstoreBook;
+        quantity = selling_quantity;
+        price = p;
+    }
+    
+    console.log(quantity);
     
     let sql: string = "";
 
@@ -23,25 +34,23 @@ export function updateBookData(updatedBookData: IBook): string {
     
         sql = sql.substring(0, sql.length - 2);
     
-        sql += ` WHERE book_name = '${book_name}'; `;
+        sql += ` WHERE isbn = '${isbn}'; `;
     }
     
     
     
-    if (quantity || price) {
+    if (quantity !== undefined || price) {
 
         const [qty, refTable] = type == BookType.LIBRARY_BOOK ? ["borrow_quantity", "Library_Books"] : ["selling_quantity", "Bookstore_Books"];
         
         sql += `\n  UPDATE  ${refTable} \nSET `;
         
-        sql += quantity ? ` ${qty} = ${quantity},` : "";
+        sql += quantity !== undefined ? ` ${qty} = ${quantity},` : "";
         sql += price ? ` price = ${price},` : "";
 
         sql = sql.substring(0, sql.length - 1);
         
-        sql += `\n  WHERE   isbn = (    SELECT Books.isbn 
-                                        FROM Books, ${refTable} 
-                                        WHERE ${refTable}.isbn = Books.isbn   AND     book_name = '${book_name}'); `;
+        sql += `\n  WHERE   isbn = '${isbn}'; `;
     }
 
     console.log(sql);

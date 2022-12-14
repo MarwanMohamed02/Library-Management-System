@@ -21,7 +21,15 @@ const publicDir = path_1.default.join(__dirname, "../public");
 app.use(express_1.default.static(publicDir));
 // Automatically Parses Request Body
 app.use(express_1.default.json());
-console.log();
+// async function test() {
+//     console.log(db)
+//     await db.query("select count(*) from Members");
+// }
+// test().then(count => console.log(count));
+// const date = Date.now();
+// console.log(date)
+console.log(new Date(1671046520795).toLocaleString());
+console.log(new Date(1671305720795).toLocaleString());
 // Routers
 app.use(booksRouter_1.booksRouter);
 app.use(membersRouter_1.membersRouter);

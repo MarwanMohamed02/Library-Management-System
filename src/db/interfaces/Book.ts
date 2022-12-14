@@ -9,14 +9,19 @@ export interface IBook {
     genre?: string, 
     book_description?: string,
     author?: string,
-    quantity?: number,
     avg_rating?: number,
-    ratings_count?: number,
-    type: BookType,
-    price?: number
+    ratings_count?: number
 }
 
 
+export interface ILibraryBook extends IBook {
+    borrow_quantity: number
+}
+
+export interface IBookstoreBook extends IBook {
+    selling_quantity: number,
+    price: number
+}
 
 export interface IBookQuery {
     isbn?: string,
