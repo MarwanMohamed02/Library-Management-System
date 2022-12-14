@@ -2,17 +2,35 @@
 @use '../components/mixins' as *;
 @use '../components/animations' as *;
 
-.table-section {
-    background-color: white;
-    padding: 10rem 0 0 0;
-    width: 100%;
-    height: 100%;
+.table-body {
+    display: flexbox;
+    justify-content: center;
+    align-items: center;
 
-    .rounded-pill {
-        margin-top: 3rem;
+    .table-section {
+        background-color: white;
+        padding-top: 3rem;
+        width: 100%;
+        height: 100%;
+
+        .rounded-pill {
+            margin-top: 3rem;
+        }
+
+        h1 {
+            padding-bottom: 2rem;
+        }
+
     }
+}
 
-    h1 {
-        padding-bottom: 2rem;
+#reset {
+    position: relative;
+    padding-top: 7rem;
+    padding-left: 16rem;
+
+    #reset-btn {
+        padding-right: 3rem;
+        padding-left: 3rem;
     }
 }
