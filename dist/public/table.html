@@ -18,7 +18,7 @@
 
     <nav class="navbar navbar-expand-lg menu shadow fixed-top" id="navigation-bar">
         <div class="container">
-            <a class="navbar-brand" href="#">Booker</a>
+            <a class="navbar-brand" href="home.html">Booker</a>
             <i class="fa-solid fa-book"></i>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
@@ -78,10 +78,17 @@
     <!-- END OF THE NAVBAR SECTION -->
     <div class="container">
         <div class="row">
-            <div class="box">
-                <input type="text" placeholder="Search..." id="search">
-                <a href="#" onclick="Search()" id="search-a">
-                    <i class="fas fa-search"></i>
+            <div class="col-md-6">
+                <div class="box">
+                    <input type="text" placeholder="Search..." id="search">
+                    <a href="#" id="search-a">
+                        <i class="fas fa-search"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6" id="reset">
+                <a style="text-decoration: none" class="btn-primary btn-rect" role="button" id="reset-btn">
+                    Reset Selections
                 </a>
             </div>
         </div>
@@ -98,10 +105,12 @@
 
                         </tr>
                     </thead>
-                    <tbody id="table-row">
-
+                    <tbody id="table-body">
                     </tbody>
                 </table>
+                <div class="card" id="error-card">
+
+                </div>
             </div>
         </div>
     </section>

@@ -11064,4 +11064,14 @@ textarea.form-control-lg {
   padding-bottom: 2rem;
 }
 
+#reset {
+  position: relative;
+  padding-top: 7rem;
+  padding-left: 16rem;
+}
+#reset #reset-btn {
+  padding-right: 3rem;
+  padding-left: 3rem;
+}
+
 /*# sourceMappingURL=style.css.map */

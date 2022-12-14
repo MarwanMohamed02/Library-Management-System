@@ -6,7 +6,7 @@ let displayedLibraryBooks: IBook[];
 var source = localStorage.getItem('target-entity');
 
 function Show() {
-  let element = document.getElementById("table-row") as HTMLTableRowElement;
+  let element = document.getElementById("table-body") as HTMLTableElement;
   element.innerHTML = "";
 
   switch (source) {
@@ -20,52 +20,58 @@ function Show() {
 
     case 'bookstore books':
 
-      //Fetch bookstore books
+      //Display bookstore books
 
       break;
 
     case 'reservations':
 
-      //Fetch reservations
+      //Display reservations
 
       break;
 
     case 'borrows':
 
-      //Fetch Borrows
+      //Display Borrows
 
       break;
 
     case 'workshops':
 
-      //Fetch workshops
+      //Display workshops
 
       break;
 
     case 'enrollments':
 
-      //Fetch Enrollments
+      //Display Enrollments
 
       break;
 
     case 'upcoming events':
 
-      //Fetch Upcoming Events
+      //Display Upcoming Events
 
       break;
 
     case 'previous events':
 
-      //Fetch Previous Events
+      //Display Previous Events
 
       break;
   }
 }
 
-const search = document.getElementById('search-a');
-search?.addEventListener('click', function handleClick(event) {
-  var element = document.getElementById("search") as HTMLInputElement;
-  var name = element.value;
+const search = document.getElementById('search') as HTMLInputElement;
+let card_body = document.getElementById("error-card") as HTMLElement;
+search?.addEventListener('keypress', function handlePress(event) {
+
+  if (event.key != 'Enter') {
+    return;
+  }
+
+  card_body.innerHTML = "";
+  var name = search.value;
   displayedLibraryBooks = [];
   var i = 0;
   for (var book of totalLibraryBooks) {
@@ -77,13 +83,24 @@ search?.addEventListener('click', function handleClick(event) {
 
 
   if (i == 0) {
-    window.alert("No Book with this name");
-    displayedLibraryBooks = totalLibraryBooks
+    displayedLibraryBooks = []
+    card_body.innerHTML = '<div class="card-body"><i>No Book Exists With This Name. Please Check Your Spelling and Try Again.</i></div>';
   }
 
   Show();
+
+
 });
 
+const reset = document.getElementById('reset-btn') as HTMLButtonElement;
+reset?.addEventListener('click', function handlePress(event) {
+
+  card_body.innerHTML = "";
+  search.value = "";
+  displayedLibraryBooks = totalLibraryBooks;
+  Show();
+
+});
 
 function prepareHeader() {
 
