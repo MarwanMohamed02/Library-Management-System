@@ -12,6 +12,7 @@ import { auth, AuthRequest } from "../utils/auth";
 import { updateMember } from "../db/updates/updateMember";
 import { systemUserSearch } from "../db/queries/systemUserSearch";
 import { callDibs } from "../db/inserts/callDibs";
+import { getDibs } from "../db/queries/getDibs";
 
 const membersRouter = express.Router();
 
@@ -32,6 +33,19 @@ membersRouter.get("/members", auth, async (req: AuthRequest, res) => {
         res.status(400).json(err);
     }
 
+})
+
+
+membersRouter.get("/mydibs", auth, async (req: AuthRequest, res) => {
+    try {
+        const dibs = await getDibs(req.member?.uuid as string);
+        
+        res.status(200).json({ dibs });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send();
+    }
 })
 
 

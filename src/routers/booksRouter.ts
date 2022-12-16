@@ -11,15 +11,19 @@ const booksRouter = express.Router();
 
 
 
+
 // GET
 booksRouter.get("/books", async (req, res) => {
     const bookQuery = req.query as IBookQuery;
 
+    // console.log(bookQuery);
+    
+    // console.log("hii");
     const sql = booksSearch(bookQuery);
     
     try {
         const {rows} = await db.query(sql)
-        console.log(rows);
+        // console.log(rows);
         res.json(rows);
     }
     catch (err) {
@@ -55,9 +59,9 @@ booksRouter.post("/books", async(req, res) => {
     const sql = insertBooks(bookData);
     
     try {
-        const result = await db.query(sql);
+        //const result = await db.query(sql);
     
-        res.status(201).json(result);
+        //res.status(201).json(result);
     }
     catch (err) {
         res.status(400).json(err);
@@ -70,7 +74,7 @@ booksRouter.post("/books/callDibs", async (req, res) => {
     const sql = callDibs(isbn, uuid);
 
     try {
-        await db.query(sql);
+        //await db.query(sql);
         res.status(201).send();
     }
     catch (err) {
@@ -83,10 +87,10 @@ booksRouter.post("/books/callDibs", async (req, res) => {
 booksRouter.patch("/books", async (req, res) => {
     const updatedBookData = req.body as IBook;
 
-    const sql = updateBookData(updatedBookData);
+    //const sql = updateBookData(updatedBookData);
 
     try {
-        await db.query(sql);
+        //await db.query(sql);
         res.status(200).send();
     }
     catch (err) {

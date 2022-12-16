@@ -27,6 +27,8 @@ function login(memberQuery) {
         const { username, pass } = memberQuery;
         const { rows } = yield connect_1.db.query((0, memberSearch_1.memberSearch)({ username }));
         let member = rows[0];
+        if (!member)
+            return null;
         console.log(member.token);
         if (member.token)
             return null;

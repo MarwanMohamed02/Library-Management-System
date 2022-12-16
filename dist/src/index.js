@@ -37,6 +37,9 @@ app.use(membersRouter_1.membersRouter);
 app.get("/", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "../public/index.html"));
 });
+app.get("/home", (req, res) => {
+    res.sendFile(path_1.default.join(__dirname, "../public/home.html"));
+});
 app.get("/test", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "../public/login.html"));
 });

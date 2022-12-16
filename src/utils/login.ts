@@ -16,6 +16,9 @@ export async function login(memberQuery:IMemberQuery): Promise<string | null> {
     const { rows } = await db.query(memberSearch({ username }));
 
     let member = rows[0] as IMember
+    
+    if (!member)
+        return null;
 
     console.log(member.token)
 

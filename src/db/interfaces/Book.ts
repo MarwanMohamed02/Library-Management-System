@@ -32,3 +32,15 @@ export interface IBookQuery {
     sort?: string,
     type?: BookType
 }
+
+
+
+export interface IDibs {
+    username: string,
+    book_name: string,
+    reservation_date: string,
+    reservation_time: string,
+    pick_up_before_date: string,
+    pick_up_before_time: string,
+    verification_code: number,
+}

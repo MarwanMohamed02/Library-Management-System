@@ -1,27 +1,37 @@
+import { db } from "../connect";
+import { IDibs } from "../interfaces/Book";
 
 
-export function getDibs(username: any, book_name: any): string {
-    let sql = `SELECT 
-                    BIN_TO_UUID(Members.id) as member_id,
-                    Members.username as username,
-                    Reservations.book_id as book_id,
-                    Books.book_name as book_name,
-                    FROM_UNIXTIME(Reservations.reservation_date) as reservation_date
-                FROM Reservations
-                INNER JOIN Members ON Reservations.member_id = Members.id
-                INNER JOIN Books ON Books.isbn = Reservations.book_id `
+export async function getDibs(uuid: string): Promise<IDibs[]> {
+    const sql = `   SELECT username,book_name, CALL_DIBS_ON_Timestamp, pick_up_before, verification_code
+                    FROM (CALL_DIBS_ON JOIN  Members ON id = member_id) JOIN books ON book_isbn = isbn 
+                    WHERE   id::UUID = '${uuid}'`
+
+    console.log(sql);
+
+    const { rows } = await db.query(sql);
+
     
-    const filters = [username, book_name];
-    const filterNames = ["username", "book_name"];
+    let dibs: IDibs[] = [];
 
-    for (let i = 0; i < filters.length; i++) 
-        if (filters[i])
-            sql += sql.includes("WHERE") ? `AND ${filterNames[i]} = "${filters[i]}" ` : `WHERE ${filterNames[i]} = "${filters[i]}" `;
-    
-    sql += "; ";
+    for (let i = 0; i < rows.length; i++) {
+        const reservation_date = (new Date(parseInt(rows[i].call_dibs_on_timestamp))).toLocaleDateString();
+        const reservation_time = (new Date(parseInt(rows[i].call_dibs_on_timestamp))).toLocaleTimeString();
+        
+        const pick_up_before_date   = (new Date(parseInt(rows[i].pick_up_before))).toLocaleDateString();
+        const pick_up_before_time   = (new Date(parseInt(rows[i].pick_up_before))).toLocaleTimeString();
 
-    // console.log(sql);
+        dibs.push({
+            username: rows[i].username,
+            book_name: rows[i].book_name,
+            reservation_date,
+            reservation_time,
+            pick_up_before_date,
+            pick_up_before_time,
+            verification_code: parseInt(rows[i].verification_code)            
+        })
+    }
 
-    return sql;
+    return dibs;
 
 }

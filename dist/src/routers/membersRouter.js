@@ -24,6 +24,7 @@ const auth_1 = require("../utils/auth");
 const updateMember_1 = require("../db/updates/updateMember");
 const systemUserSearch_1 = require("../db/queries/systemUserSearch");
 const callDibs_1 = require("../db/inserts/callDibs");
+const getDibs_1 = require("../db/queries/getDibs");
 const membersRouter = express_1.default.Router();
 exports.membersRouter = membersRouter;
 // GET
@@ -36,6 +37,17 @@ membersRouter.get("/members", auth_1.auth, (req, res) => __awaiter(void 0, void 
     }
     catch (err) {
         res.status(400).json(err);
+    }
+}));
+membersRouter.get("/mydibs", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    try {
+        const dibs = yield (0, getDibs_1.getDibs)((_a = req.member) === null || _a === void 0 ? void 0 : _a.uuid);
+        res.status(200).json({ dibs });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send();
     }
 }));
 // POST
@@ -99,9 +111,9 @@ membersRouter.post("/members/login", (req, res) => __awaiter(void 0, void 0, voi
     }
 }));
 membersRouter.post("/members/logout", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
+    var _b;
     try {
-        const removeTokenSQL = (0, updateMember_1.updateMember)({ uuid: (_a = req.member) === null || _a === void 0 ? void 0 : _a.uuid }, { token: null });
+        const removeTokenSQL = (0, updateMember_1.updateMember)({ uuid: (_b = req.member) === null || _b === void 0 ? void 0 : _b.uuid }, { token: null });
         yield connect_1.db.query(removeTokenSQL);
         res.status(200).send();
     }

@@ -1,8 +1,9 @@
-import { IBook } from "../src/db/interfaces/Book"
+import { BookType, IBook, ILibraryBook } from "../src/db/interfaces/Book"
 
-let totalLibraryBooks: IBook[];
-let displayedLibraryBooks: IBook[];
 
+let totalLibraryBooks: ILibraryBook[];
+let displayedLibraryBooks: ILibraryBook[];
+const token = localStorage.getItem('token');
 var source = localStorage.getItem('target-entity');
 
 function Show() {
@@ -13,9 +14,10 @@ function Show() {
 
     case 'library books':
 
-      for (let i = 0; i < displayedLibraryBooks.length; i++) {
-        element.innerHTML += "<tr> <th scope=\"row\">" + (i + 1) + "</th>" + "<td>" + displayedLibraryBooks[i].book_name + "</td>" + "<td>" + displayedLibraryBooks[i].genre + "</td>" + "<td>" + displayedLibraryBooks[i].author + "</td>" + "<td>" + displayedLibraryBooks[i].avg_rating + "</td>" + "<td>" + displayedLibraryBooks[i].book_description + "</td>" + "</tr>";
-      }
+      displayedLibraryBooks.forEach((book) => {
+        element.innerHTML += "<tr> <th scope=\"row\">" + book.isbn + "</th>" + "<td>" + book.book_name + "</td>" + "<td>" + book.genre + "</td>" + "<td>" + book.author + "</td>" + "<td>" + book.avg_rating + "</td>" + "<td>" + book.borrow_quantity + "</td>" + "</tr>";
+      })
+      
       break;
 
     case 'bookstore books':
@@ -75,7 +77,7 @@ search?.addEventListener('keypress', function handlePress(event) {
   displayedLibraryBooks = [];
   var i = 0;
   for (var book of totalLibraryBooks) {
-    if (name == book.book_name) {
+    if (name.toLowerCase() === book.book_name.toLowerCase()) {
       displayedLibraryBooks[i] = book;
       i++;
     }
@@ -109,7 +111,7 @@ function prepareHeader() {
   switch (source) {
 
     case 'library books':
-      tableHeader.innerHTML = '<th scope="col">#</th><th scope="col">Book Name</th><th scope="col">Genre</th><th scope="col">Author</th><th scope="col">Rating</th><th scope="col">Description</th>';
+      tableHeader.innerHTML = '<th scope="col">ISBN</th><th scope="col">Book Name</th><th scope="col">Genre</th><th scope="col">Author</th><th scope="col">Rating</th><th scope="col">Available Quantity</th>';
       break;
 
     case 'bookstore books':
@@ -153,7 +155,11 @@ async function GetEntities() {
   switch (source) {
 
     case 'library books':
-      const request = await fetch("/books");
+      const request = await fetch(`/books?type=${BookType.LIBRARY_BOOK}`, {
+        headers: {
+          'Authorization': JSON.stringify("Bearer " + token)
+        }
+      });
       totalLibraryBooks = await request.json();
       displayedLibraryBooks = totalLibraryBooks;
       break;
