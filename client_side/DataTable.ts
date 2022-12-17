@@ -1,7 +1,11 @@
-import { BookType, IBook, ILibraryBook } from "../src/db/interfaces/Book"
+import { BookType, IBook, IBookstoreBook, ILibraryBook } from "../src/db/interfaces/Book"
 
 let totalLibraryBooks: ILibraryBook[];
 let displayedLibraryBooks: ILibraryBook[];
+
+let totalBookstoreBooks: IBookstoreBook[];
+let displayedBookstoreBooks: IBookstoreBook[];
+
 const token = localStorage.getItem('token');
 var source = localStorage.getItem('target-entity');
 let search = document.getElementById('search') as HTMLInputElement;
@@ -14,14 +18,18 @@ var selected_item_name = document.getElementById('selected-element-name') as HTM
 var selected_item_author = document.getElementById('selected-element-author') as HTMLElement;
 var selected_item_ISBN = document.getElementById('selected-element-ISBN') as HTMLElement;
 var selected_item_rating = document.getElementById('selected-element-rating') as HTMLElement;
+var selected_item_price = document.getElementById('selected-element-price') as HTMLElement;
 var reserve_div = document.getElementById('reserve') as HTMLElement;
 let description = document.getElementById('description') as HTMLElement;
 
 async function GetEntities() {
+
+  var request;
+
   switch (source) {
 
     case 'library books':
-      const request = await fetch(`/books?type=${BookType.LIBRARY_BOOK}`, {
+      request = await fetch(`/books?type=${BookType.LIBRARY_BOOK}`, {
         headers: {
           'Authorization': JSON.stringify("Bearer " + token)
         }
@@ -32,8 +40,13 @@ async function GetEntities() {
 
     case 'bookstore books':
 
-      //Fetch bookstore books
-
+      request = await fetch(`/books?type=${BookType.BOOKSTORE_BOOK}`, {
+        headers: {
+          'Authorization': JSON.stringify("Bearer " + token)
+        }
+      });
+      totalBookstoreBooks = await request.json();
+      displayedBookstoreBooks = totalBookstoreBooks;
       break;
 
     case 'reservations':
@@ -88,7 +101,7 @@ function prepareHeader() {
 
     case 'bookstore books':
 
-      tableHeader.innerHTML = '<th scope="col">#</th><th scope="col">Book Name</th><th scope="col">Genre</th><th scope="col">Author</th><th scope="col">Rating</th><th scope="col">Description</th><th scope="col">Available Quantity</th>';
+      tableHeader.innerHTML = '<th scope="col">ISBN</th><th scope="col">Book Name</th><th scope="col">Genre</th><th scope="col">Author</th><th scope="col">Rating</th><th scope="col">Price</th><th scope="col">Available Quantity</th>';
       break;
 
     case 'reservations':
@@ -123,24 +136,98 @@ function prepareHeader() {
   }
 }
 
+function PrepareSelectedItemEvents() {
+  rows = document.querySelectorAll('tr');
+  rows.forEach(row => {
+    row?.addEventListener('click', function handleRowPress(event) {
+      selected_item?.scrollIntoView();
+
+      switch (source) {
+
+        case 'library books':
+
+          selected_item_name.innerHTML = "Book Name: " + displayedLibraryBooks[row.rowIndex - 1].book_name;
+          selected_item_author.innerHTML = "Author: " + displayedLibraryBooks[row.rowIndex - 1].author;
+          selected_item_ISBN.innerHTML = "ISBN: " + displayedLibraryBooks[row.rowIndex - 1].isbn;
+          selected_item_rating.innerHTML = "Average Rating: " + displayedLibraryBooks[row.rowIndex - 1].avg_rating.toString() + " (" + displayedLibraryBooks[row.rowIndex - 1].ratings_count + ")";
+          description.innerHTML = displayedLibraryBooks[row.rowIndex - 1].book_description;
+
+          accordion_selection.style.display = 'block';
+          reserve_div.style.display = 'block';
+          break;
+
+        case 'bookstore books':
+
+          selected_item_name.innerHTML = "Book Name: " + displayedBookstoreBooks[row.rowIndex - 1].book_name;
+          selected_item_author.innerHTML = "Author: " + displayedBookstoreBooks[row.rowIndex - 1].author;
+          selected_item_ISBN.innerHTML = "ISBN: " + displayedBookstoreBooks[row.rowIndex - 1].isbn;
+          selected_item_rating.innerHTML = "Average Rating: " + displayedBookstoreBooks[row.rowIndex - 1].avg_rating.toString() + " (" + displayedBookstoreBooks[row.rowIndex - 1].ratings_count + ")";
+          selected_item_price.innerHTML = "Selling Price: $" + displayedBookstoreBooks[row.rowIndex - 1].price;
+          description.innerHTML = displayedBookstoreBooks[row.rowIndex - 1].book_description;
+
+          accordion_selection.style.display = 'block';
+          break;
+
+        case 'reservations':
+
+          //Display reservations
+
+          break;
+
+        case 'borrows':
+
+          //Display Borrows
+
+          break;
+
+        case 'workshops':
+
+          //Display workshops
+
+          break;
+
+        case 'enrollments':
+
+          //Display Enrollments
+
+          break;
+
+        case 'upcoming events':
+
+          //Display Upcoming Events
+
+          break;
+
+        case 'previous events':
+
+          //Display Previous Events
+
+          break;
+      }
+
+    });
+  });
+}
 
 function Show() {
-  let element = document.getElementById("table-body") as HTMLTableElement;
-  element.innerHTML = "";
+  let table_body = document.getElementById("table-body") as HTMLTableElement;
+  table_body.innerHTML = "";
 
   switch (source) {
 
     case 'library books':
 
       displayedLibraryBooks.forEach((book) => {
-        element.innerHTML += "<tr> <td>" + book.isbn + "</td>" + "<td>" + book.book_name + "</td>" + "<td>" + book.genre + "</td>" + "<td>" + book.author + "</td>" + "<td>" + book.avg_rating + "</td>" + "<td>" + book.borrow_quantity + "</td>" + "</tr>";
+        table_body.innerHTML += "<tr> <td>" + book.isbn + "</td>" + "<td>" + book.book_name + "</td>" + "<td>" + book.genre + "</td>" + "<td>" + book.author + "</td>" + "<td>" + book.avg_rating + "</td>" + "<td>" + book.borrow_quantity + "</td>" + "</tr>";
       })
 
       break;
 
     case 'bookstore books':
 
-      //Display bookstore books
+      displayedBookstoreBooks.forEach((book) => {
+        table_body.innerHTML += "<tr> <td>" + book.isbn + "</td>" + "<td>" + book.book_name + "</td>" + "<td>" + book.genre + "</td>" + "<td>" + book.author + "</td>" + "<td>" + book.avg_rating + "</td>" + "<td>" + book.price + "</td>" + "<td>" + book.selling_quantity + "</td>" + "</tr>";
+      })
 
       break;
 
@@ -181,21 +268,8 @@ function Show() {
       break;
   }
 
-  rows = document.querySelectorAll('tr');
-  rows.forEach(row => {
-    row?.addEventListener('click', function handleRowPress(event) {
-      selected_item?.scrollIntoView();
+  PrepareSelectedItemEvents();
 
-      selected_item_name.innerHTML = "Book Name: " + displayedLibraryBooks[row.rowIndex - 1].book_name;
-      selected_item_author.innerHTML = "Author: " + displayedLibraryBooks[row.rowIndex - 1].author;
-      selected_item_ISBN.innerHTML = "ISBN: " + displayedLibraryBooks[row.rowIndex - 1].isbn;
-      selected_item_rating.innerHTML = "Average Rating: " + displayedLibraryBooks[row.rowIndex - 1].avg_rating.toString();
-      description.innerHTML = displayedLibraryBooks[row.rowIndex - 1].book_description;
-
-      accordion_selection.style.display = 'block';
-      reserve_div.style.display = 'block';
-    });
-  });
 }
 
 window.onload = async function () {
@@ -214,19 +288,82 @@ search?.addEventListener('keypress', function handlePress(event) {
 
   card_body.innerHTML = "";
   var name = search.value;
-  displayedLibraryBooks = [];
-  var i = 0;
-  for (var book of totalLibraryBooks) {
-    if (name.toLowerCase() === book.book_name.toLowerCase()) {
-      displayedLibraryBooks[i] = book;
-      i++;
-    }
-  }
+
+  switch (source) {
+
+    case 'library books':
+
+      displayedLibraryBooks = [];
+      var i = 0;
+      for (var libraryBook of totalLibraryBooks) {
+        if (name.toLowerCase() === libraryBook.book_name.toLowerCase()) {
+          displayedLibraryBooks[i] = libraryBook;
+          i++;
+        }
+      }
 
 
-  if (i == 0) {
-    displayedLibraryBooks = []
-    card_body.innerHTML = '<div class="card-body"><i>No Book Exists With This Name. Please Check Your Spelling and Try Again.</i></div>';
+      if (i == 0) {
+        displayedLibraryBooks = []
+        card_body.innerHTML = '<div class="card-body"><i>No Book Exists With This Name In The Library. Please Check Your Spelling and Try Again.</i></div>';
+      }
+
+      break;
+
+    case 'bookstore books':
+
+      displayedBookstoreBooks = [];
+      var i = 0;
+      for (var bookstoreBook of totalBookstoreBooks) {
+        if (name.toLowerCase() === bookstoreBook.book_name.toLowerCase()) {
+          displayedBookstoreBooks[i] = bookstoreBook;
+          i++;
+        }
+      }
+
+
+      if (i == 0) {
+        displayedBookstoreBooks = []
+        card_body.innerHTML = '<div class="card-body"><i>No Book Exists With This Name In The Bookstore. Please Check Your Spelling and Try Again.</i></div>';
+      }
+
+      break;
+
+    case 'reservations':
+
+      //Display reservations
+
+      break;
+
+    case 'borrows':
+
+      //Display Borrows
+
+      break;
+
+    case 'workshops':
+
+      //Display workshops
+
+      break;
+
+    case 'enrollments':
+
+      //Display Enrollments
+
+      break;
+
+    case 'upcoming events':
+
+      //Display Upcoming Events
+
+      break;
+
+    case 'previous events':
+
+      //Display Previous Events
+
+      break;
   }
 
   Show();
@@ -239,10 +376,12 @@ reset?.addEventListener('click', function handlePress(event) {
   card_body.innerHTML = "";
   search.value = "";
   displayedLibraryBooks = totalLibraryBooks;
+  displayedBookstoreBooks = totalBookstoreBooks;
   selected_item_name.innerHTML = "";
   selected_item_ISBN.innerHTML = "";
   selected_item_author.innerHTML = "";
   selected_item_rating.innerHTML = "";
+  selected_item_price.innerHTML = "";
 
   reserve_div.style.display = 'none';
   accordion_selection.style.display = 'none';
