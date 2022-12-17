@@ -11074,4 +11074,59 @@ textarea.form-control-lg {
   padding-left: 3rem;
 }
 
+#reserve {
+  position: relative;
+  padding-left: 37rem;
+}
+#reserve #reserve-btn {
+  padding-right: 3rem;
+  padding-left: 3rem;
+}
+
+.reviews {
+  position: relative;
+  padding: 0;
+  background: linear-gradient(to right, rgba(103, 52, 0, 0.95), rgba(181, 101, 29, 0.95));
+}
+.reviews__card {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 2rem 1.25rem;
+  border-radius: 0.625rem;
+  height: auto;
+  text-align: center;
+}
+.reviews__card i {
+  font-size: 1.5rem;
+  color: rgba(103, 52, 0, 0.7);
+}
+.reviews__card .ratings i {
+  color: rgba(103, 52, 0, 0.7);
+  font-size: 1rem;
+}
+.reviews__picture {
+  width: 6rem;
+  height: 6rem;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.reviews__picture img {
+  border: 0.325rem solid rgba(103, 52, 0, 0.7);
+}
+.reviews__name {
+  padding-top: 3rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 500;
+  color: #fff;
+}
+.reviews__name h3 {
+  padding-top: 0.8rem;
+  text-transform: capitalize;
+}
+.reviews__name p {
+  padding-bottom: 2rem;
+  text-transform: capitalize;
+}
+
 /*# sourceMappingURL=style.css.map */
