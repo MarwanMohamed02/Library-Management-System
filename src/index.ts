@@ -35,8 +35,8 @@ app.use(express.json());
 
 // const date = Date.now();
 // console.log(date)
-console.log(new Date('9 AM, 12/10/2022').toLocaleString())
-// console.log(new Date(1671305720795).toLocaleString())
+console.log(Date.now())
+console.log(new Date(1671305720795).toLocaleString())
 
 // Routers
 app.use(booksRouter);

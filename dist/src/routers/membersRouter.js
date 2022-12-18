@@ -25,6 +25,10 @@ const updateMember_1 = require("../db/updates/updateMember");
 const systemUserSearch_1 = require("../db/queries/systemUserSearch");
 const callDibs_1 = require("../db/inserts/callDibs");
 const getDibs_1 = require("../db/queries/getDibs");
+const getBorrows_1 = require("../db/queries/getBorrows");
+const getEnrollments_1 = require("../db/queries/getEnrollments");
+const getAvailableWorkshops_1 = require("../db/queries/getAvailableWorkshops");
+const getEvents_1 = require("../db/queries/getEvents");
 const membersRouter = express_1.default.Router();
 exports.membersRouter = membersRouter;
 // GET
@@ -44,6 +48,50 @@ membersRouter.get("/mydibs", auth_1.auth, (req, res) => __awaiter(void 0, void 0
     try {
         const dibs = yield (0, getDibs_1.getDibs)((_a = req.member) === null || _a === void 0 ? void 0 : _a.uuid);
         res.status(200).json({ dibs });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send();
+    }
+}));
+membersRouter.get("/myborrows", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
+    try {
+        const dibs = yield (0, getBorrows_1.getBorrows)((_b = req.member) === null || _b === void 0 ? void 0 : _b.uuid);
+        res.status(200).json({ dibs });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send();
+    }
+}));
+membersRouter.get("/myenrollments", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c;
+    try {
+        const enrollments = yield (0, getEnrollments_1.getEnrollments)((_c = req.member) === null || _c === void 0 ? void 0 : _c.uuid);
+        res.status(200).json({ enrollments });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send();
+    }
+}));
+membersRouter.get("/workshops", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const availableWorkshops = yield (0, getAvailableWorkshops_1.getAvailableWorkshops)();
+        res.status(200).json({ availableWorkshops });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send();
+    }
+}));
+membersRouter.get("/events", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _d;
+    const { attended } = req.query;
+    try {
+        const events = attended ? yield (0, getEvents_1.getEvents)((_d = req.member) === null || _d === void 0 ? void 0 : _d.uuid) : yield (0, getEvents_1.getEvents)();
+        res.status(200).json({ events });
     }
     catch (err) {
         console.log(err);
@@ -111,9 +159,9 @@ membersRouter.post("/members/login", (req, res) => __awaiter(void 0, void 0, voi
     }
 }));
 membersRouter.post("/members/logout", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _b;
+    var _e;
     try {
-        const removeTokenSQL = (0, updateMember_1.updateMember)({ uuid: (_b = req.member) === null || _b === void 0 ? void 0 : _b.uuid }, { token: null });
+        const removeTokenSQL = (0, updateMember_1.updateMember)({ uuid: (_e = req.member) === null || _e === void 0 ? void 0 : _e.uuid }, { token: null });
         yield connect_1.db.query(removeTokenSQL);
         res.status(200).send();
     }

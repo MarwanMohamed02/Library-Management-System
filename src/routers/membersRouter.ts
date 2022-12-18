@@ -13,6 +13,10 @@ import { updateMember } from "../db/updates/updateMember";
 import { systemUserSearch } from "../db/queries/systemUserSearch";
 import { callDibs } from "../db/inserts/callDibs";
 import { getDibs } from "../db/queries/getDibs";
+import { getBorrows } from "../db/queries/getBorrows";
+import { getEnrollments } from "../db/queries/getEnrollments";
+import { getAvailableWorkshops } from "../db/queries/getAvailableWorkshops";
+import { getEvents } from "../db/queries/getEvents";
 
 const membersRouter = express.Router();
 
@@ -48,7 +52,54 @@ membersRouter.get("/mydibs", auth, async (req: AuthRequest, res) => {
     }
 })
 
+membersRouter.get("/myborrows", auth, async (req: AuthRequest, res) => {
+    try {
+        const dibs = await getBorrows(req.member?.uuid as string);
+        
+        res.status(200).json({ dibs });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send();
+    }
+})
 
+membersRouter.get("/myenrollments", auth, async (req: AuthRequest, res) => {
+    try {
+        const enrollments = await getEnrollments(req.member?.uuid as string);
+        
+        res.status(200).json({ enrollments });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send();
+    }
+})
+
+membersRouter.get("/workshops", auth, async (req: AuthRequest, res) => {
+    try {
+        const availableWorkshops = await getAvailableWorkshops();
+        
+        res.status(200).json({ availableWorkshops });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send();
+    }
+})
+
+membersRouter.get("/events", auth, async (req: AuthRequest, res) => {
+    const { attended } = req.query;
+    try {
+        const events = attended ? await getEvents(req.member?.uuid) : await getEvents();
+        
+        res.status(200).json({ events });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send();
+    }
+})
 
 // POST
 membersRouter.post("/members/signup", async (req, res) => {

@@ -4,7 +4,7 @@ import { IDibs } from "../interfaces/Book";
 
 export async function getDibs(uuid: string): Promise<IDibs[]> {
     const sql = `   SELECT username,book_name, CALL_DIBS_ON_Timestamp, pick_up_before, verification_code
-                    FROM (CALL_DIBS_ON JOIN  Members ON id = member_id) JOIN books ON book_isbn = isbn 
+                    FROM (CALL_DIBS_ON JOIN  Members ON id = member_id) JOIN Books ON book_isbn = isbn 
                     WHERE   id::UUID = '${uuid}'`
 
     console.log(sql);

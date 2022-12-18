@@ -42,5 +42,13 @@ export interface IDibs {
     reservation_time: string,
     pick_up_before_date: string,
     pick_up_before_time: string,
-    verification_code: number,
+    verification_code: number
+}
+export interface IBorrow {
+    username: string,
+    book_name: string,
+    borrow_date: string,
+    borrow_time: string,
+    return_before_date: string,
+    return_before_time: string
 }
