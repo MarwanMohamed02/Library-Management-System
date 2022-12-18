@@ -28,8 +28,8 @@ app.use(express_1.default.json());
 // test().then(count => console.log(count));
 // const date = Date.now();
 // console.log(date)
-console.log(new Date(1671046520795).toLocaleString());
-console.log(new Date(1671305720795).toLocaleString());
+console.log(new Date('9 AM, 12/10/2022').toLocaleString());
+// console.log(new Date(1671305720795).toLocaleString())
 // Routers
 app.use(booksRouter_1.booksRouter);
 app.use(membersRouter_1.membersRouter);
