@@ -6,11 +6,11 @@ export enum BookType {
 export interface IBook {
     isbn: string,
     book_name: string,
-    genre?: string, 
-    book_description?: string,
-    author?: string,
-    avg_rating?: number,
-    ratings_count?: number
+    genre: string,
+    book_description: string,
+    author: string,
+    avg_rating: number,
+    ratings_count: number
 }
 
 
