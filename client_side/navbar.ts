@@ -6,6 +6,8 @@ const workshops_btn = document.getElementById("btn-available-workshops");
 const enrollments_btn = document.getElementById("btn-enrollments");
 const upcoming_events_btn = document.getElementById("btn-upcoming-events");
 const prev_events_btn = document.getElementById("btn-prev-events");
+const warnings_notification= document.getElementById("Warnings");
+const logo= document.getElementById("logo");
 
 
 library_btn?.addEventListener('click', function handleClick(event) {
@@ -39,4 +41,13 @@ upcoming_events_btn?.addEventListener('click', function handleClick(event) {
 prev_events_btn?.addEventListener('click', function handleClick(event) {
     localStorage.setItem('target-entity', 'previous events');
 })
+warnings_notification?.addEventListener('click', function handleClick(event) {
+   
+    location.href = "warnings.html";
+})
+
+
+window.onload =  function () {
+    logo.innerText="10";   //we should here call fetch function that will return count of warnings
+  }
 
