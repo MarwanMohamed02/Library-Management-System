@@ -5,13 +5,20 @@ let db: Client;
 async function connect() {
     const { DATABASE_URL } = process.env;
 
-    const client = new Client(DATABASE_URL as string);
+    let client = new Client(DATABASE_URL as string);
 
-    await client.connect();
+    try {
 
-    await client.query("USE booker ")
-
-    console.log("done")
+        await client.connect();
+        
+        await client.query("USE booker ")
+        
+    }
+    catch (err) {
+        console.log(err);
+        client = await connect();
+    }
+    
 
     return client;
 }

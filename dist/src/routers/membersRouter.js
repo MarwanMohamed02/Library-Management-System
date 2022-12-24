@@ -29,6 +29,7 @@ const getBorrows_1 = require("../db/queries/getBorrows");
 const getEnrollments_1 = require("../db/queries/getEnrollments");
 const getAvailableWorkshops_1 = require("../db/queries/getAvailableWorkshops");
 const getEvents_1 = require("../db/queries/getEvents");
+const addReview_1 = require("../db/inserts/addReview");
 const membersRouter = express_1.default.Router();
 exports.membersRouter = membersRouter;
 // GET
@@ -181,5 +182,57 @@ membersRouter.post("/calldibs", auth_1.auth, (req, res) => __awaiter(void 0, voi
     }
     catch (err) {
         res.status(400).send(err.message);
+    }
+}));
+membersRouter.post("/review/instructor", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _f;
+    const { instructor_id, comment, rating } = req.body;
+    try {
+        console.log(rating);
+        yield (0, addReview_1.addReview)(instructor_id, "Instructor", (_f = req.member) === null || _f === void 0 ? void 0 : _f.uuid, comment, rating);
+        res.status(200).send();
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send();
+    }
+}));
+membersRouter.post("/review/author", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _g;
+    const { author_id, comment, rating } = req.body;
+    try {
+        console.log(rating);
+        yield (0, addReview_1.addReview)(author_id, "Author", (_g = req.member) === null || _g === void 0 ? void 0 : _g.uuid, comment, rating);
+        res.status(200).send();
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send();
+    }
+}));
+membersRouter.post("/review/book", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _h;
+    const { isbn, comment, rating } = req.body;
+    try {
+        console.log(rating);
+        yield (0, addReview_1.addReview)(isbn, "Book", (_h = req.member) === null || _h === void 0 ? void 0 : _h.uuid, comment, rating);
+        res.status(200).send();
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send();
+    }
+}));
+membersRouter.post("/review/workshop", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _j;
+    const { workshop_title, comment, rating } = req.body;
+    try {
+        console.log(rating);
+        yield (0, addReview_1.addReview)(workshop_title, "Workshop", (_j = req.member) === null || _j === void 0 ? void 0 : _j.uuid, comment, rating);
+        res.status(200).send();
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send();
     }
 }));

@@ -4,3 +4,4 @@ dev.session.sql
 config/
 prod.session.sql
 Schema.pdf
+Library.sql

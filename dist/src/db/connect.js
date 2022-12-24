@@ -16,10 +16,15 @@ exports.db = db;
 function connect() {
     return __awaiter(this, void 0, void 0, function* () {
         const { DATABASE_URL } = process.env;
-        const client = new pg_1.Client(DATABASE_URL);
-        yield client.connect();
-        yield client.query("USE booker ");
-        console.log("done");
+        let client = new pg_1.Client(DATABASE_URL);
+        try {
+            yield client.connect();
+            yield client.query("USE booker ");
+        }
+        catch (err) {
+            console.log(err);
+            client = yield connect();
+        }
         return client;
     });
 }

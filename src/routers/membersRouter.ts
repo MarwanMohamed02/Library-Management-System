@@ -17,6 +17,7 @@ import { getBorrows } from "../db/queries/getBorrows";
 import { getEnrollments } from "../db/queries/getEnrollments";
 import { getAvailableWorkshops } from "../db/queries/getAvailableWorkshops";
 import { getEvents } from "../db/queries/getEvents";
+import { addReview } from "../db/inserts/addReview";
 
 const membersRouter = express.Router();
 
@@ -227,6 +228,57 @@ membersRouter.post("/calldibs", auth, async(req: AuthRequest, res) => {
 
 
 
+membersRouter.post("/review/instructor", auth, async (req: AuthRequest, res) => {
+    const { instructor_id, comment, rating } = req.body;
+    try {
+        console.log(rating);
+        await addReview(instructor_id as string, "Instructor", req.member?.uuid as string, comment, rating);
+        res.status(200).send();
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send();
+    }
+})
+
+membersRouter.post("/review/author", auth, async (req: AuthRequest, res) => {
+    const { author_id, comment, rating } = req.body;
+    try {
+        console.log(rating);
+        await addReview(author_id as string, "Author", req.member?.uuid as string, comment, rating);
+        res.status(200).send();
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send();
+    }
+})
+
+membersRouter.post("/review/book", auth, async (req: AuthRequest, res) => {
+    const { isbn, comment, rating } = req.body;
+    try {
+        console.log(rating);
+        await addReview(isbn as string, "Book", req.member?.uuid as string, comment, rating);
+        res.status(200).send();
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send();
+    }
+})
+
+membersRouter.post("/review/workshop", auth, async (req: AuthRequest, res) => {
+    const { workshop_title, comment, rating } = req.body;
+    try {
+        console.log(rating);
+        await addReview(workshop_title as string, "Workshop", req.member?.uuid as string, comment, rating);
+        res.status(200).send();
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).send();
+    }
+})
 
 
 
