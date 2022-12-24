@@ -23,7 +23,7 @@
         <div class="container">
             <button title="Warnings" id="Warnings"style=" left: -20px;" type="button" class="icon-button">
                 <span class="material-icons">
-                    bug_report
+                    notification_important
                     </span>
                 <span id="logo"class="icon-button__badge">2</span>
               </button>
@@ -104,16 +104,34 @@
         </div>
     </nav>
 
+    
 
 
-
-
+   
 
     <section id="home-section" class="home">
         <div class="container">
+            
             <div class="row align-items-center">
-               
-                    <h1 style="color:antiquewhite; font-weight: bold;">Your Penalties:</h1>
+                
+                <div style="left: 1000px; top: 50px; ;"      class="dropdown dropdown-button">
+                            
+                    <button id="Menu"   class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        
+                        All
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item"  id="WarPen">All
+                        </a>
+                        <a class="dropdown-item"  id="War">Warnings
+                        </a>
+                        <a class="dropdown-item" id="Pen">Penalties</a>
+                       
+                    </div>
+                </div>
+                    <h1  id="Mytitle" style="color:antiquewhite; font-weight: bold;">Notifications:</h1>
+                    
                     
                   
                 <div id="Warninglist" class="list-group" style="margin: 15px; margin-top: -10px;">
