@@ -11,7 +11,7 @@ async function connect() {
 
         await client.connect();
         
-        await client.query("USE booker ")
+        console.log("Connected to database");
         
     }
     catch (err) {

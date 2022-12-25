@@ -1,70 +1,17 @@
 import { io } from "socket.io-client";
-import bootstrap from "bootstrap";
-import Mustache from "mustache";
-
-const socket = io();
-// // const navContent = document.getElementById("navContent");
-// // console.log(navContent);
-// // const bsOffcanvas = new bootstrap.Offcanvas('#myOffcanvas')
-// // bsOffcanvas.show(navContent as HTMLElement)
-// const button = document.getElementById("navButton") as HTMLButtonElement;
-// const homeButton = document.getElementById("home") as HTMLButtonElement;
-// const featuresButton = document.getElementById("features") as HTMLButtonElement;
-
-// console.log(homeButton, featuresButton);
-
-// featuresButton.onclick = (e) => {
-//     e.preventDefault();
-//     homeButton.className = "nav-link";
-//     featuresButton.className = "nav-link active"
-// }
-
-// homeButton.onclick = (e) => {
-//     e.preventDefault();
-//     featuresButton.className = "nav-link";
-//     homeButton.className = "nav-link active"
-// }
-// button.onclick = (e) => {
-//     e.preventDefault();
-//     const navContent = document.getElementById("navContent") as HTMLElement;
-//     console.log(navContent);
-//     const bsOffcanvas = new bootstrap.Offcanvas(navContent)
-//     bsOffcanvas.show();
-// }
 
 
+const socket = io({
+    auth: {
+        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiM2VhOTNlNTctYjg1Ni00OGYyLTkwMmMtM2Y2Njg5MWMzODk3IiwiaWF0IjoxNjcxODYyNzU5fQ.S6ONCS-PwaJqyHXeDyuN4OmblNglSdraHu8yWdpF9oI"
+    }
+});
 
-async function func() {
-    const test_data = await fetch("/books");
-    return await test_data.json()
-}
 
-async function test() {
-    const data = await func();
-    console.log(data);
-}
+socket.on("ping", (time) => {
+    socket.emit("pong", time);
+});
 
-test();
-// func().then(test_data => {
-//     console.log(`Hiii  `)
-//     let html = document.e
-//     html = test_data as unknown as HTMLElement
-// });
-// console.log(`Hiii  `)
-// let cardsContainer = document.getElementById("cards-container");
-// const CardTemplate = document.getElementById("card-template")?.innerHTML as string;
-
-// function createCard() {
-//     const data = {
-//         title: "Harry Potter",
-//         description: "Wizards and Witches"
-//     }
-
-//     const updatedHTML = Mustache.render(CardTemplate, data);
-
-//     cardsContainer?.insertAdjacentHTML("beforeend",updatedHTML);
-// }
-
-// createCard();
-// createCard();
-// createCard();
+// "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNGUwMjgzNWQtN2RlZC00NTIxLWFhNWItYmZmMjY3N2M5NjA5IiwiaWF0IjoxNjcxMDAxMzIyfQ._aUPRC-Uz9y6ppzl_u_zBaenJZVcsDMl95f48YclJds"
+// "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNWRiODdjMzgtNDg2My00ODM3LWJlOGItNDhlZmQ3ODUwMjU1IiwiaWF0IjoxNjcxMjgxNjc2fQ._CHR9bbarOLLWHl15eBuOUxpRxvBbTmyacaiLB0u7Yo"
+// "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiYTY4OGE2ODctYzJlOC00ZDZjLWFiZjYtYmY5MjY4NWFjMjdkIiwiaWF0IjoxNjcwOTA3MDYzfQ.LZ6FTv08yusy8zGPk-jT2q6-frPNBOBmL_1-Ld5eJZg"

@@ -1,6 +1,12 @@
+import { io } from "socket.io-client";
+
 const login_button = document.getElementById("login-button") as HTMLButtonElement;
 
 localStorage.clear();
+
+// const socket = io();
+
+// socket.emit("hi");
 
 console.log(login_button);
 

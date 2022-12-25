@@ -2,11 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.memberSearch = void 0;
 function memberSearch(memberQuery) {
-    const { uuid, firstname, lastname, phone_number, email, username, membership_type, warning_count, follower_count } = memberQuery;
+    const { uuid, firstname, lastname, phone_number, email, username, membership_type, warning_count, follower_count, token } = memberQuery;
     const attributes = [firstname, lastname, phone_number, email,
-        username, membership_type];
+        username, membership_type, token];
     const attNames = ['firstname', 'lastname', 'phone_number', 'email',
-        'username', 'membership_type'];
+        'username', 'membership_type', 'token'];
     const sorts = [warning_count, follower_count];
     const sortNames = ["warning_count", "follower_count"];
     let query = `SELECT 

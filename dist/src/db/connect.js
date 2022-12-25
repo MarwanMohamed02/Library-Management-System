@@ -19,7 +19,7 @@ function connect() {
         let client = new pg_1.Client(DATABASE_URL);
         try {
             yield client.connect();
-            yield client.query("USE booker ");
+            console.log("Connected to database");
         }
         catch (err) {
             console.log(err);
