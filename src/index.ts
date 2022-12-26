@@ -89,7 +89,7 @@ io.on("connection", async (socket) => {
             if (penalties.length !== 0) 
                 io.to(uuid).emit("penalties", penalties);  
                 
-            if (penalties.length !== 0) 
+            if (warnings.length !== 0) 
                 io.to(uuid).emit("warnings", warnings);
             
             io.to(uuid).emit("ping", Date.now());

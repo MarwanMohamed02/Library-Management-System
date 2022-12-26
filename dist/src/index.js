@@ -74,7 +74,7 @@ io.on("connection", (socket) => __awaiter(void 0, void 0, void 0, function* () {
             console.log(penalties);
             if (penalties.length !== 0)
                 io.to(uuid).emit("penalties", penalties);
-            if (penalties.length !== 0)
+            if (warnings.length !== 0)
                 io.to(uuid).emit("warnings", warnings);
             io.to(uuid).emit("ping", Date.now());
         }
