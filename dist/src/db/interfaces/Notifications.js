@@ -9,19 +9,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkForPenalty = void 0;
-const connect_1 = require("../db/connect");
-function checkForPenalty(uuid, penalty_type) {
+exports.createNotification = void 0;
+const connect_1 = require("../connect");
+function createNotification(data, type) {
     return __awaiter(this, void 0, void 0, function* () {
-        const sql = `   SELECT  COUNT(*) 
+        const currTime = new Date(Date.now());
+        const notification_time = currTime.toLocaleTimeString() + " " + currTime.toLocaleDateString();
+        if (!type.includes("penalty"))
+            return { data, type, notification_time };
+        const penalty_type = type.replace(" penalty", "");
+        const sql = `   SELECT  fee
                     FROM    Penalties
-                    WHERE   member_id::UUID = '${uuid}' 
-                    AND     penalty_type = '${penalty_type}'
-                    AND     paid = 0::BIT; `;
-        console.log(sql);
+                    JOIN    Penalty_Types   ON      penalty_name = penalty_type
+                    WHERE   penalty_type = '${penalty_type}'`;
         const { rows } = yield connect_1.db.query(sql);
-        const penaltyCount = rows[0].count;
-        return penaltyCount;
+        const fee = rows[0].fee;
+        data = Object.assign(Object.assign({}, data), { fee });
+        console.log("notification data");
+        console.log(data);
+        return {
+            data,
+            type,
+            notification_time
+        };
     });
 }
-exports.checkForPenalty = checkForPenalty;
+exports.createNotification = createNotification;

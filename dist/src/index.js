@@ -17,7 +17,7 @@ const http_1 = __importDefault(require("http"));
 const path_1 = __importDefault(require("path"));
 const socket_io_1 = require("socket.io");
 const connect_1 = require("./db/connect");
-const getAllWarnings_1 = require("./db/queries/getAllWarnings");
+const getViolations_1 = require("./db/queries/getViolations");
 // import { adminsRouter } from "./routers/adminsRouter";
 const booksRouter_1 = require("./routers/booksRouter");
 const membersRouter_1 = require("./routers/membersRouter");
@@ -63,15 +63,20 @@ io.on("connection", (socket) => __awaiter(void 0, void 0, void 0, function* () {
     yield socket.join(uuid);
     io.to(uuid).emit("ping", Date.now());
     socket.on("pong", (time) => __awaiter(void 0, void 0, void 0, function* () {
-        if (Date.now() - time < 60)
+        if (Date.now() - time < 10000)
             io.to(uuid).emit("ping", time);
         else {
-            const warnings = yield (0, getAllWarnings_1.getAllWarnings)(uuid);
+            const warnings = yield (0, getViolations_1.getAllLatePickups)(uuid);
+            console.log("warnings:");
             console.log(warnings);
-            if (!warnings)
-                io.to(uuid).emit("ping", Date.now());
-            else
+            const penalties = yield (0, getViolations_1.getAllLateReturns)(uuid);
+            console.log("penalties:");
+            console.log(penalties);
+            if (penalties.length !== 0)
+                io.to(uuid).emit("penalties", penalties);
+            if (penalties.length !== 0)
                 io.to(uuid).emit("warnings", warnings);
+            io.to(uuid).emit("ping", Date.now());
         }
     }));
 }));

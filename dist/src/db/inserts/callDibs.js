@@ -25,7 +25,7 @@ function callDibs(isbn, member) {
         if (!book)
             return { error: new Error("Sorry... Book is unavailable") };
         // Checks if there are any unpaid penalties related to a dibs that was not picked up
-        const hasPenalty = yield (0, checkForPenalty_1.checkForPenalty)(member.uuid, { type: "no pickup" });
+        const hasPenalty = yield (0, checkForPenalty_1.checkForPenalty)(member.uuid, "no pickup");
         console.log("Penalties:" + hasPenalty);
         if (hasPenalty > 0)
             return { error: new Error("Please pay past penalties before calling dibs") };

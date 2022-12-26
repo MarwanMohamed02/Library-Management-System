@@ -175,13 +175,16 @@ membersRouter.post("/members/delete/account", auth_1.auth, (req, res) => {
 membersRouter.post("/calldibs", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { isbn } = req.body;
     try {
+        // console.log(req.member?.warning_count as number)
+        // if (req.member?.warning_count as number >= 5)
+        //     throw new Error("You cannot make any reservations until warnings are cleared");
         const { verification_code, error } = yield (0, callDibs_1.callDibs)(isbn, req.member);
         if (error)
             throw error;
         res.status(201).json({ verification_code });
     }
     catch (err) {
-        res.status(400).send(err.message);
+        res.status(400).json({ error: err.message });
     }
 }));
 membersRouter.post("/review/instructor", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {

@@ -21,7 +21,7 @@ export async function callDibs(isbn: string, member: IMember) {
 
     
     // Checks if there are any unpaid penalties related to a dibs that was not picked up
-    const hasPenalty: number = await checkForPenalty(member.uuid as string, { type: "no pickup" });
+    const hasPenalty: number = await checkForPenalty(member.uuid as string, "no pickup");
 
     console.log("Penalties:" + hasPenalty)
 

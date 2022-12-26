@@ -13,6 +13,7 @@ export async function getAvailableWorkshops(): Promise<IWorkshop[]> {
                         workshop.avg_rating             as avg_rating,
                         workshop.reviews_count          as reviews_count,
                         org_name                        as sponsor,
+                        instructor_id,
                         firstname                       as instructor_firstname,
                         lastname                        as instructor_lastname,
                         System_Users.email              as instructor_email,

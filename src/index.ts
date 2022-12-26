@@ -3,9 +3,11 @@ import http from "http"
 import path from "path";
 import { Server } from "socket.io"
 import { db } from "./db/connect";
+import { addPenalty } from "./db/inserts/addPenalty";
 import { IMember } from "./db/interfaces/Member";
-import { IWarnings } from "./db/interfaces/Penalty";
-import { getAllWarnings } from "./db/queries/getAllWarnings";
+import { IWarnings } from "./db/interfaces/Notifications";
+import { getAllLatePickups, getAllLateReturns } from "./db/queries/getViolations";
+import { updateMember } from "./db/updates/updateMember";
 // import { adminsRouter } from "./routers/adminsRouter";
 import { booksRouter } from "./routers/booksRouter"
 import { membersRouter } from "./routers/membersRouter"
@@ -73,15 +75,24 @@ io.on("connection", async (socket) => {
     io.to(uuid).emit("ping", Date.now() );
 
     socket.on("pong", async (time) => {
-        if (Date.now() - time < 60)
+        if (Date.now() - time < 10000)
             io.to(uuid).emit("ping", time);
         else {
-            const warnings = await getAllWarnings(uuid) as IWarnings;
+            const warnings = await getAllLatePickups(uuid);
+            console.log("warnings:");
             console.log(warnings);
-            if (!warnings)
-                io.to(uuid).emit("ping", Date.now());
-            else
+
+            const penalties = await getAllLateReturns(uuid);
+            console.log("penalties:")
+            console.log(penalties)
+
+            if (penalties.length !== 0) 
+                io.to(uuid).emit("penalties", penalties);  
+                
+            if (penalties.length !== 0) 
                 io.to(uuid).emit("warnings", warnings);
+            
+            io.to(uuid).emit("ping", Date.now());
         }
     })
 

@@ -214,6 +214,10 @@ membersRouter.post("/calldibs", auth, async(req: AuthRequest, res) => {
     const { isbn } = req.body;
 
     try {
+        // console.log(req.member?.warning_count as number)
+        // if (req.member?.warning_count as number >= 5)
+        //     throw new Error("You cannot make any reservations until warnings are cleared");
+        
         const {verification_code, error} = await callDibs(isbn, req.member as IMember)
         
         if (error)
@@ -222,7 +226,7 @@ membersRouter.post("/calldibs", auth, async(req: AuthRequest, res) => {
         res.status(201).json({ verification_code });
     }
     catch (err: any) {
-        res.status(400).send(err.message)
+        res.status(400).json({error: err.message})
     }
 })
 

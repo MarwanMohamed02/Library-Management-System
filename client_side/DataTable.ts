@@ -22,19 +22,21 @@ var selected_item_price = document.getElementById('selected-element-price') as H
 var reserve_div = document.getElementById('reserve') as HTMLElement;
 let description = document.getElementById('description') as HTMLElement;
 
+
 async function GetEntities() {
 
   var request;
-
+  console.log(source);
   switch (source) {
-
     case 'library books':
+      console.log("lib books: " + totalLibraryBooks);
       request = await fetch(`/books?type=${BookType.LIBRARY_BOOK}`, {
         headers: {
           'Authorization': JSON.stringify("Bearer " + token)
         }
       });
       totalLibraryBooks = await request.json();
+      
       displayedLibraryBooks = totalLibraryBooks;
       break;
 
@@ -273,6 +275,7 @@ function Show() {
 }
 
 window.onload = async function () {
+ 
   reserve_div.style.display = 'none';
   accordion_selection.style.display = 'none';
   await GetEntities();

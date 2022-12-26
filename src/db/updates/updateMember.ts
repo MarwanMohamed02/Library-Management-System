@@ -7,8 +7,8 @@ export function updateMember(member: IMemberQuery, updatedMemberData: any) {
 
     const { uuid, username } = member
 
-    // console.log(uuid)
-    // console.log(username)
+    console.log(uuid)
+    console.log(updatedMemberData)
 
     if (!uuid && !username) 
         return ;
@@ -44,9 +44,10 @@ export function updateMember(member: IMemberQuery, updatedMemberData: any) {
         // }
 
     }
-    
-    if (membership_type || warning_count || follower_count || token !== undefined) {
+    console.log(warning_count);
+    if (membership_type != undefined || warning_count != undefined || follower_count != undefined || token !== undefined) {
         sql = "UPDATE Members SET"
+        console.log(warning_count);
     
         token = token? `'${token}'`: token;
         
@@ -64,7 +65,7 @@ export function updateMember(member: IMemberQuery, updatedMemberData: any) {
         
     }
 
-    // console.log(sql);
+    console.log(sql);
     return sql;
 }
 

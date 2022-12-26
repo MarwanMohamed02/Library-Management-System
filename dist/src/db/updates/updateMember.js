@@ -5,8 +5,8 @@ exports.updateMember = void 0;
 function updateMember(member, updatedMemberData) {
     // console.log(updatedMemberData);
     const { uuid, username } = member;
-    // console.log(uuid)
-    // console.log(username)
+    console.log(uuid);
+    console.log(updatedMemberData);
     if (!uuid && !username)
         return;
     // const keys      = [  uuid,    username]
@@ -29,8 +29,10 @@ function updateMember(member, updatedMemberData) {
         //     query += ``
         // }
     }
-    if (membership_type || warning_count || follower_count || token !== undefined) {
+    console.log(warning_count);
+    if (membership_type != undefined || warning_count != undefined || follower_count != undefined || token !== undefined) {
         sql = "UPDATE Members SET";
+        console.log(warning_count);
         token = token ? `'${token}'` : token;
         const updates = [membership_type, warning_count, follower_count, token];
         const updatesNames = ["membership_type", "warning_count", "follower_count", "token"];
@@ -42,7 +44,7 @@ function updateMember(member, updatedMemberData) {
         sql = sql.substring(0, sql.length - 2);
         sql += ` WHERE id::UUID = '${uuid}';`;
     }
-    // console.log(sql);
+    console.log(sql);
     return sql;
 }
 exports.updateMember = updateMember;
