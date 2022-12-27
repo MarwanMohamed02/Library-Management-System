@@ -58,8 +58,8 @@ membersRouter.get("/mydibs", auth_1.auth, (req, res) => __awaiter(void 0, void 0
 membersRouter.get("/myborrows", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     try {
-        const dibs = yield (0, getBorrows_1.getBorrows)((_b = req.member) === null || _b === void 0 ? void 0 : _b.uuid);
-        res.status(200).json({ dibs });
+        const borrows = yield (0, getBorrows_1.getBorrows)((_b = req.member) === null || _b === void 0 ? void 0 : _b.uuid);
+        res.status(200).json({ borrows });
     }
     catch (err) {
         console.log(err);
@@ -125,12 +125,11 @@ membersRouter.post("/members/signup", (req, res) => __awaiter(void 0, void 0, vo
         }
         else
             uuid = rows[0].uuid;
-        const { username, pass, membership_type } = req.body;
+        const { username, pass } = req.body;
         const member = {
             uuid,
             username,
             pass,
-            membership_type
         };
         const memSQL = yield (0, insertMember_1.insertMember)(member);
         yield connect_1.db.query(memSQL);

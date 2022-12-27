@@ -55,9 +55,9 @@ membersRouter.get("/mydibs", auth, async (req: AuthRequest, res) => {
 
 membersRouter.get("/myborrows", auth, async (req: AuthRequest, res) => {
     try {
-        const dibs = await getBorrows(req.member?.uuid as string);
+        const borrows = await getBorrows(req.member?.uuid as string);
         
-        res.status(200).json({ dibs });
+        res.status(200).json({ borrows });
     }
     catch (err) {
         console.log(err);
@@ -141,14 +141,13 @@ membersRouter.post("/members/signup", async (req, res) => {
             uuid = rows[0].uuid;
         
         
-        const { username , pass, membership_type } = req.body as IMember;
+        const { username , pass } = req.body as IMember;
 
 
         const member = {
             uuid,
             username,
-            pass,
-            membership_type 
+            pass, 
         }
 
         const memSQL = await insertMember(member as IMember);

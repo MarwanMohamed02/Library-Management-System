@@ -17,11 +17,9 @@ const http_1 = __importDefault(require("http"));
 const path_1 = __importDefault(require("path"));
 const socket_io_1 = require("socket.io");
 const connect_1 = require("./db/connect");
-const getViolations_1 = require("./db/queries/getViolations");
 // import { adminsRouter } from "./routers/adminsRouter";
 const booksRouter_1 = require("./routers/booksRouter");
 const membersRouter_1 = require("./routers/membersRouter");
-const auth_1 = require("./utils/auth");
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 const io = new socket_io_1.Server(server, {
@@ -55,29 +53,29 @@ app.get("/home", (req, res) => {
 app.get("/test", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "../public/login.html"));
 });
-io.use(auth_1.auth_socket);
-io.on("connection", (socket) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("connected");
-    const member = socket.data.member;
-    const uuid = member.uuid;
-    yield socket.join(uuid);
-    io.to(uuid).emit("ping", Date.now());
-    socket.on("pong", (time) => __awaiter(void 0, void 0, void 0, function* () {
-        if (Date.now() - time < 10000)
-            io.to(uuid).emit("ping", time);
-        else {
-            const warnings = yield (0, getViolations_1.getAllLatePickups)(uuid);
-            console.log("warnings:");
-            console.log(warnings);
-            const penalties = yield (0, getViolations_1.getAllLateReturns)(uuid);
-            console.log("penalties:");
-            console.log(penalties);
-            if (penalties.length !== 0)
-                io.to(uuid).emit("penalties", penalties);
-            if (warnings.length !== 0)
-                io.to(uuid).emit("warnings", warnings);
-            io.to(uuid).emit("ping", Date.now());
-        }
-    }));
-}));
+// io.use(auth_socket);
+// io.on("connection", async (socket) => {
+//     console.log("connected");
+//     const member = socket.data.member as IMember;
+//     const uuid = member.uuid as string;
+//     await socket.join(uuid);
+//     io.to(uuid).emit("ping", Date.now() );
+//     socket.on("pong", async (time) => {
+//         if (Date.now() - time < 10000)
+//             io.to(uuid).emit("ping", time);
+//         else {
+//             const warnings = await getAllLatePickups(uuid);
+//             console.log("warnings:");
+//             console.log(warnings);
+//             const penalties = await getAllLateReturns(uuid);
+//             console.log("penalties:")
+//             console.log(penalties)
+//             if (penalties.length !== 0) 
+//                 io.to(uuid).emit("penalties", penalties);  
+//             if (warnings.length !== 0) 
+//                 io.to(uuid).emit("warnings", warnings);
+//             io.to(uuid).emit("ping", Date.now());
+//         }
+//     })
+// })
 server.listen(port, () => console.log(`Server is up on port ${port}`));

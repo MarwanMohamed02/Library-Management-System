@@ -8,7 +8,9 @@ export interface IBook {
     book_name: string,
     genre: string,
     book_description: string,
-    author: string,
+    firstname: string,
+    lastname: string,
+    author_id: string,
     avg_rating: number,
     ratings_count: number
 }

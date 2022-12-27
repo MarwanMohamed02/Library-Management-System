@@ -18,13 +18,13 @@ function getBorrows(uuid) {
                     WHERE   id::UUID = '${uuid}'`;
         console.log(sql);
         const { rows } = yield connect_1.db.query(sql);
-        let dibs = [];
+        let borrows = [];
         for (let i = 0; i < rows.length; i++) {
             const borrow_date = (new Date(parseInt(rows[i].borrow_timestamp))).toLocaleDateString();
             const borrow_time = (new Date(parseInt(rows[i].borrow_timestamp))).toLocaleTimeString();
             const return_before_date = (new Date(parseInt(rows[i].return_before))).toLocaleDateString();
             const return_before_time = (new Date(parseInt(rows[i].return_before))).toLocaleTimeString();
-            dibs.push({
+            borrows.push({
                 username: rows[i].username,
                 book_name: rows[i].book_name,
                 borrow_date,
@@ -33,7 +33,7 @@ function getBorrows(uuid) {
                 return_before_time,
             });
         }
-        return dibs;
+        return borrows;
     });
 }
 exports.getBorrows = getBorrows;

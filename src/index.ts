@@ -62,41 +62,41 @@ app.get("/test", (req, res) => {
     res.sendFile(path.join(__dirname, "../public/login.html"));
 })
 
-io.use(auth_socket);
+// io.use(auth_socket);
 
-io.on("connection", async (socket) => {
-    console.log("connected");
+// io.on("connection", async (socket) => {
+//     console.log("connected");
     
-    const member = socket.data.member as IMember;
-    const uuid = member.uuid as string;
+//     const member = socket.data.member as IMember;
+//     const uuid = member.uuid as string;
 
-    await socket.join(uuid);
+//     await socket.join(uuid);
 
-    io.to(uuid).emit("ping", Date.now() );
+//     io.to(uuid).emit("ping", Date.now() );
 
-    socket.on("pong", async (time) => {
-        if (Date.now() - time < 10000)
-            io.to(uuid).emit("ping", time);
-        else {
-            const warnings = await getAllLatePickups(uuid);
-            console.log("warnings:");
-            console.log(warnings);
+//     socket.on("pong", async (time) => {
+//         if (Date.now() - time < 10000)
+//             io.to(uuid).emit("ping", time);
+//         else {
+//             const warnings = await getAllLatePickups(uuid);
+//             console.log("warnings:");
+//             console.log(warnings);
 
-            const penalties = await getAllLateReturns(uuid);
-            console.log("penalties:")
-            console.log(penalties)
+//             const penalties = await getAllLateReturns(uuid);
+//             console.log("penalties:")
+//             console.log(penalties)
 
-            if (penalties.length !== 0) 
-                io.to(uuid).emit("penalties", penalties);  
+//             if (penalties.length !== 0) 
+//                 io.to(uuid).emit("penalties", penalties);  
                 
-            if (warnings.length !== 0) 
-                io.to(uuid).emit("warnings", warnings);
+//             if (warnings.length !== 0) 
+//                 io.to(uuid).emit("warnings", warnings);
             
-            io.to(uuid).emit("ping", Date.now());
-        }
-    })
+//             io.to(uuid).emit("ping", Date.now());
+//         }
+//     })
 
-})
+// })
 
 
 

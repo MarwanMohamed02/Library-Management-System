@@ -1,4 +1,7 @@
-import { BookType, IBook, IBookstoreBook, ILibraryBook } from "../src/db/interfaces/Book"
+import { BookType, IBook, IBookstoreBook, IBorrow, IDibs, ILibraryBook } from "../src/db/interfaces/Book"
+import { IWorkshop, IEnrollment } from "../src/db/interfaces/Workshops"
+import { IEvents } from "../src/db/interfaces/Events"
+
 
 let totalLibraryBooks: ILibraryBook[];
 let displayedLibraryBooks: ILibraryBook[];
@@ -6,7 +9,26 @@ let displayedLibraryBooks: ILibraryBook[];
 let totalBookstoreBooks: IBookstoreBook[];
 let displayedBookstoreBooks: IBookstoreBook[];
 
-const token = localStorage.getItem('token');
+let totalDibs: IDibs[];
+let displayedDibs: IDibs[];
+
+let totalBorrows: IBorrow[];
+let displayedBorrows: IBorrow[];
+
+let totalWorkshops: IWorkshop[];
+let displayedWorkshops: IWorkshop[];
+
+let totalEnrollments: IEnrollment[];
+let displayedEnrollments: IEnrollment[];
+
+let totalEvents: IEvents[];
+let displayedEvents: IEvents[];
+
+let totalAttendedEvents: IEvents[];
+let displayedAttendedEvents: IEvents[];
+
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNWRiODdjMzgtNDg2My00ODM3LWJlOGItNDhlZmQ3ODUwMjU1IiwiaWF0IjoxNjcyMDQ2NjEzfQ.IlQ1neU1Ei83YaQ7uubqodYxQHJUEkUPEcVZzf4Ll_c";
+// const token = localStorage.getItem('token');
 var source = localStorage.getItem('target-entity');
 let search = document.getElementById('search') as HTMLInputElement;
 let card_body = document.getElementById("error-card") as HTMLElement;
@@ -25,66 +47,123 @@ let description = document.getElementById('description') as HTMLElement;
 
 async function GetEntities() {
 
-  var request;
+  var response;
   console.log(source);
   switch (source) {
     case 'library books':
       console.log("lib books: " + totalLibraryBooks);
-      request = await fetch(`/books?type=${BookType.LIBRARY_BOOK}`, {
+      response = await fetch(`/books?type=${BookType.LIBRARY_BOOK}`, {
         headers: {
-          'Authorization': JSON.stringify("Bearer " + token)
+          'Authorization': `Bearer ${token}` 
         }
       });
-      totalLibraryBooks = await request.json();
+      totalLibraryBooks = await response.json();
       
       displayedLibraryBooks = totalLibraryBooks;
       break;
 
     case 'bookstore books':
 
-      request = await fetch(`/books?type=${BookType.BOOKSTORE_BOOK}`, {
+      response = await fetch(`/books?type=${BookType.BOOKSTORE_BOOK}`, {
         headers: {
-          'Authorization': JSON.stringify("Bearer " + token)
+          'Authorization': `Bearer ${token}` 
         }
       });
-      totalBookstoreBooks = await request.json();
+      totalBookstoreBooks = await response.json();
       displayedBookstoreBooks = totalBookstoreBooks;
       break;
 
     case 'reservations':
 
-      //Fetch reservations
+      response = await fetch("/mydibs", {
+        method: "GET",
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const { dibs } = await response.json();
+      totalDibs = dibs
+      displayedDibs = totalDibs;
 
       break;
 
     case 'borrows':
 
-      //Fetch Borrows
+      response = await fetch("/myborrows", {
+        method: "GET",
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const { borrows } = await response.json();
+      console.log(borrows);
+      totalBorrows = borrows
+      displayedBorrows = totalBorrows;
 
       break;
 
     case 'workshops':
 
       //Fetch workshops
+      response = await fetch("/workshops", {
+        method: "GET",
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      const { availableWorkshops } = await response.json();
+      totalWorkshops = availableWorkshops;
+      displayedWorkshops = totalWorkshops;
+      // console.log(displayedWorkshops)
 
       break;
 
     case 'enrollments':
 
       //Fetch Enrollments
+      response = await fetch("/myenrollments", {
+        method: "GET",
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+
+      const { enrollments } = await response.json();
+
+      totalEnrollments = enrollments;
+      displayedEnrollments = totalEnrollments;
+
+      console.log(totalEnrollments);
 
       break;
 
     case 'upcoming events':
 
       //Fetch Upcoming Events
+      response = await fetch("/events", {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      const { events } = await response.json();
+
+      totalEvents = events
+      displayedEvents = totalEvents;
 
       break;
 
     case 'previous events':
 
       //Fetch Previous Events
+      response = await fetch("/events?attended=1", {
+        headers: {
+          'Authorization' : `Bearer ${token}`
+        }
+      })
+      const { events: attendedEvents } = await response.json();
 
+      totalAttendedEvents = attendedEvents
+      displayedAttendedEvents = totalAttendedEvents;
       break;
   }
 
@@ -108,12 +187,12 @@ function prepareHeader() {
 
     case 'reservations':
 
-      tableHeader.innerHTML = '<th scope="col">ISBN</th><th scope="col">Book Name</th><th scope="col">Reservation Date</th><th scope="col">Deadline</th>';
+      tableHeader.innerHTML = '<th scope="col">Book Name</th><th scope="col">Reservation Date</th><th scope="col">Deadline</th><th scope="col">Verification Code</th>';
       break;
 
     case 'borrows':
 
-      tableHeader.innerHTML = '<th scope="col">ISBN</th><th scope="col">Book Name</th><th scope="col">Accepting Staff Member</th><th scope="col">Borrow Date</th><th scope="col">Deadline</th>';
+      tableHeader.innerHTML = '<th scope="col">Book Name</th><th scope="col">Borrow Date</th><th scope="col">Deadline</th>';
       break;
 
     case 'workshops':
@@ -123,7 +202,7 @@ function prepareHeader() {
 
     case 'enrollments':
 
-      tableHeader.innerHTML = '<th scope="col">Workshop Title</th><th scope="col">Enrollment Date</th><th scope="col">Start Date</th><th scope="col">End Date</th>';
+      tableHeader.innerHTML = '<th scope="col">Workshop Title</th><th scope="col">Enrollment Price</th><th scope="col">Instructor Name</th><th scope="col">Sponsoring Organization</th><th scope="col">Average Rating</th><th scope="col">Enrollment Date</th>';
       break;
 
     case 'upcoming events':
@@ -133,7 +212,7 @@ function prepareHeader() {
 
     case 'previous events':
 
-      tableHeader.innerHTML = '<th scope="col">Attending Author</th><th scope="col">Date</th><th scope="col">Start Time</th><th scope="col">End Time</th><th scope="col">Average Rating</th>';
+      tableHeader.innerHTML = '<th scope="col">Attending Author</th><th scope="col">Date</th><th scope="col">Start Time</th><th scope="col">End Time</th>';
       break;
   }
 }
@@ -149,7 +228,7 @@ function PrepareSelectedItemEvents() {
         case 'library books':
 
           selected_item_name.innerHTML = "Book Name: " + displayedLibraryBooks[row.rowIndex - 1].book_name;
-          selected_item_author.innerHTML = "Author: " + displayedLibraryBooks[row.rowIndex - 1].author;
+          selected_item_author.innerHTML = "Author: " + displayedLibraryBooks[row.rowIndex - 1].firstname + " " + displayedLibraryBooks[row.rowIndex - 1].lastname;
           selected_item_ISBN.innerHTML = "ISBN: " + displayedLibraryBooks[row.rowIndex - 1].isbn;
           selected_item_rating.innerHTML = "Average Rating: " + displayedLibraryBooks[row.rowIndex - 1].avg_rating.toString() + " (" + displayedLibraryBooks[row.rowIndex - 1].ratings_count + ")";
           description.innerHTML = displayedLibraryBooks[row.rowIndex - 1].book_description;
@@ -161,7 +240,7 @@ function PrepareSelectedItemEvents() {
         case 'bookstore books':
 
           selected_item_name.innerHTML = "Book Name: " + displayedBookstoreBooks[row.rowIndex - 1].book_name;
-          selected_item_author.innerHTML = "Author: " + displayedBookstoreBooks[row.rowIndex - 1].author;
+          selected_item_author.innerHTML = "Author: " + displayedBookstoreBooks[row.rowIndex - 1].firstname + " " + displayedBookstoreBooks[row.rowIndex - 1].lastname;
           selected_item_ISBN.innerHTML = "ISBN: " + displayedBookstoreBooks[row.rowIndex - 1].isbn;
           selected_item_rating.innerHTML = "Average Rating: " + displayedBookstoreBooks[row.rowIndex - 1].avg_rating.toString() + " (" + displayedBookstoreBooks[row.rowIndex - 1].ratings_count + ")";
           selected_item_price.innerHTML = "Selling Price: $" + displayedBookstoreBooks[row.rowIndex - 1].price;
@@ -220,7 +299,7 @@ function Show() {
     case 'library books':
 
       displayedLibraryBooks.forEach((book) => {
-        table_body.innerHTML += "<tr> <td>" + book.isbn + "</td>" + "<td>" + book.book_name + "</td>" + "<td>" + book.genre + "</td>" + "<td>" + book.author + "</td>" + "<td>" + book.avg_rating + "</td>" + "<td>" + book.borrow_quantity + "</td>" + "</tr>";
+        table_body.innerHTML += "<tr> <td>" + book.isbn + "</td>" + "<td>" + book.book_name + "</td>" + "<td>" + book.genre + "</td>" + "<td>" + `${book.firstname} ${book.lastname}` + "</td>" + "<td>" + book.avg_rating + "</td>" + "<td>" + book.borrow_quantity + "</td>" + "</tr>";
       })
 
       break;
@@ -228,44 +307,57 @@ function Show() {
     case 'bookstore books':
 
       displayedBookstoreBooks.forEach((book) => {
-        table_body.innerHTML += "<tr> <td>" + book.isbn + "</td>" + "<td>" + book.book_name + "</td>" + "<td>" + book.genre + "</td>" + "<td>" + book.author + "</td>" + "<td>" + book.avg_rating + "</td>" + "<td>" + book.price + "</td>" + "<td>" + book.selling_quantity + "</td>" + "</tr>";
+        table_body.innerHTML += "<tr> <td>" + book.isbn + "</td>" + "<td>" + book.book_name + "</td>" + "<td>" + book.genre + "</td>" + "<td>" + `${book.firstname} ${book.lastname}` + "</td>" + "<td>" + book.avg_rating + "</td>" + "<td>" + book.price + "</td>" + "<td>" + book.selling_quantity + "</td>" + "</tr>";
       })
 
       break;
 
     case 'reservations':
 
-      //Display reservations
+      displayedDibs.forEach((dib) => {
+        table_body.innerHTML += "<tr> <td>" + dib.book_name + "</td>" + "<td>" + dib.reservation_date + "</td>" + "<td>" + dib.pick_up_before_date + "</td>" + "<td>" + dib.verification_code + "</td>";
+      })
 
       break;
 
     case 'borrows':
 
-      //Display Borrows
+      displayedBorrows.forEach((borrow) => {
+        table_body.innerHTML += "<tr> <td>" + borrow.book_name + "</td>" + "<td>" + borrow.borrow_date + "</td>" + "<td>" + borrow.return_before_date + "</td>";
+      })
 
       break;
 
     case 'workshops':
 
-      //Display workshops
+      displayedWorkshops.forEach((workshop) => {
+        table_body.innerHTML += "<tr> <td>" + workshop.workshop_title + "</td>" + "<td>" + workshop.price + "</td>" + "<td>" + workshop.instructor + "</td>" + "<td>" + workshop.sponsor + "</td>" + "<td>" + workshop.avg_rating + "</td>";
+      })
+
 
       break;
 
     case 'enrollments':
 
-      //Display Enrollments
+      displayedEnrollments.forEach((workshop) => {
+        table_body.innerHTML += "<tr> <td>" + workshop.workshop_title + "</td>" + "<td>" + workshop.price + "</td>" + "<td>" + workshop.instructor + "</td>" + "<td>" + workshop.sponsor + "</td>" + "<td>" + workshop.avg_rating + "</td>" + "<td>" + workshop.enrollment_date + "</td>";
+      })
 
       break;
 
     case 'upcoming events':
 
-      //Display Upcoming Events
+      displayedEvents.forEach((event) => {
+        table_body.innerHTML += "<tr> <td>" + event.author_firstname + " " + event.author_lastname + "</td>" + "<td>" + event.event_date + "</td>" + "<td>" + event.event_start_time + "</td>" + "<td>" + event.event_end_time + "</td>" + "<td>";
+      })
 
       break;
 
     case 'previous events':
 
-      //Display Previous Events
+      displayedAttendedEvents.forEach((event) => {
+        table_body.innerHTML += "<tr> <td>" + event.author_firstname + " " + event.author_lastname + "</td>" + "<td>" + event.event_date + "</td>" + "<td>" + event.event_start_time + "</td>" + "<td>" + event.event_end_time + "</td>" + "<td>";
+      })
 
       break;
   }
