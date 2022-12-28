@@ -41,7 +41,7 @@ function getEnrollments(uuid) {
         const { rows } = yield connect_1.db.query(query);
         let enrollments = [];
         rows.forEach(t => {
-            let { workshop_title, price, avg_rating, reviews_count, sponsor, instructor_firstname, instructor_lastname, instructor_email, workshop_date, workshop_start_time, workshop_end_time, enrollment_timestamp } = t;
+            let { workshop_title, price, avg_rating, reviews_count, sponsor, instructor_firstname, instructor_lastname, instructor_id, instructor_email, workshop_date, workshop_start_time, workshop_end_time, enrollment_timestamp } = t;
             const timestamp = new Date(enrollment_timestamp);
             workshop_date = new Date(workshop_date).toLocaleDateString();
             const enrollment = {
@@ -52,6 +52,7 @@ function getEnrollments(uuid) {
                 sponsor,
                 instructor: `${instructor_firstname} ${instructor_lastname}`,
                 instructor_email,
+                instructor_id,
                 workshop_date,
                 workshop_start_time,
                 workshop_end_time,

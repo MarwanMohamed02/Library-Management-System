@@ -8,15 +8,23 @@ const { token } = localStorage;
 let { notifications } = localStorage;
 let notifications_array = JSON.parse(notifications) as INotification[];
 
+let reset = 0;
+localStorage.setItem("unseen_notifications_count", JSON.stringify(reset))
 
-const warnings_notification = document.getElementById("Warnings");
+
 
 let Warnings_List = document.getElementById("Warninglist") as HTMLElement;
+let bell = document.getElementById("Warnings") as HTMLElement;
 const all = document.getElementById("WarPen");
 const War = document.getElementById("War");
 const Pen = document.getElementById("Pen");
 const Mytitle = document.getElementById("Mytitle");
 const Menu = document.getElementById("Menu");
+let logo = document.getElementById("logo") as HTMLElement;
+
+bell.innerHTML = `  <span class="material-icons">
+                        notification_important
+                    </span> `;
 
 const socket = io({
     auth: {

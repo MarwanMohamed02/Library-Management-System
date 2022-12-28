@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getReviews = void 0;
 const connect_1 = require("../connect");
 const Reviews_1 = require("../interfaces/Reviews");
-function getReviews(member_id, reviewed_item_id, reviewedItemTable) {
+function getReviews(reviewed_item_id, reviewedItemTable) {
     return __awaiter(this, void 0, void 0, function* () {
         const { id_name, id_type } = (0, Reviews_1.getQueryParams)(reviewedItemTable);
         const sql = `  SELECT 
@@ -21,9 +21,9 @@ function getReviews(member_id, reviewed_item_id, reviewedItemTable) {
                     
                     FROM    ${reviewedItemTable}_Review
                     
-                    JOIN    System_Users    ON      id::UUID = '${member_id}'
+                    JOIN    System_Users    ON      id = member_id
                     
-                    WHERE   ${id_name}= '${reviewed_item_id}'${id_type} `;
+                    WHERE   ${id_name}= '${reviewed_item_id}'${id_type}; `;
         console.log(sql);
         const { rows } = yield connect_1.db.query(sql);
         let reviews = [];

@@ -1,3 +1,4 @@
+
 const library_btn = document.getElementById("btn-books-library");
 const bookstore_btn = document.getElementById("btn-books-bookstore");
 const reservations_btn = document.getElementById("btn-reservations");
@@ -6,10 +7,11 @@ const workshops_btn = document.getElementById("btn-available-workshops");
 const enrollments_btn = document.getElementById("btn-enrollments");
 const upcoming_events_btn = document.getElementById("btn-upcoming-events");
 const prev_events_btn = document.getElementById("btn-prev-events");
-const warnings = document.getElementById("Warnings");
+var warnings = document.getElementById("Warnings") as HTMLButtonElement;
 const logo_navbar = document.getElementById("logo") as HTMLElement;
 
-const { token } = localStorage; 
+var { token } = localStorage;
+
 
 
 library_btn?.addEventListener('click', function handleClick(event) {
@@ -48,6 +50,8 @@ warnings?.addEventListener('click', function handleClick(event) {
    
     location.href = "warnings.html";
 })
+const logout_button = document.getElementById("logout") as HTMLButtonElement;
+
 
 
 // window.onload = function () {
@@ -61,9 +65,8 @@ warnings?.addEventListener('click', function handleClick(event) {
 //Next lines related to warnings
 
 //Logout
-const logout_button=document.getElementById("logout") as HTMLButtonElement;
 logout_button.onclick = async () => {
-
+    console.log("HII")
     await fetch("members/logout", {
         method: "POST",
         headers: {

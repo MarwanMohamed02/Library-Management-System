@@ -3,7 +3,7 @@ import { db } from "../connect";
 import { ReviewTables, getQueryParams, IReviews } from "../interfaces/Reviews"
 
 
-export async function getReviews(member_id: string, reviewed_item_id: string, reviewedItemTable: ReviewTables): Promise<IReviews[]> {
+export async function getReviews(reviewed_item_id: string, reviewedItemTable: ReviewTables): Promise<IReviews[]> {
 
     const { id_name, id_type } = getQueryParams(reviewedItemTable);
 
@@ -13,9 +13,9 @@ export async function getReviews(member_id: string, reviewed_item_id: string, re
                     
                     FROM    ${reviewedItemTable}_Review
                     
-                    JOIN    System_Users    ON      id::UUID = '${member_id}'
+                    JOIN    System_Users    ON      id = member_id
                     
-                    WHERE   ${id_name}= '${reviewed_item_id}'${id_type} `
+                    WHERE   ${id_name}= '${reviewed_item_id}'${id_type}; `
     
     console.log(sql)
     
