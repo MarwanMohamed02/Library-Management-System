@@ -1,6 +1,44 @@
 import { BookType, IBook, IBookstoreBook, IBorrow, IDibs, ILibraryBook } from "../src/db/interfaces/Book"
 import { IWorkshop, IEnrollment } from "../src/db/interfaces/Workshops"
 import { IEvents } from "../src/db/interfaces/Events"
+import { io } from "socket.io-client";
+
+const { token } = localStorage;
+
+const socket = io({
+  auth: {
+    token
+  }
+})
+
+/* When implementing the notifications part consider the following (rakkez m3aya ya hamada mennak lyy): */
+
+// hyb2a fy array kbeer stored fl localStorage esmo notifications
+// hyb2a fy listeners zy l t7t dah "confirmation-notification", "warning-notification", "penalty-notification"
+// fl page dy w f Home l listeners msh hy3mlo haga 8eer enohom y-insert fl notifications w y-call updateNotificationsCount ely htkoon fl navbar.ts
+// amma l listener bta3 warnings.ts, dah hy-display l notification  (Warnings_List.insertAdjacentHTML("afterbegin", {html bta3 l notification}))
+
+// updateNotificationsCount hta5od rakam w t-add it ll currentNotificationsCount w t-call functions bta3t kol page
+// kol page hyb2a leha l function bt3tha ely bt-update l rakam bt3ha
+// dah shakl l function ely fl navbar.ts
+
+//   updateNotificationsCount(n) {
+//
+//      update_home_notifications_count(n)
+//      update_datatable_notifications_count(n)
+//      update_warnings_notifications_count(n)
+
+//  }
+
+
+// kol function ml 3 ely gowa dool hta5od l rakam w t7otto zy mahwa kda 3ndaha fl page
+// l edge case l waheeeda lw n=0 sa3etha bnsheel l bta3a l 7amra :)
+
+
+socket.on("confirmation-notification", (confirmation) => {
+  console.log(confirmation);
+  // "confirmation" should be added to the notifications array
+})
 
 
 let totalLibraryBooks: ILibraryBook[];
@@ -27,7 +65,7 @@ let displayedEvents: IEvents[];
 let totalAttendedEvents: IEvents[];
 let displayedAttendedEvents: IEvents[];
 
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNWRiODdjMzgtNDg2My00ODM3LWJlOGItNDhlZmQ3ODUwMjU1IiwiaWF0IjoxNjcyMDQ2NjEzfQ.IlQ1neU1Ei83YaQ7uubqodYxQHJUEkUPEcVZzf4Ll_c";
+// const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNWRiODdjMzgtNDg2My00ODM3LWJlOGItNDhlZmQ3ODUwMjU1IiwiaWF0IjoxNjcyMDQ2NjEzfQ.IlQ1neU1Ei83YaQ7uubqodYxQHJUEkUPEcVZzf4Ll_c";
 // const token = localStorage.getItem('token');
 var source = localStorage.getItem('target-entity');
 let search = document.getElementById('search') as HTMLInputElement;
@@ -42,12 +80,33 @@ var selected_item_ISBN = document.getElementById('selected-element-ISBN') as HTM
 var selected_item_rating = document.getElementById('selected-element-rating') as HTMLElement;
 var selected_item_price = document.getElementById('selected-element-price') as HTMLElement;
 var reserve_div = document.getElementById('reserve') as HTMLElement;
+var reserveButton = document.getElementById("reserve-btn") as HTMLButtonElement;
 let description = document.getElementById('description') as HTMLElement;
 
+var response;
+var reservedBook: ILibraryBook;
+var purchasedBook: IBookstoreBook;
+
+reserveButton.onclick = async (e) => {
+  // prevents refreshing
+  e.preventDefault();
+
+  response = await fetch("/calldibs", {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({isbn: reservedBook.isbn})
+  })
+  
+  if (response.status == 400) {
+    // show error messsage above the reserve button
+  }
+}
 
 async function GetEntities() {
 
-  var response;
   console.log(source);
   switch (source) {
     case 'library books':
@@ -226,25 +285,26 @@ function PrepareSelectedItemEvents() {
       switch (source) {
 
         case 'library books':
-
-          selected_item_name.innerHTML = "Book Name: " + displayedLibraryBooks[row.rowIndex - 1].book_name;
-          selected_item_author.innerHTML = "Author: " + displayedLibraryBooks[row.rowIndex - 1].firstname + " " + displayedLibraryBooks[row.rowIndex - 1].lastname;
-          selected_item_ISBN.innerHTML = "ISBN: " + displayedLibraryBooks[row.rowIndex - 1].isbn;
-          selected_item_rating.innerHTML = "Average Rating: " + displayedLibraryBooks[row.rowIndex - 1].avg_rating.toString() + " (" + displayedLibraryBooks[row.rowIndex - 1].ratings_count + ")";
-          description.innerHTML = displayedLibraryBooks[row.rowIndex - 1].book_description;
+          reservedBook = displayedLibraryBooks[row.rowIndex - 1];
+          selected_item_name.innerHTML = "Book Name: " + reservedBook.book_name;
+          selected_item_author.innerHTML = "Author: " + reservedBook.firstname + " " + reservedBook.lastname;
+          selected_item_ISBN.innerHTML = "ISBN: " + reservedBook.isbn;
+          selected_item_rating.innerHTML = "Average Rating: " + reservedBook.avg_rating.toString() + " (" + reservedBook.ratings_count + ")";
+          description.innerHTML = reservedBook.book_description;
 
           accordion_selection.style.display = 'block';
           reserve_div.style.display = 'block';
           break;
 
         case 'bookstore books':
+          purchasedBook = displayedBookstoreBooks[row.rowIndex - 1];
 
-          selected_item_name.innerHTML = "Book Name: " + displayedBookstoreBooks[row.rowIndex - 1].book_name;
-          selected_item_author.innerHTML = "Author: " + displayedBookstoreBooks[row.rowIndex - 1].firstname + " " + displayedBookstoreBooks[row.rowIndex - 1].lastname;
-          selected_item_ISBN.innerHTML = "ISBN: " + displayedBookstoreBooks[row.rowIndex - 1].isbn;
-          selected_item_rating.innerHTML = "Average Rating: " + displayedBookstoreBooks[row.rowIndex - 1].avg_rating.toString() + " (" + displayedBookstoreBooks[row.rowIndex - 1].ratings_count + ")";
-          selected_item_price.innerHTML = "Selling Price: $" + displayedBookstoreBooks[row.rowIndex - 1].price;
-          description.innerHTML = displayedBookstoreBooks[row.rowIndex - 1].book_description;
+          selected_item_name.innerHTML = "Book Name: " + purchasedBook.book_name;
+          selected_item_author.innerHTML = "Author: " + purchasedBook.firstname + " " + purchasedBook.lastname;
+          selected_item_ISBN.innerHTML = "ISBN: " + purchasedBook.isbn;
+          selected_item_rating.innerHTML = "Average Rating: " + purchasedBook.avg_rating.toString() + " (" + purchasedBook.ratings_count + ")";
+          selected_item_price.innerHTML = "Selling Price: $" + purchasedBook.price;
+          description.innerHTML = purchasedBook.book_description;
 
           accordion_selection.style.display = 'block';
           break;

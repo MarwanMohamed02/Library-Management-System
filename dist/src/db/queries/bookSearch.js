@@ -5,8 +5,17 @@ const Book_1 = require("../interfaces/Book");
 function booksSearch(bookQuery) {
     const { isbn, book_name, genre, author, status, sort, type } = bookQuery;
     const [qty, refTable] = type == Book_1.BookType.LIBRARY_BOOK ? ["borrow_quantity", "Library_Books"] : ["selling_quantity", "Bookstore_Books"];
-    let query = `SELECT Books.isbn, book_name, genre, book_description, ${qty}, Books.avg_rating, Books.ratings_count, 
-                        author_id::UUID, firstname, lastname `;
+    let query = `SELECT 
+                        Books.isbn as isbn, 
+                        book_name, 
+                        genre, 
+                        book_description, 
+                        ${qty}, 
+                        Books.avg_rating    as avg_rating, 
+                        Books.ratings_count as ratings_count, 
+                        author_id::UUID, 
+                        firstname, 
+                        lastname `;
     query += type == Book_1.BookType.BOOKSTORE_BOOK ? " ,price " : "";
     query += `  FROM Books 
                 JOIN ${refTable}    ON  Books.isbn = ${refTable}.isbn 

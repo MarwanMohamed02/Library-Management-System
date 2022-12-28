@@ -18,6 +18,7 @@ import { getEnrollments } from "../db/queries/getEnrollments";
 import { getAvailableWorkshops } from "../db/queries/getAvailableWorkshops";
 import { getEvents } from "../db/queries/getEvents";
 import { addReview } from "../db/inserts/addReview";
+import { currSocket } from "../index"
 
 const membersRouter = express.Router();
 
@@ -213,11 +214,11 @@ membersRouter.post("/calldibs", auth, async(req: AuthRequest, res) => {
     const { isbn } = req.body;
 
     try {
-        // console.log(req.member?.warning_count as number)
+        console.log("HIII")
         // if (req.member?.warning_count as number >= 5)
         //     throw new Error("You cannot make any reservations until warnings are cleared");
         
-        const {verification_code, error} = await callDibs(isbn, req.member as IMember)
+        const {verification_code, error} = await callDibs(isbn, req.member as IMember, currSocket)
         
         if (error)
             throw error;

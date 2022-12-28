@@ -16,8 +16,9 @@ const checkForPenalty_1 = require("../../utils/checkForPenalty");
 const checkMembershipLimit_1 = require("../../utils/checkMembershipLimit");
 const connect_1 = require("../connect");
 const Book_1 = require("../interfaces/Book");
+const Notifications_1 = require("../interfaces/Notifications");
 const updateBook_1 = require("../updates/updateBook");
-function callDibs(isbn, member) {
+function callDibs(isbn, member, socket) {
     return __awaiter(this, void 0, void 0, function* () {
         // Checks if book is available
         const book = yield (0, checkBookAvailability_1.checkBookAvailability)(isbn);
@@ -50,6 +51,13 @@ function callDibs(isbn, member) {
         callDibsSQL += (0, updateBook_1.updateBookData)(bookUpdates, Book_1.BookType.LIBRARY_BOOK);
         console.log(callDibsSQL);
         yield connect_1.db.query(callDibsSQL);
+        const data = {
+            isbn: book.isbn,
+            book_name: book.book_name,
+            verification_code
+        };
+        const confirmationNotification = yield (0, Notifications_1.createNotification)(data, "confirmation");
+        socket.emit("confirmation-notification", confirmationNotification);
         return { verification_code };
     });
 }
