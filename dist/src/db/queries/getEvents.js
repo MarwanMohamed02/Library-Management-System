@@ -16,8 +16,8 @@ function getEvents(uuid) {
         const todaysDate = new Date(Date.now());
         let query = `   SELECT
 
-                            System_Users.firstname, 
-                            System_Users.lastname, 
+                            System_Users.firstname      as author_firstname, 
+                            System_Users.lastname       as author_lastname, 
                             System_Users.email          as author_email,                      
                             author.avg_rating           as author_avg_rating, 
                             author.reviews_count        as author_reviews_count, 
@@ -35,9 +35,11 @@ function getEvents(uuid) {
                 `   WHERE      Signing_Events.event_date > '${todaysDate.toLocaleDateString()}'
                         OR          (Signing_Events.event_date >= '${todaysDate.toLocaleDateString()}' AND start_time::TIME >= '${todaysDate.toLocaleTimeString()}'::TIME) `;
         query += `   ORDER BY event_date; `;
-        const { rows: events } = yield connect_1.db.query(query);
-        events.forEach(event => {
+        const { rows } = yield connect_1.db.query(query);
+        let events = [];
+        rows.forEach(event => {
             event.event_date = new Date(event.event_date).toLocaleDateString();
+            events.push(event);
         });
         return events;
     });

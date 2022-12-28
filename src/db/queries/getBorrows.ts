@@ -12,7 +12,7 @@ export async function getBorrows(uuid: string): Promise<IBorrow[]> {
     const { rows } = await db.query(sql);
 
 
-    let dibs: IBorrow[] = [];
+    let borrows: IBorrow[] = [];
 
     for (let i = 0; i < rows.length; i++) {
         const borrow_date = (new Date(parseInt(rows[i].borrow_timestamp))).toLocaleDateString();
@@ -21,7 +21,7 @@ export async function getBorrows(uuid: string): Promise<IBorrow[]> {
         const return_before_date = (new Date(parseInt(rows[i].return_before))).toLocaleDateString();
         const return_before_time = (new Date(parseInt(rows[i].return_before))).toLocaleTimeString();
 
-        dibs.push({
+        borrows.push({
             username: rows[i].username,
             book_name: rows[i].book_name,
             borrow_date,
@@ -31,6 +31,6 @@ export async function getBorrows(uuid: string): Promise<IBorrow[]> {
         })
     }
 
-    return dibs;
+    return borrows;
 
 }

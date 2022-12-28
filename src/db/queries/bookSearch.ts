@@ -6,8 +6,17 @@ export function booksSearch(bookQuery: IBookQuery): string {
 
     const [qty, refTable] = type == BookType.LIBRARY_BOOK ? ["borrow_quantity", "Library_Books"] : ["selling_quantity", "Bookstore_Books"];
 
-    let query = `SELECT Books.isbn, book_name, genre, book_description, ${qty}, Books.avg_rating, Books.ratings_count, 
-                        author_id::UUID, firstname, lastname ` 
+    let query = `SELECT 
+                        Books.isbn as isbn, 
+                        book_name, 
+                        genre, 
+                        book_description, 
+                        ${qty}, 
+                        Books.avg_rating    as avg_rating, 
+                        Books.ratings_count as ratings_count, 
+                        author_id::UUID, 
+                        firstname, 
+                        lastname ` 
  
     query += type == BookType.BOOKSTORE_BOOK ? " ,price " : "";
     

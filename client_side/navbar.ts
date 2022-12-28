@@ -9,7 +9,7 @@ const prev_events_btn = document.getElementById("btn-prev-events");
 const warnings = document.getElementById("Warnings");
 const logo_navbar = document.getElementById("logo") as HTMLElement;
 
-
+const { token } = localStorage; 
 
 
 library_btn?.addEventListener('click', function handleClick(event) {
@@ -60,5 +60,19 @@ warnings?.addEventListener('click', function handleClick(event) {
 
 //Next lines related to warnings
 
+//Logout
+const logout_button=document.getElementById("logout") as HTMLButtonElement;
+logout_button.onclick = async () => {
 
+    await fetch("members/logout", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    location.href = "/";
+
+
+}
 

@@ -1,16 +1,17 @@
 import { db } from "../connect";
+import { IEvents } from "../interfaces/Events";
 
 
 
 
 
-export async function getEvents(uuid?: string) {
+export async function getEvents(uuid?: string): Promise<IEvents[]> {
     const todaysDate = new Date(Date.now());
 
         let query = `   SELECT
 
-                            System_Users.firstname, 
-                            System_Users.lastname, 
+                            System_Users.firstname      as author_firstname, 
+                            System_Users.lastname       as author_lastname, 
                             System_Users.email          as author_email,                      
                             author.avg_rating           as author_avg_rating, 
                             author.reviews_count        as author_reviews_count, 
@@ -33,11 +34,14 @@ export async function getEvents(uuid?: string) {
                     
     query +=        `   ORDER BY event_date; `;
     
-    const { rows: events } = await db.query(query);
+    const { rows } = await db.query(query);
 
-    events.forEach(event => {
+    let events: IEvents[] = [];
+
+    rows.forEach(event => {
         event.event_date = new Date(event.event_date).toLocaleDateString();
+        events.push(event);
     })
-
+    
     return events;
 }

@@ -18,6 +18,7 @@ import { getEnrollments } from "../db/queries/getEnrollments";
 import { getAvailableWorkshops } from "../db/queries/getAvailableWorkshops";
 import { getEvents } from "../db/queries/getEvents";
 import { addReview } from "../db/inserts/addReview";
+import { currSocket } from "../index"
 
 const membersRouter = express.Router();
 
@@ -55,9 +56,9 @@ membersRouter.get("/mydibs", auth, async (req: AuthRequest, res) => {
 
 membersRouter.get("/myborrows", auth, async (req: AuthRequest, res) => {
     try {
-        const dibs = await getBorrows(req.member?.uuid as string);
+        const borrows = await getBorrows(req.member?.uuid as string);
         
-        res.status(200).json({ dibs });
+        res.status(200).json({ borrows });
     }
     catch (err) {
         console.log(err);
@@ -141,14 +142,13 @@ membersRouter.post("/members/signup", async (req, res) => {
             uuid = rows[0].uuid;
         
         
-        const { username , pass, membership_type } = req.body as IMember;
+        const { username , pass } = req.body as IMember;
 
 
         const member = {
             uuid,
             username,
-            pass,
-            membership_type 
+            pass, 
         }
 
         const memSQL = await insertMember(member as IMember);
@@ -214,11 +214,11 @@ membersRouter.post("/calldibs", auth, async(req: AuthRequest, res) => {
     const { isbn } = req.body;
 
     try {
-        // console.log(req.member?.warning_count as number)
+        console.log("HIII")
         // if (req.member?.warning_count as number >= 5)
         //     throw new Error("You cannot make any reservations until warnings are cleared");
         
-        const {verification_code, error} = await callDibs(isbn, req.member as IMember)
+        const {verification_code, error} = await callDibs(isbn, req.member as IMember, currSocket)
         
         if (error)
             throw error;

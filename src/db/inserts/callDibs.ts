@@ -1,18 +1,20 @@
 import { getDigitalCode } from "node-verification-code"
+import {  Socket } from "socket.io";
 import { checkBookAvailability } from "../../utils/checkBookAvailability";
 import { checkForPenalty } from "../../utils/checkForPenalty"
 import { checkMembershipLimit } from "../../utils/checkMembershipLimit";
 import { db } from "../connect";
 import { BookType, IBook, ILibraryBook } from "../interfaces/Book";
 import { IMember } from "../interfaces/Member";
+import { createNotification } from "../interfaces/Notifications";
 import { updateBookData } from "../updates/updateBook";
 
 
 
-export async function callDibs(isbn: string, member: IMember) {
+export async function callDibs(isbn: string, member: IMember, socket: Socket) {
 
     // Checks if book is available
-    const book = await checkBookAvailability(isbn);
+    const book = await checkBookAvailability(isbn) as ILibraryBook;
 
     console.log("reserved book: " + book)
 
@@ -60,6 +62,16 @@ export async function callDibs(isbn: string, member: IMember) {
     console.log(callDibsSQL)
     
     await db.query(callDibsSQL);
+
+    const data = {
+        isbn: book.isbn,
+        book_name: book.book_name,
+        verification_code
+    }
+
+    const confirmationNotification = await createNotification(data, "confirmation");
+
+    socket.emit("confirmation-notification", confirmationNotification);
 
     return {verification_code};    
 }

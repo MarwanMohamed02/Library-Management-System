@@ -1,7 +1,7 @@
 import express from "express"
 import http from "http"
 import path from "path";
-import { Server } from "socket.io"
+import { Server, Socket } from "socket.io"
 import { db } from "./db/connect";
 import { addPenalty } from "./db/inserts/addPenalty";
 import { IMember } from "./db/interfaces/Member";
@@ -22,6 +22,7 @@ const io = new Server(server, {
 
 
 const port = process.env.PORT;
+let currSocket: Socket;
 
 // Serving Up Files
 const publicDir = path.join(__dirname, "../public");
@@ -62,42 +63,55 @@ app.get("/test", (req, res) => {
     res.sendFile(path.join(__dirname, "../public/login.html"));
 })
 
-// io.use(auth_socket);
+io.use(auth_socket);
 
-// io.on("connection", async (socket) => {
-//     console.log("connected");
 
-//     const member = socket.data.member as IMember;
-//     const uuid = member.uuid as string;
+io.on("connection", async (socket) => {
+    console.log("connected");
+    try {
 
-//     await socket.join(uuid);
+        const member = socket.data.member as IMember;
+        const uuid = member.uuid as string;
 
-//     io.to(uuid).emit("ping", Date.now() );
+        await socket.join(uuid);
+        currSocket = socket;
 
-//     socket.on("pong", async (time) => {
-//         if (Date.now() - time < 10000)
-//             io.to(uuid).emit("ping", time);
-//         else {
-//             const warnings = await getAllLatePickups(uuid);
-//             console.log("warnings:");
-//             console.log(warnings);
+        socket.emit("ping", Date.now());
 
-//             const penalties = await getAllLateReturns(uuid);
-//             console.log("penalties:")
-//             console.log(penalties)
+        socket.on("pong", async (time) => {
+            if (Date.now() - time < 10000)
+                socket.emit("ping", time);
+            else {
+                const warnings = await getAllLatePickups(uuid);
+                console.log("warnings:");
+                console.log(warnings);
 
-//             if (penalties.length !== 0) 
-//                 io.to(uuid).emit("penalties", penalties);  
+                const penalties = await getAllLateReturns(uuid);
+                console.log("penalties:")
+                console.log(penalties)
 
-//             if (penalties.length !== 0) 
-//                 io.to(uuid).emit("warnings", warnings);
+                if (penalties.length !== 0)
+                    socket.emit("penalties", penalties);
 
-//             io.to(uuid).emit("ping", Date.now());
-//         }
-//     })
+                if (warnings.length !== 0)
+                    socket.emit("warnings", warnings);
 
-// })
+                socket.emit("ping", Date.now());
+            }
+        })
 
+    }
+    catch (err) {
+        console.log("Socket Error");
+        console.log(err);
+    }
+})
 
 
 server.listen(port, () => console.log(`Server is up on port ${port}`))
+
+
+
+
+
+export { currSocket }

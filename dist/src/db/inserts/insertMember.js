@@ -16,7 +16,7 @@ exports.insertMember = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 function insertMember(member) {
     return __awaiter(this, void 0, void 0, function* () {
-        let { uuid, username, pass, membership_type, follower_count = 0, warning_count = 0 } = member;
+        let { uuid, username, pass, membership_type = "Standard", follower_count = 0, warning_count = 0 } = member;
         // Hashing Password
         pass = yield bcryptjs_1.default.hash(pass, 12);
         return "INSERT INTO Members(id, username, pass, membership_type, follower_count, warning_count) "

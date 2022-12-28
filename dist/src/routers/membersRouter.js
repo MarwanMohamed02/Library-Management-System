@@ -30,6 +30,7 @@ const getEnrollments_1 = require("../db/queries/getEnrollments");
 const getAvailableWorkshops_1 = require("../db/queries/getAvailableWorkshops");
 const getEvents_1 = require("../db/queries/getEvents");
 const addReview_1 = require("../db/inserts/addReview");
+const index_1 = require("../index");
 const membersRouter = express_1.default.Router();
 exports.membersRouter = membersRouter;
 // GET
@@ -58,8 +59,8 @@ membersRouter.get("/mydibs", auth_1.auth, (req, res) => __awaiter(void 0, void 0
 membersRouter.get("/myborrows", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     try {
-        const dibs = yield (0, getBorrows_1.getBorrows)((_b = req.member) === null || _b === void 0 ? void 0 : _b.uuid);
-        res.status(200).json({ dibs });
+        const borrows = yield (0, getBorrows_1.getBorrows)((_b = req.member) === null || _b === void 0 ? void 0 : _b.uuid);
+        res.status(200).json({ borrows });
     }
     catch (err) {
         console.log(err);
@@ -125,12 +126,11 @@ membersRouter.post("/members/signup", (req, res) => __awaiter(void 0, void 0, vo
         }
         else
             uuid = rows[0].uuid;
-        const { username, pass, membership_type } = req.body;
+        const { username, pass } = req.body;
         const member = {
             uuid,
             username,
             pass,
-            membership_type
         };
         const memSQL = yield (0, insertMember_1.insertMember)(member);
         yield connect_1.db.query(memSQL);
@@ -175,10 +175,10 @@ membersRouter.post("/members/delete/account", auth_1.auth, (req, res) => {
 membersRouter.post("/calldibs", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { isbn } = req.body;
     try {
-        // console.log(req.member?.warning_count as number)
+        console.log("HIII");
         // if (req.member?.warning_count as number >= 5)
         //     throw new Error("You cannot make any reservations until warnings are cleared");
-        const { verification_code, error } = yield (0, callDibs_1.callDibs)(isbn, req.member);
+        const { verification_code, error } = yield (0, callDibs_1.callDibs)(isbn, req.member, index_1.currSocket);
         if (error)
             throw error;
         res.status(201).json({ verification_code });

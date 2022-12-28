@@ -1,3 +1,19 @@
+import { io } from "socket.io-client";
+
+import { INotification } from "../src/db/interfaces/Notifications"
+
+const socket = io({
+    auth: {
+        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiM2VhOTNlNTctYjg1Ni00OGYyLTkwMmMtM2Y2Njg5MWMzODk3IiwiaWF0IjoxNjcxODYyNzU5fQ.S6ONCS-PwaJqyHXeDyuN4OmblNglSdraHu8yWdpF9oI" // b3d kda htgebo ml local storage bas 5aleeh kda 3shan l testing
+    }
+});
+
+socket.on("ping", (time) => {
+    socket.emit("pong", time);
+});
+
+
+
 const warnings_notification = document.getElementById("Warnings");
 
 const all = document.getElementById("WarPen");
@@ -47,3 +63,17 @@ window.onbeforeunload = () => {
     // save notifications
 }
 
+// after exactly 10 seconds 2 warnings will appear
+socket.on("warnings", (warning_notifications: INotification[]) => {
+    console.log(warning_notifications);
+
+    // ht-update l list hena ya hamadaa
+    
+    for (let i = 0; i < warning_notifications.length; i++) {
+        // baddelha hena be7eeth tst5dm kol l hagat ely fl data (shoof INotifications w IWarnings)
+        // nafs l kalam fl penalties ba2a
+        const { data, type:notificationType, notification_time }= warning_notifications[i]
+        const { book_name, book_isbn, reservation_time, pick_up_before, verification_code } = data;
+        Warnings_List.insertAdjacentHTML("afterbegin", "<a  href=\"#\" class=\"list-group-item list-group-item-action\"><div class=\"d-flex w-100 justify-content-between\"> <h5 class=\"mb-1\">" + book_name + "</h5><small class=\"text-muted\">" + book_isbn + "</small></div><p class=\"mb-1\">" + "warning description" + "</p><small class=\"text-muted\">" + notification_time + "</small></a>")
+    }
+})

@@ -6,6 +6,7 @@ import {IBook, IBookQuery} from "../db/interfaces/Book"
 import { updateBookData } from "../db/updates/updateBook"
 import { callDibs } from "../db/inserts/callDibs"
 import { getMemberDibs } from "../db/joins/getMemberDibs"
+import { auth } from "../utils/auth"
 
 const booksRouter = express.Router();
 
@@ -13,7 +14,7 @@ const booksRouter = express.Router();
 
 
 // GET
-booksRouter.get("/books", async (req, res) => {
+booksRouter.get("/books", auth, async (req, res) => {
     const bookQuery = req.query as IBookQuery;
 
     // console.log(bookQuery);
@@ -33,7 +34,7 @@ booksRouter.get("/books", async (req, res) => {
 })
 
 
-booksRouter.get("/books/mydibs", async (req, res) => {
+booksRouter.get("/books/mydibs", auth, async (req, res) => {
     const { uuid, sort = "ASC" } = req.query;
 
     const sql = getMemberDibs(uuid, sort);
@@ -53,7 +54,7 @@ booksRouter.get("/books/mydibs", async (req, res) => {
 
 
 // POST
-booksRouter.post("/books", async(req, res) => {
+booksRouter.post("/books", auth, async(req, res) => {
     const bookData = req.body as IBook;
 
     const sql = insertBooks(bookData);
@@ -69,7 +70,7 @@ booksRouter.post("/books", async(req, res) => {
 
 })
 
-booksRouter.post("/books/callDibs", async (req, res) => {
+booksRouter.post("/books/callDibs", auth, async (req, res) => {
     const { isbn, uuid } = req.body;
     const sql = callDibs(isbn, uuid);
 
