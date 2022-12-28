@@ -105,10 +105,10 @@ membersRouter.get("/events", auth, async (req: AuthRequest, res) => {
 })
 
 membersRouter.get("/reviews/book", auth, async (req: AuthRequest, res) => {
-    const { isbn } = req.body;
+    const { isbn } = req.query;
 
     try {
-        const reviews = await getReviews(req.member?.uuid as string, isbn, "Books");
+        const reviews = await getReviews(req.member?.uuid as string, isbn as string, "Books");
 
         res.status(200).json({ reviews });
     }
@@ -122,10 +122,10 @@ membersRouter.get("/reviews/book", auth, async (req: AuthRequest, res) => {
 
 })
 membersRouter.get("/reviews/author", auth, async (req: AuthRequest, res) => {
-    const { author_id } = req.body;
+    const { author_id } = req.query;
 
     try {
-        const reviews = await getReviews(req.member?.uuid as string, author_id, "Author");
+        const reviews = await getReviews(req.member?.uuid as string, author_id as string, "Author");
 
         res.status(200).json({ reviews });
     }
@@ -139,10 +139,10 @@ membersRouter.get("/reviews/author", auth, async (req: AuthRequest, res) => {
 
 })
 membersRouter.get("/reviews/instructor", auth, async (req: AuthRequest, res) => {
-    const { instructor_id } = req.body;
+    const { instructor_id } = req.query;
 
     try {
-        const reviews = await getReviews(req.member?.uuid as string, instructor_id, "Instructor");
+        const reviews = await getReviews(req.member?.uuid as string, instructor_id as string, "Instructor");
 
         res.status(200).json({ reviews });
     }
@@ -156,10 +156,10 @@ membersRouter.get("/reviews/instructor", auth, async (req: AuthRequest, res) => 
 
 })
 membersRouter.get("/reviews/workshop", auth, async (req: AuthRequest, res) => {
-    const { workshop_title } = req.body;
+    const { workshop_title } = req.query;
 
     try {
-        const reviews = await getReviews(req.member?.uuid as string, workshop_title, "Workshop");
+        const reviews = await getReviews(req.member?.uuid as string, workshop_title as string, "Workshop");
 
         res.status(200).json({ reviews });
     }

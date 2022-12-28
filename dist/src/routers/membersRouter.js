@@ -103,7 +103,7 @@ membersRouter.get("/events", auth_1.auth, (req, res) => __awaiter(void 0, void 0
 }));
 membersRouter.get("/reviews/book", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _e;
-    const { isbn } = req.body;
+    const { isbn } = req.query;
     try {
         const reviews = yield (0, getReview_1.getReviews)((_e = req.member) === null || _e === void 0 ? void 0 : _e.uuid, isbn, "Books");
         res.status(200).json({ reviews });
@@ -115,7 +115,7 @@ membersRouter.get("/reviews/book", auth_1.auth, (req, res) => __awaiter(void 0, 
 }));
 membersRouter.get("/reviews/author", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _f;
-    const { author_id } = req.body;
+    const { author_id } = req.query;
     try {
         const reviews = yield (0, getReview_1.getReviews)((_f = req.member) === null || _f === void 0 ? void 0 : _f.uuid, author_id, "Author");
         res.status(200).json({ reviews });
@@ -127,7 +127,7 @@ membersRouter.get("/reviews/author", auth_1.auth, (req, res) => __awaiter(void 0
 }));
 membersRouter.get("/reviews/instructor", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _g;
-    const { instructor_id } = req.body;
+    const { instructor_id } = req.query;
     try {
         const reviews = yield (0, getReview_1.getReviews)((_g = req.member) === null || _g === void 0 ? void 0 : _g.uuid, instructor_id, "Instructor");
         res.status(200).json({ reviews });
@@ -139,7 +139,7 @@ membersRouter.get("/reviews/instructor", auth_1.auth, (req, res) => __awaiter(vo
 }));
 membersRouter.get("/reviews/workshop", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _h;
-    const { workshop_title } = req.body;
+    const { workshop_title } = req.query;
     try {
         const reviews = yield (0, getReview_1.getReviews)((_h = req.member) === null || _h === void 0 ? void 0 : _h.uuid, workshop_title, "Workshop");
         res.status(200).json({ reviews });
