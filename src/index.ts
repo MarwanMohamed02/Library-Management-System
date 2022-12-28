@@ -76,29 +76,29 @@ io.on("connection", async (socket) => {
         await socket.join(uuid);
         currSocket = socket;
 
-        socket.emit("ping", Date.now());
+        // socket.emit("ping", Date.now());
 
-        socket.on("pong", async (time) => {
-            if (Date.now() - time < 10000)
-                socket.emit("ping", time);
-            else {
-                const warnings = await getAllLatePickups(uuid);
-                console.log("warnings:");
-                console.log(warnings);
+        // socket.on("pong", async (time) => {
+        //     if (Date.now() - time < 10000)
+        //         socket.emit("ping", time);
+        //     else {
+        //         const warnings = await getAllLatePickups(uuid);
+        //         console.log("warnings:");
+        //         console.log(warnings);
 
-                const penalties = await getAllLateReturns(uuid);
-                console.log("penalties:")
-                console.log(penalties)
+        //         const penalties = await getAllLateReturns(uuid);
+        //         console.log("penalties:")
+        //         console.log(penalties)
 
-                if (penalties.length !== 0)
-                    socket.emit("penalties", penalties);
+        //         if (penalties.length !== 0)
+        //             socket.emit("penalties", penalties);
 
-                if (warnings.length !== 0)
-                    socket.emit("warnings", warnings);
+        //         if (warnings.length !== 0)
+        //             socket.emit("warnings", warnings);
 
-                socket.emit("ping", Date.now());
-            }
-        })
+        //         socket.emit("ping", Date.now());
+        //     }
+        // })
 
     }
     catch (err) {

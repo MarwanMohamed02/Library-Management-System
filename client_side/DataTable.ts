@@ -293,7 +293,7 @@ function PrepareSelectedItemEvents() {
           selected_item_name.innerHTML = "Book Name: " + selected_library_Book.book_name;
           selected_item_1.innerHTML = "Author: " + selected_library_Book.firstname + " " + selected_library_Book.lastname;
           selected_item_2.innerHTML = "ISBN: " + selected_library_Book.isbn;
-          selected_item_3.innerHTML = "Average Rating: " + selected_library_Book.avg_rating.toString() + " (" + selected_library_Book.ratings_count + ")";
+          selected_item_3.innerHTML = "Average Rating: " + selected_library_Book.avg_rating.toString() + " (" + selected_library_Book.reviews_count + ")";
           description.innerHTML = selected_library_Book.book_description;
 
           description_header.innerHTML = "Book Description";
@@ -307,7 +307,7 @@ function PrepareSelectedItemEvents() {
           selected_item_name.innerHTML = "Book Name: " + selected_bookstore_Book.book_name;
           selected_item_1.innerHTML = "Author: " + selected_bookstore_Book.firstname + " " + selected_bookstore_Book.lastname;
           selected_item_2.innerHTML = "ISBN: " + selected_bookstore_Book.isbn;
-          selected_item_3.innerHTML = "Average Rating: " + selected_bookstore_Book.avg_rating.toString() + " (" + selected_bookstore_Book.ratings_count + ")";
+          selected_item_3.innerHTML = "Average Rating: " + selected_bookstore_Book.avg_rating.toString() + " (" + selected_bookstore_Book.reviews_count + ")";
           selected_item_4.innerHTML = "Selling Price: $" + selected_bookstore_Book.price;
           description.innerHTML = selected_bookstore_Book.book_description;
 

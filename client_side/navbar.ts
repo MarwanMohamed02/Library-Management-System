@@ -72,7 +72,5 @@ logout_button.onclick = async () => {
         }
     })
     location.href = "/";
-
-
 }
 
