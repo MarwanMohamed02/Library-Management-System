@@ -1,6 +1,7 @@
 import { BookType, IBook, IBookstoreBook, IBorrow, IDibs, ILibraryBook } from "../src/db/interfaces/Book"
 import { IWorkshop, IEnrollment } from "../src/db/interfaces/Workshops"
 import { IEvents } from "../src/db/interfaces/Events"
+import { IReviews } from "../src/db/interfaces/Reviews"
 import { io } from "socket.io-client";
 
 const { token } = localStorage;
@@ -65,6 +66,9 @@ let displayedEvents: IEvents[];
 let totalAttendedEvents: IEvents[];
 let displayedAttendedEvents: IEvents[];
 
+let item1Reviews: IReviews[];
+let item2Reviews: IReviews[];
+
 //const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNWRiODdjMzgtNDg2My00ODM3LWJlOGItNDhlZmQ3ODUwMjU1IiwiaWF0IjoxNjcyMDQ2NjEzfQ.IlQ1neU1Ei83YaQ7uubqodYxQHJUEkUPEcVZzf4Ll_c";
 // const token = localStorage.getItem('token');
 var source = localStorage.getItem('target-entity');
@@ -100,7 +104,7 @@ let reviews_title_item1 = document.getElementById('reviews-title-item1') as HTML
 let reviews_title_item2 = document.getElementById('reviews-title-item2') as HTMLElement;
 
 let item1_reviews = document.getElementById('carousel-reviews-item1') as HTMLElement;
-
+let item2_reviews = document.getElementById('carousel-reviews-item2') as HTMLElement;
 var response;
 var reservedBook: ILibraryBook;
 var selected_library_Book: ILibraryBook;
@@ -114,8 +118,6 @@ var selected_event: IEvents;
 reserveButton.onclick = async (e) => {
   // prevents refreshing
   e.preventDefault();
-  console.log("HII")
-  console.log(selected_library_Book.isbn)
   response = await fetch("/calldibs", {
     method: "POST",
     headers: {
@@ -132,10 +134,8 @@ reserveButton.onclick = async (e) => {
 
 async function GetEntities() {
 
-  console.log(source);
   switch (source) {
     case 'library books':
-      console.log("lib books: " + totalLibraryBooks);
       response = await fetch(`/books?type=${BookType.LIBRARY_BOOK}`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -180,7 +180,6 @@ async function GetEntities() {
         }
       });
       const { borrows } = await response.json();
-      console.log(borrows);
       totalBorrows = borrows
       displayedBorrows = totalBorrows;
 
@@ -214,7 +213,6 @@ async function GetEntities() {
       totalEnrollments = enrollments;
       displayedEnrollments = totalEnrollments;
 
-      console.log(totalEnrollments);
 
       break;
 
@@ -296,11 +294,51 @@ function prepareHeader() {
   }
 }
 
+function displayReviews() {
+  if (item1Reviews.length === 0) return;
+
+  item1_reviews.innerHTML += '<div class="carousel-item active"><div class="reviews__card"><p class="lh-lg"><i class="fas fa-quote-left"></i>' + item1Reviews[0].comment + '<i class="fas fa-quote-right"></i><div class="ratings p-1" id="ratings0-item1"></div></p></div><div class="reviews__name"><h3>' + item1Reviews[0].member_name + '</h3><p class="fw-light">' + item1Reviews[0].review_time + '</p></div></div>';
+  var current_rating_section = document.getElementById('ratings0-item1') as HTMLElement;
+  var i;
+  var j;
+  for (i = 1; i < item1Reviews[0].rating + 0.1; i++) {
+    current_rating_section.innerHTML += '<i class="fas fa-star"></i>';
+  }
+  if (item1Reviews[0].rating - i + 1 > 0.3) current_rating_section.innerHTML += '<i class="fas fa-star-half"></i>';
+
+  for (i = 1; i < item1Reviews.length; i++) {
+    item1_reviews.innerHTML += '<div class="carousel-item"><div class="reviews__card"><p class="lh-lg"><i class="fas fa-quote-left"></i>' + item1Reviews[i].comment + '<i class="fas fa-quote-right"></i><div class="ratings p-1" id="ratings' + i.toString() + '-item1"></div></p></div><div class="reviews__name"><h3>' + item1Reviews[i].member_name + '</h3><p class="fw-light">' + item1Reviews[i].review_time + '</p></div></div>';
+    var current_rating_section = document.getElementById('ratings' + i.toString() + '-item1') as HTMLElement;
+    for (j = 1; j < item1Reviews[i].rating; j++) {
+      current_rating_section.innerHTML += '<i class="fas fa-star"></i>';
+    }
+    if (item1Reviews[i].rating - j + 1 > 0.3) current_rating_section.innerHTML += '<i class="fas fa-star-half"></i>';
+  }
+
+  if (item2Reviews.length === 0) return;
+
+  item2_reviews.innerHTML += '<div class="carousel-item active"><div class="reviews__card"><p class="lh-lg"><i class="fas fa-quote-left"></i>' + item2Reviews[0].comment + '<i class="fas fa-quote-right"></i><div class="ratings p-1" id="ratings0-item2"></div></p></div><div class="reviews__name"><h3>' + item2Reviews[0].member_name + '</h3><p class="fw-light">' + item2Reviews[0].review_time + '</p></div></div>';
+  var current_rating_section = document.getElementById('ratings0-item2') as HTMLElement;
+  for (i = 1; i < item2Reviews[0].rating; i++) {
+    current_rating_section.innerHTML += '<i class="fas fa-star"></i>';
+  }
+  if (item2Reviews[0].rating - i + 1 > 0.3) current_rating_section.innerHTML += '<i class="fas fa-star-half"></i>';
+
+  for (i = 1; i < item2Reviews.length; i++) {
+    item2_reviews.innerHTML += '<div class="carousel-item"><div class="reviews__card"><p class="lh-lg"><i class="fas fa-quote-left"></i>' + item2Reviews[i].comment + '<i class="fas fa-quote-right"></i><div class="ratings p-1" id="ratings' + i.toString() + '-item2"></div></p></div><div class="reviews__name"><h3>' + item2Reviews[i].member_name + '</h3><p class="fw-light">' + item2Reviews[i].review_time + '</p></div></div>';
+    var current_rating_section = document.getElementById('ratings' + i.toString() + '-item2') as HTMLElement;
+    for (j = 1; j < item2Reviews[i].rating; j++) {
+      current_rating_section.innerHTML += '<i class="fas fa-star"></i>';
+    }
+    if (item2Reviews[i].rating - i + 1 > 0.3) current_rating_section.innerHTML += '<i class="fas fa-star-half"></i>';
+  }
+}
+
 function PrepareSelectedItemEvents() {
   item1_reviews.innerHTML = "";
   rows = document.querySelectorAll('tr');
   rows.forEach(row => {
-    row?.addEventListener('click', function handleRowPress(event) {
+    row?.addEventListener('click', async function handleRowPress(event) {
       selected_item?.scrollIntoView();
 
       switch (source) {
@@ -314,12 +352,25 @@ function PrepareSelectedItemEvents() {
           selected_item_3.innerHTML = "Average Rating: " + selected_library_Book.avg_rating.toString() + " (" + selected_library_Book.reviews_count + ")";
           description.innerHTML = selected_library_Book.book_description;
 
+          response = await fetch("/reviews/book?isbn=" + selected_library_Book.isbn, {
+            method: "GET",
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          })
+          var { reviews } = await response.json();
+          item1Reviews = reviews;
 
-          item1_reviews.innerHTML += '<div class="carousel-item active"><div class="reviews__card"><p class="lh-lg"><i class="fas fa-quote-left"></i>Highly Talented Writer.<i class="fas fa-quote-right"></i><div class="ratings p-1" id="ratings1-item1"></div></p></div><div class="reviews__name"><h3>Ahmed Abdelaal</h3><p class="fw-light">12/17/2022</p></div></div>';
-          var current_rating_section = document.getElementById('ratings1-item1') as HTMLElement;
-          for (var i = 0; i < 5; i++) {
-            current_rating_section.innerHTML += '<i class="fas fa-star"></i>';
-          }
+          response = await fetch("/reviews/author?author_id=" + selected_library_Book.author_id, {
+            method: "GET",
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          })
+          var { reviews } = await response.json();
+          item2Reviews = reviews;
+
+          displayReviews();
 
           description_header.innerHTML = "Book Description";
           accordion_selection.style.display = 'block';
@@ -335,6 +386,26 @@ function PrepareSelectedItemEvents() {
           selected_item_3.innerHTML = "Average Rating: " + selected_bookstore_Book.avg_rating.toString() + " (" + selected_bookstore_Book.reviews_count + ")";
           selected_item_4.innerHTML = "Selling Price: $" + selected_bookstore_Book.price;
           description.innerHTML = selected_bookstore_Book.book_description;
+
+          response = await fetch("/reviews/book?isbn=" + selected_bookstore_Book.isbn, {
+            method: "GET",
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          })
+          var { reviews } = await response.json();
+          item1Reviews = reviews;
+
+          response = await fetch("/reviews/author?author_id=" + selected_bookstore_Book.author_id, {
+            method: "GET",
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          })
+          var { reviews } = await response.json();
+          item2Reviews = reviews;
+
+          displayReviews();
 
           description_header.innerHTML = "Book Description";
           accordion_selection.style.display = 'block';
@@ -371,6 +442,26 @@ function PrepareSelectedItemEvents() {
           selected_item_4.innerHTML = "Enrollment Price: $" + selected_workshop.price;
           selected_item_5.innerHTML = "Hosted On " + selected_workshop.workshop_date + " From " + selected_workshop.workshop_start_time + " To " + selected_workshop.workshop_end_time;
 
+          response = await fetch("/reviews/workshop?workshop_title=" + selected_workshop.workshop_title, {
+            method: "GET",
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          })
+          var { reviews } = await response.json();
+          item1Reviews = reviews;
+
+          response = await fetch("/reviews/instructor?instructor_id=" + selected_workshop.instructor_id, {
+            method: "GET",
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          })
+          var { reviews } = await response.json();
+          item2Reviews = reviews;
+
+          displayReviews();
+
           description_header.innerHTML = "Workshop Description";
           accordion_selection.style.display = 'block';
 
@@ -384,6 +475,24 @@ function PrepareSelectedItemEvents() {
           selected_item_3.innerHTML = "Average Rating: " + selected_enrollment.avg_rating.toString() + " (" + selected_enrollment.reviews_count + ")";
           selected_item_4.innerHTML = "Enrollment Price: $" + selected_enrollment.price;
           selected_item_5.innerHTML = "Hosted On " + selected_enrollment.workshop_date + " From " + selected_enrollment.workshop_start_time + " To " + selected_enrollment.workshop_end_time;
+
+          response = await fetch("/reviews/workshop?workshop_title=" + selected_workshop.workshop_title, {
+            method: "GET",
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          })
+          var { reviews } = await response.json();
+          item1Reviews = reviews;
+
+          response = await fetch("/reviews/instructor?instructor_id=" + selected_workshop.instructor_id, {
+            method: "GET",
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          })
+          var { reviews } = await response.json();
+          item2Reviews = reviews;
 
           description_header.innerHTML = "Workshop Description";
           accordion_selection.style.display = 'block';
@@ -417,7 +526,6 @@ function PrepareSelectedItemEvents() {
 
 function Show() {
   let table_body = document.getElementById("table-body") as HTMLTableElement;
-  console.log('Table Test');
   table_body.innerHTML = "";
 
   switch (source) {
