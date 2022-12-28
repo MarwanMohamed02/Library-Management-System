@@ -190,16 +190,16 @@
                     <h2 class="accordion-header" id="flush-headingTwo">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                            Reviews
+                            Book Reviews
                         </button>
                     </h2>
                     <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
                         data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
 
-                            <!-- START OF THE REVIEWS SECTION -->
+                            <!-- START OF THE BOOK REVIEWS SECTION -->
 
-                            <section id="reviews" class="reviews">
+                            <section id="item1-reviews" class="reviews">
                                 <div class="container">
                                     <div class="row text-center text-white">
                                         <h1 class="display-5 fw-bold pt-4">What Readers Are Saying</h1>
@@ -208,7 +208,7 @@
 
                                     <!-- START THE CAROUSEL CONTENT  -->
                                     <div class="row align-items-center">
-                                        <div id="carouselExampleCaptions" class="carousel slide"
+                                        <div id="carouselExampleCaptionsOne" class="carousel slide"
                                             data-bs-ride="carousel">
                                             <div class="carousel-inner">
                                                 <!-- CAROUSEL ITEM 1 -->
@@ -306,29 +306,183 @@
                                             </div>
                                             <div class="text-center pb-4">
                                                 <button class="btn btn-outline-light fas fa-long-arrow-alt-left"
-                                                    type="button" data-bs-target="#carouselExampleCaptions"
+                                                    type="button" data-bs-target="#carouselExampleCaptionsOne"
                                                     data-bs-slide="prev">
                                                 </button>
                                                 <button class="btn btn-outline-light fas fa-long-arrow-alt-right"
-                                                    type="button" data-bs-target="#carouselExampleCaptions"
+                                                    type="button" data-bs-target="#carouselExampleCaptionsOne"
                                                     data-bs-slide="next">
                                                 </button>
-                                                <div class="col-md-12 align-content-center pt-5" id="review">
+                                                <div class="col-md-12 align-content-center pt-5">
                                                     <a style="text-decoration: none" class="btn btn-outline-light"
-                                                        role="button" id="reserve-btn">
-                                                        Review Book
+                                                        role="button" id="enable-review-item1-btn">
+                                                        Write Your Own Review
                                                     </a>
-
+                                                </div>
+                                                <div class="row review-row align-content-center"
+                                                    style="padding-left: 16rem;">
+                                                    <input id="item1-review-comment" placeholder="Your Comment..."
+                                                        class="form-control my-3" style="width: 40rem; height: 30px;">
+                                                    <input id="item1-review-rating" placeholder="Your Rating..."
+                                                        class="form-control my-3" style="width: 40rem; height: 30px;">
+                                                </div>
+                                                <div class="col-md-12 align-content-center pt-5">
+                                                    <a style="text-decoration: none" class="btn btn-outline-light"
+                                                        role="button" id="review-item1-btn">
+                                                        Review book
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </section>
-
                         </div>
                     </div>
                 </div>
+
+                <div class="accordion-item shadow mb-3">
+                    <h2 class="accordion-header" id="flush-headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseThree" aria-expanded="false"
+                            aria-controls="flush-collapseThree">
+                            Author Reviews
+                        </button>
+                    </h2>
+                    <div id="flush-collapseThree" class="accordion-collapse collapse"
+                        aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+
+                            <!-- START OF THE BOOK REVIEWS SECTION -->
+
+                            <section id="item2-reviews" class="reviews">
+                                <div class="container">
+                                    <div class="row text-center text-white">
+                                        <h1 class="display-5 fw-bold pt-4">What Readers Are Saying</h1>
+                                        <hr style="width: 100px; height: 3px; " class="mx-auto">
+                                    </div>
+
+                                    <!-- START THE CAROUSEL CONTENT  -->
+                                    <div class="row align-items-center">
+                                        <div id="carouselExampleCaptionsTwo" class="carousel slide"
+                                            data-bs-ride="carousel">
+                                            <div class="carousel-inner">
+                                                <!-- CAROUSEL ITEM 1 -->
+                                                <div class="carousel-item active">
+                                                    <!-- review card  -->
+                                                    <div class="reviews__card">
+                                                        <p class="lh-lg">
+                                                            <i class="fas fa-quote-left"></i>
+                                                            Highly Talented Writer.
+                                                            <i class="fas fa-quote-right"></i>
+                                                        <div class="ratings p-1">
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                        </div>
+                                                        </p>
+                                                    </div>
+                                                    <!-- user name and review date -->
+                                                    <div class="reviews__name">
+                                                        <h3>Ahmed Abdelaal</h3>
+                                                        <p class="fw-light">12/17/2022</p>
+                                                    </div>
+                                                </div>
+                                                <!-- CAROUSEL ITEM 2 -->
+                                                <div class="carousel-item">
+                                                    <!-- review card  -->
+                                                    <div class="reviews__card">
+                                                        <p class="lh-lg">
+                                                            <i class="fas fa-quote-left"></i>
+                                                            Thank you Einstein for this amazing masterpiece.
+                                                            <i class="fas fa-quote-right"></i>
+                                                        <div class="ratings p-1">
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                        </div>
+                                                        </p>
+                                                    </div>
+                                                    <!-- user name & review date  -->
+                                                    <div class="reviews__name">
+                                                        <h3>Marwan Abbas</h3>
+                                                        <p class="fw-light">12/2/2022</p>
+                                                    </div>
+                                                </div>
+                                                <!-- CAROUSEL ITEM 3 -->
+                                                <div class="carousel-item">
+                                                    <!-- review card  -->
+                                                    <div class="reviews__card">
+                                                        <p class="lh-lg">
+                                                            <i class="fas fa-quote-left"></i>
+                                                            Confusing mess. Could not understand a thing.
+                                                            <i class="fas fa-quote-right"></i>
+                                                        <div class="ratings p-1">
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                        </div>
+                                                        </p>
+                                                    </div>
+                                                    <!-- user name & review date  -->
+                                                    <div class="reviews__name">
+                                                        <h3>Hamada</h3>
+                                                        <p class="fw-light">12/15/2022</p>
+                                                    </div>
+                                                </div>
+                                                <!-- CAROUSEL ITEM 4 -->
+                                                <div class="carousel-item">
+                                                    <!-- review card  -->
+                                                    <div class="reviews__card">
+                                                        <p class="lh-lg">
+                                                            <i class="fas fa-quote-left"></i>
+                                                            I truly learned a lot. Highly recommended book.
+                                                            <i class="fas fa-quote-right"></i>
+                                                        <div class="ratings p-1">
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                            <i class="fas fa-star"></i>
+                                                        </div>
+                                                        </p>
+                                                    </div>
+                                                    <div class="reviews__name">
+                                                        <h3>Fatema Kotb</h3>
+                                                        <p class="fw-light">12/9/2022</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="text-center pb-4">
+                                                <button class="btn btn-outline-light fas fa-long-arrow-alt-left"
+                                                    type="button" data-bs-target="#carouselExampleCaptionsTwo"
+                                                    data-bs-slide="prev">
+                                                </button>
+                                                <button class="btn btn-outline-light fas fa-long-arrow-alt-right"
+                                                    type="button" data-bs-target="#carouselExampleCaptionsTwo"
+                                                    data-bs-slide="next">
+                                                </button>
+                                                <div class="col-md-12 align-content-center pt-5" id="review">
+                                                    <a style="text-decoration: none" class="btn btn-outline-light"
+                                                        role="button" id="review-item2-btn">
+                                                        Review Author
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
