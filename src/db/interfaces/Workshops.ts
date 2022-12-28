@@ -7,6 +7,7 @@ export interface IWorkshop {
     reviews_count: number,
     sponsor: string,
     instructor: string,
+    instructor_id: string,
     instructor_email: string,
     workshop_date: string,
     workshop_start_time: string,

@@ -21,7 +21,7 @@ function getAvailableWorkshops() {
                         workshop.avg_rating             as avg_rating,
                         workshop.reviews_count          as reviews_count,
                         org_name                        as sponsor,
-                        instructor_id,
+                        instructor_id::UUID,
                         firstname                       as instructor_firstname,
                         lastname                        as instructor_lastname,
                         System_Users.email              as instructor_email,
@@ -44,7 +44,7 @@ function getAvailableWorkshops() {
         let workshops = [];
         rows.forEach(t => {
             t.workshop_date = new Date(t.workshop_date).toLocaleDateString();
-            const { workshop_title, price, avg_rating, reviews_count, sponsor, instructor_firstname, instructor_lastname, instructor_email, workshop_date, workshop_start_time, workshop_end_time, } = t;
+            const { workshop_title, price, avg_rating, reviews_count, sponsor, instructor_firstname, instructor_lastname, instructor_id, instructor_email, workshop_date, workshop_start_time, workshop_end_time, } = t;
             const workshop = {
                 workshop_title,
                 price,
@@ -52,6 +52,7 @@ function getAvailableWorkshops() {
                 reviews_count,
                 sponsor,
                 instructor: `${instructor_firstname} ${instructor_lastname}`,
+                instructor_id,
                 instructor_email,
                 workshop_date,
                 workshop_start_time,
