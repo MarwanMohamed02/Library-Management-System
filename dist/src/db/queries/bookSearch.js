@@ -12,7 +12,7 @@ function booksSearch(bookQuery) {
                         book_description, 
                         ${qty}, 
                         Books.avg_rating    as avg_rating, 
-                        Books.ratings_count as ratings_count, 
+                        Books.reviews_count as reviews_count, 
                         author_id::UUID, 
                         firstname, 
                         lastname `;
