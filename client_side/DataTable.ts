@@ -82,6 +82,7 @@ var selected_item_4 = document.getElementById('selected-element-item4') as HTMLE
 var selected_item_5 = document.getElementById('selected-element-item5') as HTMLElement;
 var reserve_div = document.getElementById('reserve') as HTMLElement;
 var reserveButton = document.getElementById("reserve-btn") as HTMLButtonElement;
+let description_header = document.getElementById('description-header') as HTMLElement;
 let description = document.getElementById('description') as HTMLElement;
 
 var response;
@@ -295,6 +296,7 @@ function PrepareSelectedItemEvents() {
           selected_item_3.innerHTML = "Average Rating: " + selected_library_Book.avg_rating.toString() + " (" + selected_library_Book.ratings_count + ")";
           description.innerHTML = selected_library_Book.book_description;
 
+          description_header.innerHTML = "Book Description";
           accordion_selection.style.display = 'block';
           reserve_div.style.display = 'block';
           break;
@@ -309,6 +311,7 @@ function PrepareSelectedItemEvents() {
           selected_item_4.innerHTML = "Selling Price: $" + selected_bookstore_Book.price;
           description.innerHTML = selected_bookstore_Book.book_description;
 
+          description_header.innerHTML = "Book Description";
           accordion_selection.style.display = 'block';
           break;
 
@@ -343,6 +346,9 @@ function PrepareSelectedItemEvents() {
           selected_item_4.innerHTML = "Enrollment Price: $" + selected_workshop.price;
           selected_item_5.innerHTML = "Hosted On " + selected_workshop.workshop_date + " From " + selected_workshop.workshop_start_time + " To " + selected_workshop.workshop_end_time;
 
+          description_header.innerHTML = "Workshop Description";
+          accordion_selection.style.display = 'block';
+
         case 'enrollments':
 
           selected_enrollment = displayedEnrollments[row.rowIndex - 1];
@@ -353,6 +359,9 @@ function PrepareSelectedItemEvents() {
           selected_item_3.innerHTML = "Average Rating: " + selected_enrollment.avg_rating.toString() + " (" + selected_enrollment.reviews_count + ")";
           selected_item_4.innerHTML = "Enrollment Price: $" + selected_enrollment.price;
           selected_item_5.innerHTML = "Hosted On " + selected_enrollment.workshop_date + " From " + selected_enrollment.workshop_start_time + " To " + selected_enrollment.workshop_end_time;
+
+          description_header.innerHTML = "Workshop Description";
+          accordion_selection.style.display = 'block';
 
           break;
 
