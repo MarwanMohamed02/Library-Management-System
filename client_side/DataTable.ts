@@ -41,6 +41,7 @@ const socket = io({
   auth: {
     token
   }
+})
 });
 
 socket.on("ping", (time) => {
@@ -169,7 +170,28 @@ var selected_workshop: IWorkshop;
 var selected_enrollment: IEnrollment;
 var selected_event: IEvents;
 
+review_item1_btn.onclick = async (e) => {
+  // prevents refreshing
+  e.preventDefault();
 
+  switch (source) {
+    case 'library books':
+
+      break;
+    case 'bookstore books':
+
+      break;
+    case 'workshops':
+
+      break;
+    case 'enrollments':
+
+      break;
+  }
+  if (response.status == 400) {
+    // show error messsage above the reserve button
+  }
+}
 
 reserveButton.onclick = async (e) => {
   // prevents refreshing
@@ -391,7 +413,6 @@ function displayReviews() {
 }
 
 function PrepareSelectedItemEvents() {
-  item1_reviews.innerHTML = "";
   rows = document.querySelectorAll('tr');
   rows.forEach(row => {
     row?.addEventListener('click', async function handleRowPress(event) {
@@ -400,6 +421,8 @@ function PrepareSelectedItemEvents() {
       switch (source) {
 
         case 'library books':
+          item1_reviews.innerHTML = "";
+          item2_reviews.innerHTML = "";
           selected_library_Book = displayedLibraryBooks[row.rowIndex - 1];
 
           selected_item_name.innerHTML = "Book Name: " + selected_library_Book.book_name;
@@ -434,6 +457,8 @@ function PrepareSelectedItemEvents() {
           break;
 
         case 'bookstore books':
+          item1_reviews.innerHTML = "";
+          item2_reviews.innerHTML = "";
           selected_bookstore_Book = displayedBookstoreBooks[row.rowIndex - 1];
 
           selected_item_name.innerHTML = "Book Name: " + selected_bookstore_Book.book_name;
@@ -488,7 +513,8 @@ function PrepareSelectedItemEvents() {
           break;
 
         case 'workshops':
-
+          // item1_reviews.innerHTML = "";
+          // item2_reviews.innerHTML = "";
           selected_workshop = displayedWorkshops[row.rowIndex - 1];
 
           selected_item_name.innerHTML = "Workshop Name: " + selected_workshop.workshop_title;
@@ -522,7 +548,8 @@ function PrepareSelectedItemEvents() {
           accordion_selection.style.display = 'block';
 
         case 'enrollments':
-
+          // item1_reviews.innerHTML = "";
+          // item2_reviews.innerHTML = "";
           selected_enrollment = displayedEnrollments[row.rowIndex - 1];
 
           selected_item_name.innerHTML = "Workshop Name: " + selected_enrollment.workshop_title;
