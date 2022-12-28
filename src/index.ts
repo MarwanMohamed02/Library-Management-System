@@ -48,7 +48,7 @@ app.use(membersRouter);
 
 
 app.get("/", async (req, res) => {
-    
+
     await db.query("USE Booker");
 
     res.sendFile(path.join(__dirname, "../public/index.html"));
@@ -62,41 +62,41 @@ app.get("/test", (req, res) => {
     res.sendFile(path.join(__dirname, "../public/login.html"));
 })
 
-io.use(auth_socket);
+// io.use(auth_socket);
 
-io.on("connection", async (socket) => {
-    console.log("connected");
-    
-    const member = socket.data.member as IMember;
-    const uuid = member.uuid as string;
+// io.on("connection", async (socket) => {
+//     console.log("connected");
 
-    await socket.join(uuid);
+//     const member = socket.data.member as IMember;
+//     const uuid = member.uuid as string;
 
-    io.to(uuid).emit("ping", Date.now() );
+//     await socket.join(uuid);
 
-    socket.on("pong", async (time) => {
-        if (Date.now() - time < 10000)
-            io.to(uuid).emit("ping", time);
-        else {
-            const warnings = await getAllLatePickups(uuid);
-            console.log("warnings:");
-            console.log(warnings);
+//     io.to(uuid).emit("ping", Date.now() );
 
-            const penalties = await getAllLateReturns(uuid);
-            console.log("penalties:")
-            console.log(penalties)
+//     socket.on("pong", async (time) => {
+//         if (Date.now() - time < 10000)
+//             io.to(uuid).emit("ping", time);
+//         else {
+//             const warnings = await getAllLatePickups(uuid);
+//             console.log("warnings:");
+//             console.log(warnings);
 
-            if (penalties.length !== 0) 
-                io.to(uuid).emit("penalties", penalties);  
-                
-            if (penalties.length !== 0) 
-                io.to(uuid).emit("warnings", warnings);
-            
-            io.to(uuid).emit("ping", Date.now());
-        }
-    })
+//             const penalties = await getAllLateReturns(uuid);
+//             console.log("penalties:")
+//             console.log(penalties)
 
-})
+//             if (penalties.length !== 0) 
+//                 io.to(uuid).emit("penalties", penalties);  
+
+//             if (penalties.length !== 0) 
+//                 io.to(uuid).emit("warnings", warnings);
+
+//             io.to(uuid).emit("ping", Date.now());
+//         }
+//     })
+
+// })
 
 
 

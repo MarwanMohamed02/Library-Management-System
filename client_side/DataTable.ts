@@ -1,4 +1,6 @@
-import { BookType, IBook, IBookstoreBook, ILibraryBook } from "../src/db/interfaces/Book"
+import { BookType, IBook, IBookstoreBook, IBorrow, IDibs, ILibraryBook } from "../src/db/interfaces/Book"
+import { IWorkshop, IEnrollment } from "../src/db/interfaces/Workshops"
+
 
 let totalLibraryBooks: ILibraryBook[];
 let displayedLibraryBooks: ILibraryBook[];
@@ -6,7 +8,20 @@ let displayedLibraryBooks: ILibraryBook[];
 let totalBookstoreBooks: IBookstoreBook[];
 let displayedBookstoreBooks: IBookstoreBook[];
 
-const token = localStorage.getItem('token');
+let totalDibs: IDibs[];
+let displayedDibs: IDibs[];
+
+let totalBorrows: IBorrow[];
+let displayedBorrows: IBorrow[];
+
+let totalWorkshops: IWorkshop[];
+let displayedWorkshops: IWorkshop[];
+
+let totalEnrollments: IEnrollment[];
+let displayedEnrollments: IEnrollment[];
+
+//const token = localStorage.getItem('token');
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNWRiODdjMzgtNDg2My00ODM3LWJlOGItNDhlZmQ3ODUwMjU1IiwiaWF0IjoxNjcyMDQ2NjEzfQ.IlQ1neU1Ei83YaQ7uubqodYxQHJUEkUPEcVZzf4Ll_c";
 var source = localStorage.getItem('target-entity');
 let search = document.getElementById('search') as HTMLInputElement;
 let card_body = document.getElementById("error-card") as HTMLElement;
@@ -36,7 +51,7 @@ async function GetEntities() {
         }
       });
       totalLibraryBooks = await request.json();
-      
+
       displayedLibraryBooks = totalLibraryBooks;
       break;
 
@@ -53,25 +68,37 @@ async function GetEntities() {
 
     case 'reservations':
 
-      //Fetch reservations
+      request = await fetch('/mydibs');
+      totalDibs = await request.json();
+      displayedDibs = totalDibs;
 
       break;
 
     case 'borrows':
 
-      //Fetch Borrows
+      request = await fetch('/myborrows');
+      totalBorrows = await request.json();
+      displayedBorrows = totalBorrows;
 
       break;
 
     case 'workshops':
-
-      //Fetch workshops
+      console.log(token)
+      request = await fetch('/workshops', {
+        headers: {
+          'Authorization': "Bearer " + token
+        }
+      });
+      totalWorkshops = await request.json();
+      displayedWorkshops = totalWorkshops;
 
       break;
 
     case 'enrollments':
 
-      //Fetch Enrollments
+      request = await fetch('/myenrollments');
+      totalEnrollments = await request.json();
+      displayedEnrollments = totalEnrollments;
 
       break;
 
@@ -247,7 +274,9 @@ function Show() {
 
     case 'workshops':
 
-      //Display workshops
+      displayedWorkshops.forEach((workshop) => {
+        table_body.innerHTML += "<tr> <td>" + workshop.workshop_title + "</td>" + "<td>" + workshop.price + "</td>" + "<td>" + workshop.instructor + "</td>" + "<td>" + workshop.sponsor + "</td>" + "<td>" + workshop.avg_rating + "</td>";
+      })
 
       break;
 
@@ -275,7 +304,7 @@ function Show() {
 }
 
 window.onload = async function () {
- 
+
   reserve_div.style.display = 'none';
   accordion_selection.style.display = 'none';
   await GetEntities();
