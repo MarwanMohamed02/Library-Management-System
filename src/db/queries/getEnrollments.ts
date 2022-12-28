@@ -30,7 +30,7 @@ export async function getEnrollments(uuid: string): Promise<IEnrollment[]> {
 
                     WHERE member_id::UUID = '${uuid}' 
                     ORDER BY workshop_date; `;
-                    
+
     const { rows } = await db.query(query);
 
     let enrollments: IEnrollment[] = []
@@ -44,6 +44,7 @@ export async function getEnrollments(uuid: string): Promise<IEnrollment[]> {
             sponsor,
             instructor_firstname,
             instructor_lastname,
+            instructor_id,
             instructor_email,
             workshop_date,
             workshop_start_time,
@@ -61,13 +62,14 @@ export async function getEnrollments(uuid: string): Promise<IEnrollment[]> {
             reviews_count,
             sponsor,
             instructor: `${instructor_firstname} ${instructor_lastname}`,
+            instructor_id,
             instructor_email,
             workshop_date,
             workshop_start_time,
             workshop_end_time,
             enrollment_date: timestamp.toLocaleDateString(),
             enrollment_time: timestamp.toLocaleTimeString()
-        } 
+        }
 
         enrollments.push(enrollment)
     })
