@@ -3,10 +3,19 @@ import { io } from "socket.io-client";
 import { INotification } from "../src/db/interfaces/Notifications"
 
 
-const { token } = localStorage;
 
-let { notifications } = localStorage;
-let notifications_array = JSON.parse(notifications) as INotification[];
+var { token, notifications } = localStorage;
+notifications = JSON.parse(notifications)
+let notifications_array: INotification[] = [];
+for (let i = 0; i < notifications.length; i++) {
+    notifications_array.push(notifications[i])
+}
+
+console.log(notifications_array)
+
+
+console.log(notifications_array);
+
 
 let reset = 0;
 localStorage.setItem("unseen_notifications_count", JSON.stringify(reset))
@@ -18,6 +27,7 @@ let bell = document.getElementById("Warnings") as HTMLElement;
 const all = document.getElementById("WarPen");
 const War = document.getElementById("War");
 const Pen = document.getElementById("Pen");
+const Con = document.getElementById("Con");
 const Mytitle = document.getElementById("Mytitle");
 const Menu = document.getElementById("Menu");
 let logo = document.getElementById("logo") as HTMLElement;
@@ -150,34 +160,36 @@ const testBorrowPenaltyNotification: INotification = {
     notification_time: '7:51:35 PM$12/28/2022'
 }
 
-notifications_array.push(testWarningNotification);
-notifications_array.push(testConfirmationNotification);
-notifications_array.push(testPickupPenaltyNotification);
-notifications_array.push(testBorrowPenaltyNotification);
+// notifications_array.push(testWarningNotification);
+// notifications_array.push(testConfirmationNotification);
+// notifications_array.push(testPickupPenaltyNotification);
+// notifications_array.push(testBorrowPenaltyNotification);
 
-notifications_array.forEach(notification => {
-    const { type, data, notification_time } = notification
-    let html: string = "";
-    switch (type) {
-        case 'no pickup warning':
-            html = warning_notification(data, notification_time);
-            break;
-        case 'confirmation':
-            html = confirmation_notification(data, notification_time)
-            break;
-        case 'no pickup penalty':
-            html = rsrv_penalty_notification(data, notification_time)
-            break;
-        case 'late return penalty':
-            html = borrow_penalty_notification(data, notification_time)
-            break;
-    }
+function displayAllNotifications() {
+    notifications_array.forEach(notification => {
+        const { type, data, notification_time } = notification
+        let html: string = "";
+        switch (type) {
+            case 'no pickup warning':
+                html = warning_notification(data, notification_time);
+                break;
+            case 'confirmation':
+                html = confirmation_notification(data, notification_time)
+                break;
+            case 'no pickup penalty':
+                html = rsrv_penalty_notification(data, notification_time)
+                break;
+            case 'late return penalty':
+                html = borrow_penalty_notification(data, notification_time)
+                break;
+        }
 
-    Warnings_List.insertAdjacentHTML("afterbegin", html)
+        Warnings_List.insertAdjacentHTML("afterbegin", html)
 
-});
+    });
+}
 
-
+displayAllNotifications();
 
 
 
@@ -193,18 +205,57 @@ all?.addEventListener('click', function handleClick(event) {
     if (Menu)
         Menu.innerText = "All";
 
+    displayAllNotifications();
 })
 War?.addEventListener('click', function handleClick(event) {
     if (Mytitle != null)
         Mytitle.innerText = "Your Warnings: "
     if (Menu)
         Menu.innerText = "Warnings";
+    
+    Warnings_List.innerHTML = "";
+    let html: string = "";
+    notifications_array.forEach(notification => {
+        if (notification.type == "no pickup warning") {
+            html = warning_notification(notification.data, notification.notification_time);
+            Warnings_List.insertAdjacentHTML("afterbegin", html)
+        }
+    })
 })
 Pen?.addEventListener('click', function handleClick(event) {
     if (Mytitle != null)
         Mytitle.innerText = "Your Penalties: "
     if (Menu)
         Menu.innerText = "Penalties";
+    
+    Warnings_List.innerHTML = "";
+    let html: string;
+    notifications_array.forEach(notification => {
+        if (notification.type == "no pickup penalty") {
+            html = rsrv_penalty_notification(notification.data, notification.notification_time);
+            Warnings_List.insertAdjacentHTML("afterbegin", html)
+        }
+        else if (notification.type == "late return penalty") {
+            html = borrow_penalty_notification(notification.data, notification.notification_time);
+            Warnings_List.insertAdjacentHTML("afterbegin", html)
+            
+        }
+    })
+})
+Con?.addEventListener('click', function handleClick(event) {
+    if (Mytitle != null)
+        Mytitle.innerText = "Your Confirmations: "
+    if (Menu)
+        Menu.innerText = "Confirmations";
+    
+    Warnings_List.innerHTML = "";
+    let html: string;
+    notifications_array.forEach(notification => {
+        if (notification.type == "confirmation") {
+            html = confirmation_notification(notification.data, notification.notification_time);
+            Warnings_List.insertAdjacentHTML("afterbegin", html)
+        }
+    })
 })
 
 
@@ -215,21 +266,52 @@ let employee: { emp_id: number, emp_name: string, emp_desg: string }[] = [
     { "emp_id": 1, "emp_name": "Karthik", "emp_desg": "Manager" },
     { "emp_id": 2, "emp_name": "Kiran", "emp_desg": "Senior Systems Engineer" }
 ];//this is for testing only but will be changed with an array containing the warnings
-window.onbeforeunload = () => {
-    // save notifications
-}
+
+
 
 // after exactly 10 seconds 2 warnings will appear
 socket.on("warnings", (warning_notifications: INotification[]) => {
     console.log(warning_notifications);
 
-    // ht-update l list hena ya hamadaa
-    
-    for (let i = 0; i < warning_notifications.length; i++) {
-        // baddelha hena be7eeth tst5dm kol l hagat ely fl data (shoof INotifications w IWarnings)
-        // nafs l kalam fl penalties ba2a
-        const { data, type:notificationType, notification_time }= warning_notifications[i]
-        const { book_name, book_isbn, reservation_time, pick_up_before, verification_code } = data;
-        Warnings_List.insertAdjacentHTML("afterbegin", "<a  href=\"#\" class=\"list-group-item list-group-item-action\"><div class=\"d-flex w-100 justify-content-between\"> <h5 class=\"mb-1\">" + book_name + "</h5><small class=\"text-muted\">" + book_isbn + "</small></div><p class=\"mb-1\">" + "warning description" + "</p><small class=\"text-muted\">" + notification_time + "</small></a>")
-    }
+
+    let html: string;
+    warning_notifications.forEach((warning) => {
+        notifications_array.push(warning)
+        const { data, notification_time, type } = warning
+        html = type == "no pickup penalty" ? rsrv_penalty_notification(data, notification_time) : warning_notification(data, notification_time);
+        console.log(html);
+        Warnings_List.insertAdjacentHTML("afterbegin", html);
+    })
 })
+
+socket.on("penalties", (penalty_notifications: INotification[]) => {
+    console.log(penalty_notifications);
+
+    
+    
+    let html: string;
+    penalty_notifications.forEach((penalty) => {
+        notifications_array.push(penalty)
+        const { data, notification_time } = penalty
+        html = borrow_penalty_notification(data, notification_time);
+        Warnings_List.insertAdjacentHTML("afterbegin", html );
+    })
+})
+
+socket.on("confirmation-notification", (confirmation: INotification) => {
+    console.log(confirmation);
+
+    notifications_array.push(confirmation)
+
+    let html: string;
+    
+    const { data, notification_time } = confirmation
+    html = confirmation_notification(data, notification_time);
+
+    Warnings_List.insertAdjacentHTML("afterbegin", html );
+
+})
+
+window.onbeforeunload = () => {
+    localStorage.setItem("notifications", JSON.stringify(notifications));
+}
