@@ -85,6 +85,22 @@ var reserveButton = document.getElementById("reserve-btn") as HTMLButtonElement;
 let description_header = document.getElementById('description-header') as HTMLElement;
 let description = document.getElementById('description') as HTMLElement;
 
+let accordion_btn_item1 = document.getElementById('accordion-btn-item1') as HTMLElement;
+let accordion_btn_item2 = document.getElementById('accordion-btn-item2') as HTMLElement;
+
+let write_item1_review = document.getElementById('enable-review-item1-btn') as HTMLElement;
+let item1_review_input = document.getElementById('item1-review-input') as HTMLElement;
+let review_item1_btn = document.getElementById('review-item1-btn') as HTMLElement;
+
+let write_item2_review = document.getElementById('enable-review-item2-btn') as HTMLElement;
+let item2_review_input = document.getElementById('item2-review-input') as HTMLElement;
+let review_item2_btn = document.getElementById('review-item2-btn') as HTMLElement;
+
+let reviews_title_item1 = document.getElementById('reviews-title-item1') as HTMLElement;
+let reviews_title_item2 = document.getElementById('reviews-title-item2') as HTMLElement;
+
+let item1_reviews = document.getElementById('carousel-reviews-item1') as HTMLElement;
+
 var response;
 var reservedBook: ILibraryBook;
 var selected_library_Book: ILibraryBook;
@@ -281,6 +297,7 @@ function prepareHeader() {
 }
 
 function PrepareSelectedItemEvents() {
+  item1_reviews.innerHTML = "";
   rows = document.querySelectorAll('tr');
   rows.forEach(row => {
     row?.addEventListener('click', function handleRowPress(event) {
@@ -296,6 +313,13 @@ function PrepareSelectedItemEvents() {
           selected_item_2.innerHTML = "ISBN: " + selected_library_Book.isbn;
           selected_item_3.innerHTML = "Average Rating: " + selected_library_Book.avg_rating.toString() + " (" + selected_library_Book.reviews_count + ")";
           description.innerHTML = selected_library_Book.book_description;
+
+
+          item1_reviews.innerHTML += '<div class="carousel-item active"><div class="reviews__card"><p class="lh-lg"><i class="fas fa-quote-left"></i>Highly Talented Writer.<i class="fas fa-quote-right"></i><div class="ratings p-1" id="ratings1-item1"></div></p></div><div class="reviews__name"><h3>Ahmed Abdelaal</h3><p class="fw-light">12/17/2022</p></div></div>';
+          var current_rating_section = document.getElementById('ratings1-item1') as HTMLElement;
+          for (var i = 0; i < 5; i++) {
+            current_rating_section.innerHTML += '<i class="fas fa-star"></i>';
+          }
 
           description_header.innerHTML = "Book Description";
           accordion_selection.style.display = 'block';
@@ -393,6 +417,7 @@ function PrepareSelectedItemEvents() {
 
 function Show() {
   let table_body = document.getElementById("table-body") as HTMLTableElement;
+  console.log('Table Test');
   table_body.innerHTML = "";
 
   switch (source) {
@@ -468,6 +493,22 @@ function Show() {
 }
 
 window.onload = async function () {
+
+  if (source === 'library books' || source === 'bookstore books') {
+    accordion_btn_item1.innerHTML = "Book Reviews";
+    accordion_btn_item2.innerHTML = "Author Reviews";
+    reviews_title_item1.innerHTML = "What Readers Are Saying";
+    reviews_title_item2.innerHTML = reviews_title_item1.innerHTML;
+    review_item1_btn.innerHTML = "Review Book"
+    review_item2_btn.innerHTML = "Review Author"
+  } else if (source === "workshops" || source === "enrollments") {
+    accordion_btn_item1.innerHTML = "Workshop Reviews";
+    accordion_btn_item2.innerHTML = "Instructor Reviews";
+    reviews_title_item1.innerHTML = "What Learners Are Saying"
+    reviews_title_item2.innerHTML = reviews_title_item1.innerHTML;
+    review_item1_btn.innerHTML = "Review Workshop";
+    review_item2_btn.innerHTML = "Review Instructor";
+  };
 
   reserve_div.style.display = 'none';
   accordion_selection.style.display = 'none';
@@ -654,6 +695,22 @@ reset?.addEventListener('click', function handlePress(event) {
 
   reserve_div.style.display = 'none';
   accordion_selection.style.display = 'none';
+
+  Show();
+
+});
+
+write_item1_review?.addEventListener('click', function handlePress(event) {
+
+  item1_review_input.style.display = 'block';
+
+  Show();
+
+});
+
+write_item2_review?.addEventListener('click', function handlePress(event) {
+
+  item2_review_input.style.display = 'block';
 
   Show();
 
