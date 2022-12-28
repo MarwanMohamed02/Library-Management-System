@@ -189,8 +189,8 @@
                 <div class="accordion-item shadow mb-3">
                     <h2 class="accordion-header" id="flush-headingTwo">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                            Book Reviews
+                            data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo"
+                            id="accordion-btn-item1">
                         </button>
                     </h2>
                     <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
@@ -202,7 +202,9 @@
                             <section id="item1-reviews" class="reviews">
                                 <div class="container">
                                     <div class="row text-center text-white">
-                                        <h1 class="display-5 fw-bold pt-4">What Readers Are Saying</h1>
+                                        <h1 class="display-5 fw-bold pt-4" id="reviews-title-item1">What Readers Are
+                                            Saying
+                                        </h1>
                                         <hr style="width: 100px; height: 3px; " class="mx-auto">
                                     </div>
 
@@ -319,18 +321,26 @@
                                                         Write Your Own Review
                                                     </a>
                                                 </div>
-                                                <div class="row review-row align-content-center"
-                                                    style="padding-left: 16rem;">
-                                                    <input id="item1-review-comment" placeholder="Your Comment..."
-                                                        class="form-control my-3" style="width: 40rem; height: 30px;">
-                                                    <input id="item1-review-rating" placeholder="Your Rating..."
-                                                        class="form-control my-3" style="width: 40rem; height: 30px;">
-                                                </div>
-                                                <div class="col-md-12 align-content-center pt-5">
-                                                    <a style="text-decoration: none" class="btn btn-outline-light"
-                                                        role="button" id="review-item1-btn">
-                                                        Review book
-                                                    </a>
+                                                <div id="item1-review-input" style="display: none;">
+                                                    <div class="row review-row align-content-center"
+                                                        style="padding-left: 16rem;">
+                                                        <input id="item1-review-comment" placeholder="Your Comment..."
+                                                            class="form-control my-3"
+                                                            style="width: 40rem; height: 40px;">
+                                                    </div>
+                                                    <div class="row review-row align-content-center"
+                                                        style="padding-left: 31rem;">
+                                                        <input id="item1-review-rating" placeholder="Your Rating..."
+                                                            class="form-control my-3"
+                                                            style="width: 10rem; height: 40px;" type="number" min="0"
+                                                            max="5" step="0.5" required>
+                                                    </div>
+                                                    <div class="col-md-12 align-content-center pt-5">
+                                                        <a style="text-decoration: none" class="btn btn-outline-light"
+                                                            role="button" id="review-item1-btn">
+                                                            Review book
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -345,8 +355,7 @@
                     <h2 class="accordion-header" id="flush-headingThree">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#flush-collapseThree" aria-expanded="false"
-                            aria-controls="flush-collapseThree">
-                            Author Reviews
+                            aria-controls="flush-collapseThree" id="accordion-btn-item2">
                         </button>
                     </h2>
                     <div id="flush-collapseThree" class="accordion-collapse collapse"
@@ -358,7 +367,9 @@
                             <section id="item2-reviews" class="reviews">
                                 <div class="container">
                                     <div class="row text-center text-white">
-                                        <h1 class="display-5 fw-bold pt-4">What Readers Are Saying</h1>
+                                        <h1 class="display-5 fw-bold pt-4" id="reviews-title-item2">What Readers Are
+                                            Saying
+                                        </h1>
                                         <hr style="width: 100px; height: 3px; " class="mx-auto">
                                     </div>
 
@@ -470,9 +481,30 @@
                                                 </button>
                                                 <div class="col-md-12 align-content-center pt-5" id="review">
                                                     <a style="text-decoration: none" class="btn btn-outline-light"
-                                                        role="button" id="review-item2-btn">
-                                                        Review Author
+                                                        role="button" id="enable-review-item2-btn">
+                                                        Write Your Own Review
                                                     </a>
+                                                </div>
+                                                <div id="item2-review-input" style="display: none;">
+                                                    <div class="row review-row align-content-center"
+                                                        style="padding-left: 16rem;">
+                                                        <input id="item2-review-comment" placeholder="Your Comment..."
+                                                            class="form-control my-3"
+                                                            style="width: 40rem; height: 40px;">
+                                                    </div>
+                                                    <div class="row review-row align-content-center"
+                                                        style="padding-left: 31rem;">
+                                                        <input id="item2-review-rating" placeholder="Your Rating..."
+                                                            class="form-control my-3"
+                                                            style="width: 10rem; height: 40px;" type="number" min="0"
+                                                            max="5" step="0.5" required>
+                                                    </div>
+                                                    <div class="col-md-12 align-content-center pt-5">
+                                                        <a style="text-decoration: none" class="btn btn-outline-light"
+                                                            role="button" id="review-item2-btn">
+                                                            Review Author
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
