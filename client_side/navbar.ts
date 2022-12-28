@@ -60,5 +60,23 @@ warnings?.addEventListener('click', function handleClick(event) {
 
 //Next lines related to warnings
 
+//Logout
+const logout_button=document.getElementById("logout") as HTMLButtonElement;
+logout_button.onclick = async () => {
+ const tokenout=localStorage.getItem("token");
+ localStorage.removeItem("token");
+const logoutData = {
+    token: tokenout
+}
+const response = await fetch("/members/logout", {
+    method: "POST",
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(logoutData)
+})
+location.href="index.html";
 
+
+}
 

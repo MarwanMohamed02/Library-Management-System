@@ -14,6 +14,11 @@ login_button.onclick = async () => {
     const username = document.getElementById("username") as HTMLInputElement;
     
     const password = document.getElementById("password") as HTMLInputElement;
+    if(username.value=="" || password.value==""){
+        const msg = document.getElementById("error-msg") as HTMLElement;
+        msg.innerText= "Please fill the two fields";
+        return;
+    }
     
     const loginData = {
         username: username.value,
