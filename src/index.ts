@@ -49,7 +49,7 @@ app.use(membersRouter);
 
 
 app.get("/", async (req, res) => {
-    
+
     await db.query("USE Booker");
 
     res.sendFile(path.join(__dirname, "../public/index.html"));
@@ -69,15 +69,15 @@ io.use(auth_socket);
 io.on("connection", async (socket) => {
     console.log("connected");
     try {
-        
+
         const member = socket.data.member as IMember;
         const uuid = member.uuid as string;
-        
+
         await socket.join(uuid);
         currSocket = socket;
-        
-        socket.emit("ping", Date.now() );
-        
+
+        socket.emit("ping", Date.now());
+
         socket.on("pong", async (time) => {
             if (Date.now() - time < 10000)
                 socket.emit("ping", time);
@@ -85,29 +85,29 @@ io.on("connection", async (socket) => {
                 const warnings = await getAllLatePickups(uuid);
                 console.log("warnings:");
                 console.log(warnings);
-                
+
                 const penalties = await getAllLateReturns(uuid);
                 console.log("penalties:")
                 console.log(penalties)
-                
-                if (penalties.length !== 0) 
-                    socket.emit("penalties", penalties);  
-                
-                if (warnings.length !== 0) 
+
+                if (penalties.length !== 0)
+                    socket.emit("penalties", penalties);
+
+                if (warnings.length !== 0)
                     socket.emit("warnings", warnings);
-                
+
                 socket.emit("ping", Date.now());
             }
         })
-                
+
     }
     catch (err) {
         console.log("Socket Error");
         console.log(err);
     }
 })
-            
-            
+
+
 server.listen(port, () => console.log(`Server is up on port ${port}`))
 
 

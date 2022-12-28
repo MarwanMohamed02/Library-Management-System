@@ -65,7 +65,7 @@ let displayedEvents: IEvents[];
 let totalAttendedEvents: IEvents[];
 let displayedAttendedEvents: IEvents[];
 
-// const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNWRiODdjMzgtNDg2My00ODM3LWJlOGItNDhlZmQ3ODUwMjU1IiwiaWF0IjoxNjcyMDQ2NjEzfQ.IlQ1neU1Ei83YaQ7uubqodYxQHJUEkUPEcVZzf4Ll_c";
+//const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNWRiODdjMzgtNDg2My00ODM3LWJlOGItNDhlZmQ3ODUwMjU1IiwiaWF0IjoxNjcyMDQ2NjEzfQ.IlQ1neU1Ei83YaQ7uubqodYxQHJUEkUPEcVZzf4Ll_c";
 // const token = localStorage.getItem('token');
 var source = localStorage.getItem('target-entity');
 let search = document.getElementById('search') as HTMLInputElement;
@@ -75,17 +75,25 @@ let rows = document.querySelectorAll('tr');
 let selected_item = document.getElementById('selected-item') as HTMLElement;
 let accordion_selection = document.getElementById('accordion-selection') as HTMLElement;
 var selected_item_name = document.getElementById('selected-element-name') as HTMLElement;
-var selected_item_author = document.getElementById('selected-element-author') as HTMLElement;
-var selected_item_ISBN = document.getElementById('selected-element-ISBN') as HTMLElement;
-var selected_item_rating = document.getElementById('selected-element-rating') as HTMLElement;
-var selected_item_price = document.getElementById('selected-element-price') as HTMLElement;
+var selected_item_1 = document.getElementById('selected-element-item1') as HTMLElement;
+var selected_item_2 = document.getElementById('selected-element-item2') as HTMLElement;
+var selected_item_3 = document.getElementById('selected-element-item3') as HTMLElement;
+var selected_item_4 = document.getElementById('selected-element-item4') as HTMLElement;
+var selected_item_5 = document.getElementById('selected-element-item5') as HTMLElement;
 var reserve_div = document.getElementById('reserve') as HTMLElement;
 var reserveButton = document.getElementById("reserve-btn") as HTMLButtonElement;
+let description_header = document.getElementById('description-header') as HTMLElement;
 let description = document.getElementById('description') as HTMLElement;
 
 var response;
 var reservedBook: ILibraryBook;
-var purchasedBook: IBookstoreBook;
+var selected_library_Book: ILibraryBook;
+var selected_bookstore_Book: IBookstoreBook;
+var selected_reservation: IDibs;
+var selected_borrow: IBorrow;
+var selected_workshop: IWorkshop;
+var selected_enrollment: IEnrollment;
+var selected_event: IEvents;
 
 reserveButton.onclick = async (e) => {
   // prevents refreshing
@@ -97,9 +105,9 @@ reserveButton.onclick = async (e) => {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify({isbn: reservedBook.isbn})
+    body: JSON.stringify({ isbn: reservedBook.isbn })
   })
-  
+
   if (response.status == 400) {
     // show error messsage above the reserve button
   }
@@ -113,11 +121,11 @@ async function GetEntities() {
       console.log("lib books: " + totalLibraryBooks);
       response = await fetch(`/books?type=${BookType.LIBRARY_BOOK}`, {
         headers: {
-          'Authorization': `Bearer ${token}` 
+          'Authorization': `Bearer ${token}`
         }
       });
       totalLibraryBooks = await response.json();
-      
+
       displayedLibraryBooks = totalLibraryBooks;
       break;
 
@@ -125,7 +133,7 @@ async function GetEntities() {
 
       response = await fetch(`/books?type=${BookType.BOOKSTORE_BOOK}`, {
         headers: {
-          'Authorization': `Bearer ${token}` 
+          'Authorization': `Bearer ${token}`
         }
       });
       totalBookstoreBooks = await response.json();
@@ -163,7 +171,6 @@ async function GetEntities() {
 
     case 'workshops':
 
-      //Fetch workshops
       response = await fetch("/workshops", {
         method: "GET",
         headers: {
@@ -173,13 +180,11 @@ async function GetEntities() {
       const { availableWorkshops } = await response.json();
       totalWorkshops = availableWorkshops;
       displayedWorkshops = totalWorkshops;
-      // console.log(displayedWorkshops)
 
       break;
 
     case 'enrollments':
 
-      //Fetch Enrollments
       response = await fetch("/myenrollments", {
         method: "GET",
         headers: {
@@ -198,7 +203,6 @@ async function GetEntities() {
 
     case 'upcoming events':
 
-      //Fetch Upcoming Events
       response = await fetch("/events", {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -213,10 +217,9 @@ async function GetEntities() {
 
     case 'previous events':
 
-      //Fetch Previous Events
       response = await fetch("/events?attended=1", {
         headers: {
-          'Authorization' : `Bearer ${token}`
+          'Authorization': `Bearer ${token}`
         }
       })
       const { events: attendedEvents } = await response.json();
@@ -285,67 +288,104 @@ function PrepareSelectedItemEvents() {
       switch (source) {
 
         case 'library books':
-          reservedBook = displayedLibraryBooks[row.rowIndex - 1];
-          selected_item_name.innerHTML = "Book Name: " + reservedBook.book_name;
-          selected_item_author.innerHTML = "Author: " + reservedBook.firstname + " " + reservedBook.lastname;
-          selected_item_ISBN.innerHTML = "ISBN: " + reservedBook.isbn;
-          selected_item_rating.innerHTML = "Average Rating: " + reservedBook.avg_rating.toString() + " (" + reservedBook.ratings_count + ")";
-          description.innerHTML = reservedBook.book_description;
+          selected_library_Book = displayedLibraryBooks[row.rowIndex - 1];
 
+          selected_item_name.innerHTML = "Book Name: " + selected_library_Book.book_name;
+          selected_item_1.innerHTML = "Author: " + selected_library_Book.firstname + " " + selected_library_Book.lastname;
+          selected_item_2.innerHTML = "ISBN: " + selected_library_Book.isbn;
+          selected_item_3.innerHTML = "Average Rating: " + selected_library_Book.avg_rating.toString() + " (" + selected_library_Book.ratings_count + ")";
+          description.innerHTML = selected_library_Book.book_description;
+
+          description_header.innerHTML = "Book Description";
           accordion_selection.style.display = 'block';
           reserve_div.style.display = 'block';
           break;
 
         case 'bookstore books':
-          purchasedBook = displayedBookstoreBooks[row.rowIndex - 1];
+          selected_bookstore_Book = displayedBookstoreBooks[row.rowIndex - 1];
 
-          selected_item_name.innerHTML = "Book Name: " + purchasedBook.book_name;
-          selected_item_author.innerHTML = "Author: " + purchasedBook.firstname + " " + purchasedBook.lastname;
-          selected_item_ISBN.innerHTML = "ISBN: " + purchasedBook.isbn;
-          selected_item_rating.innerHTML = "Average Rating: " + purchasedBook.avg_rating.toString() + " (" + purchasedBook.ratings_count + ")";
-          selected_item_price.innerHTML = "Selling Price: $" + purchasedBook.price;
-          description.innerHTML = purchasedBook.book_description;
+          selected_item_name.innerHTML = "Book Name: " + selected_bookstore_Book.book_name;
+          selected_item_1.innerHTML = "Author: " + selected_bookstore_Book.firstname + " " + selected_bookstore_Book.lastname;
+          selected_item_2.innerHTML = "ISBN: " + selected_bookstore_Book.isbn;
+          selected_item_3.innerHTML = "Average Rating: " + selected_bookstore_Book.avg_rating.toString() + " (" + selected_bookstore_Book.ratings_count + ")";
+          selected_item_4.innerHTML = "Selling Price: $" + selected_bookstore_Book.price;
+          description.innerHTML = selected_bookstore_Book.book_description;
 
+          description_header.innerHTML = "Book Description";
           accordion_selection.style.display = 'block';
           break;
 
         case 'reservations':
 
-          //Display reservations
+          selected_reservation = displayedDibs[row.rowIndex - 1];
+
+          selected_item_name.innerHTML = "Reserved Book Name: " + selected_reservation.book_name;
+          selected_item_1.innerHTML = "Reserved On " + selected_reservation.reservation_date + " at " + selected_reservation.reservation_time;
+          selected_item_2.innerHTML = "To be picked up before " + selected_reservation.pick_up_before_date + " at " + selected_reservation.pick_up_before_time;
 
           break;
 
         case 'borrows':
 
-          //Display Borrows
+          selected_borrow = displayedBorrows[row.rowIndex - 1];
+
+          selected_item_name.innerHTML = "Borrowed Book Name: " + selected_borrow.book_name;
+          selected_item_1.innerHTML = "Borrowed On " + selected_borrow.borrow_date + " at " + selected_borrow.borrow_time;
+          selected_item_2.innerHTML = "To be returned before " + selected_borrow.return_before_date + " at " + selected_borrow.return_before_time;
 
           break;
 
         case 'workshops':
 
-          //Display workshops
+          selected_workshop = displayedWorkshops[row.rowIndex - 1];
 
-          break;
+          selected_item_name.innerHTML = "Workshop Name: " + selected_workshop.workshop_title;
+          selected_item_1.innerHTML = "Taught By: " + selected_workshop.instructor + ", Whose Email is " + selected_workshop.instructor_email;
+          selected_item_2.innerHTML = "Sponsored By: " + selected_workshop.sponsor;
+          selected_item_3.innerHTML = "Average Rating: " + selected_workshop.avg_rating.toString() + " (" + selected_workshop.reviews_count + ")";
+          selected_item_4.innerHTML = "Enrollment Price: $" + selected_workshop.price;
+          selected_item_5.innerHTML = "Hosted On " + selected_workshop.workshop_date + " From " + selected_workshop.workshop_start_time + " To " + selected_workshop.workshop_end_time;
+
+          description_header.innerHTML = "Workshop Description";
+          accordion_selection.style.display = 'block';
 
         case 'enrollments':
 
-          //Display Enrollments
+          selected_enrollment = displayedEnrollments[row.rowIndex - 1];
+
+          selected_item_name.innerHTML = "Workshop Name: " + selected_enrollment.workshop_title;
+          selected_item_1.innerHTML = "Taught By: " + selected_enrollment.instructor + ", Whose Email is " + selected_enrollment.instructor_email;
+          selected_item_2.innerHTML = "Sponsored By: " + selected_enrollment.sponsor;
+          selected_item_3.innerHTML = "Average Rating: " + selected_enrollment.avg_rating.toString() + " (" + selected_enrollment.reviews_count + ")";
+          selected_item_4.innerHTML = "Enrollment Price: $" + selected_enrollment.price;
+          selected_item_5.innerHTML = "Hosted On " + selected_enrollment.workshop_date + " From " + selected_enrollment.workshop_start_time + " To " + selected_enrollment.workshop_end_time;
+
+          description_header.innerHTML = "Workshop Description";
+          accordion_selection.style.display = 'block';
 
           break;
 
         case 'upcoming events':
 
-          //Display Upcoming Events
+          selected_event = displayedEvents[row.rowIndex - 1];
+
+          selected_item_name.innerHTML = "Attending Author: " + selected_event.author_firstname + " " + selected_event.author_lastname;
+          selected_item_1.innerHTML = "To Be Hosted On " + selected_event.event_date + " From " + selected_event.event_start_time + " To " + selected_event.event_end_time;
+          selected_item_2.innerHTML = "Author Email: " + selected_event.author_email;
+          selected_item_3.innerHTML = "Author Average Rating: " + selected_event.author_avg_rating.toString() + " (" + selected_event.author_reviews_count + ")";
 
           break;
 
         case 'previous events':
 
-          //Display Previous Events
+          selected_event = displayedAttendedEvents[row.rowIndex - 1];
 
+          selected_item_name.innerHTML = "Attending Author: " + selected_event.author_firstname + " " + selected_event.author_lastname;
+          selected_item_1.innerHTML = "Was Hosted On " + selected_event.event_date + " From " + selected_event.event_start_time + " To " + selected_event.event_end_time;
+          selected_item_2.innerHTML = "Author Email: " + selected_event.author_email;
+          selected_item_3.innerHTML = "Author Average Rating: " + selected_event.author_avg_rating.toString() + " (" + selected_event.author_reviews_count + ")";
           break;
       }
-
     });
   });
 }
@@ -427,12 +467,13 @@ function Show() {
 }
 
 window.onload = async function () {
- 
+
   reserve_div.style.display = 'none';
   accordion_selection.style.display = 'none';
   await GetEntities();
   prepareHeader();
   Show();
+
 }
 
 search?.addEventListener('keypress', function handlePress(event) {
@@ -443,20 +484,19 @@ search?.addEventListener('keypress', function handlePress(event) {
 
   card_body.innerHTML = "";
   var name = search.value;
+  var i = 0;
 
   switch (source) {
 
     case 'library books':
 
       displayedLibraryBooks = [];
-      var i = 0;
       for (var libraryBook of totalLibraryBooks) {
         if (name.toLowerCase() === libraryBook.book_name.toLowerCase()) {
           displayedLibraryBooks[i] = libraryBook;
           i++;
         }
       }
-
 
       if (i == 0) {
         displayedLibraryBooks = []
@@ -468,7 +508,6 @@ search?.addEventListener('keypress', function handlePress(event) {
     case 'bookstore books':
 
       displayedBookstoreBooks = [];
-      var i = 0;
       for (var bookstoreBook of totalBookstoreBooks) {
         if (name.toLowerCase() === bookstoreBook.book_name.toLowerCase()) {
           displayedBookstoreBooks[i] = bookstoreBook;
@@ -486,37 +525,110 @@ search?.addEventListener('keypress', function handlePress(event) {
 
     case 'reservations':
 
-      //Display reservations
+      displayedDibs = [];
+      for (var dib of totalDibs) {
+        if (name.toLowerCase() === dib.book_name.toLowerCase()) {
+          displayedDibs[i] = dib;
+          i++;
+        }
+      }
+
+
+      if (i == 0) {
+        displayedDibs = []
+        card_body.innerHTML = '<div class="card-body"><i>You Did Not Reserve Any Book With This Name. Please Check Your Spelling and Try Again.</i></div>';
+      }
 
       break;
 
     case 'borrows':
 
-      //Display Borrows
+      displayedBorrows = [];
+      for (var borrow of totalBorrows) {
+        if (name.toLowerCase() === borrow.book_name.toLowerCase()) {
+          displayedBorrows[i] = borrow;
+          i++;
+        }
+      }
+
+      if (i == 0) {
+        displayedBorrows = []
+        card_body.innerHTML = '<div class="card-body"><i>You Did Not Borrow Any Book With This Name. Please Check Your Spelling and Try Again.</i></div>';
+      }
 
       break;
 
     case 'workshops':
 
-      //Display workshops
+      displayedWorkshops = [];
+      for (var workshop of totalWorkshops) {
+        if (name.toLowerCase() === workshop.workshop_title.toLowerCase()) {
+          displayedWorkshops[i] = workshop;
+          i++;
+        }
+      }
+
+      if (i == 0) {
+        displayedWorkshops = []
+        card_body.innerHTML = '<div class="card-body"><i>No Workshops Exist With This Title. Please Check Your Spelling and Try Again.</i></div>';
+      }
 
       break;
 
     case 'enrollments':
 
-      //Display Enrollments
+      displayedEnrollments = [];
+      for (var enrollment of totalEnrollments) {
+        if (name.toLowerCase() === enrollment.workshop_title.toLowerCase()) {
+          displayedEnrollments[i] = enrollment;
+          i++;
+        }
+      }
+
+      if (i == 0) {
+        displayedEnrollments = []
+        card_body.innerHTML = '<div class="card-body"><i>You Did Not Enroll In Any Workshops With This Title. Please Check Your Spelling and Try Again.</i></div>';
+      }
 
       break;
 
     case 'upcoming events':
 
-      //Display Upcoming Events
+      displayedEvents = [];
+      for (var current_event of totalEvents) {
+        if (name.toLowerCase() === current_event.author_firstname.toLowerCase()
+          || name.toLowerCase() === current_event.author_lastname.toLowerCase()
+          || name.toLowerCase() === (current_event.author_firstname.toLowerCase() + current_event.author_lastname.toLowerCase())) {
+
+          displayedEvents[i] = current_event;
+          i++;
+        }
+      }
+
+      if (i == 0) {
+        displayedEvents = []
+        card_body.innerHTML = '<div class="card-body"><i>No Signing Events Exist For The Selected Author. Please Check Your Spelling and Try Again.</i></div>';
+      }
 
       break;
 
     case 'previous events':
 
-      //Display Previous Events
+      displayedAttendedEvents = [];
+      for (var current_attended_event of totalAttendedEvents) {
+        if (name.toLowerCase() === current_attended_event.author_firstname.toLowerCase()
+          || name.toLowerCase() === current_attended_event.author_lastname.toLowerCase()
+          || name.toLowerCase() === (current_attended_event.author_firstname.toLowerCase() + current_attended_event.author_lastname.toLowerCase())) {
+
+          displayedAttendedEvents[i] = current_attended_event;
+          i++;
+        }
+      }
+
+      if (i == 0) {
+        displayedAttendedEvents = []
+        card_body.innerHTML = '<div class="card-body"><i>You Did Not Attend Any Signing Evenets For The Selected Author. Please Check Your Spelling and Try Again.</i></div>';
+      }
 
       break;
   }
@@ -533,10 +645,11 @@ reset?.addEventListener('click', function handlePress(event) {
   displayedLibraryBooks = totalLibraryBooks;
   displayedBookstoreBooks = totalBookstoreBooks;
   selected_item_name.innerHTML = "";
-  selected_item_ISBN.innerHTML = "";
-  selected_item_author.innerHTML = "";
-  selected_item_rating.innerHTML = "";
-  selected_item_price.innerHTML = "";
+  selected_item_1.innerHTML = "";
+  selected_item_2.innerHTML = "";
+  selected_item_3.innerHTML = "";
+  selected_item_4.innerHTML = "";
+  selected_item_5.innerHTML = "";
 
   reserve_div.style.display = 'none';
   accordion_selection.style.display = 'none';
