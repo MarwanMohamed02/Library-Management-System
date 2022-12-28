@@ -18,6 +18,7 @@ const http_1 = __importDefault(require("http"));
 const path_1 = __importDefault(require("path"));
 const socket_io_1 = require("socket.io");
 const connect_1 = require("./db/connect");
+const getViolations_1 = require("./db/queries/getViolations");
 // import { adminsRouter } from "./routers/adminsRouter";
 const booksRouter_1 = require("./routers/booksRouter");
 const membersRouter_1 = require("./routers/membersRouter");
@@ -65,24 +66,24 @@ io.on("connection", (socket) => __awaiter(void 0, void 0, void 0, function* () {
         const uuid = member.uuid;
         yield socket.join(uuid);
         exports.currSocket = currSocket = socket;
-        // socket.emit("ping", Date.now());
-        // socket.on("pong", async (time) => {
-        //     if (Date.now() - time < 10000)
-        //         socket.emit("ping", time);
-        //     else {
-        //         const warnings = await getAllLatePickups(uuid);
-        //         console.log("warnings:");
-        //         console.log(warnings);
-        //         const penalties = await getAllLateReturns(uuid);
-        //         console.log("penalties:")
-        //         console.log(penalties)
-        //         if (penalties.length !== 0)
-        //             socket.emit("penalties", penalties);
-        //         if (warnings.length !== 0)
-        //             socket.emit("warnings", warnings);
-        //         socket.emit("ping", Date.now());
-        //     }
-        // })
+        socket.emit("ping", Date.now());
+        socket.on("pong", (time) => __awaiter(void 0, void 0, void 0, function* () {
+            if (Date.now() - time < 10000)
+                socket.emit("ping", time);
+            else {
+                const warnings = yield (0, getViolations_1.getAllLatePickups)(uuid);
+                console.log("warnings:");
+                console.log(warnings);
+                const penalties = yield (0, getViolations_1.getAllLateReturns)(uuid);
+                console.log("penalties:");
+                console.log(penalties);
+                if (penalties.length !== 0)
+                    socket.emit("penalties", penalties);
+                if (warnings.length !== 0)
+                    socket.emit("warnings", warnings);
+                socket.emit("ping", Date.now());
+            }
+        }));
     }
     catch (err) {
         console.log("Socket Error");

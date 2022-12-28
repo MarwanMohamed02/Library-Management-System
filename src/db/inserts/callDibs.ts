@@ -63,9 +63,11 @@ export async function callDibs(isbn: string, member: IMember, socket: Socket) {
 
     await db.query(callDibsSQL);
 
+    const pckpTime = new Date(currTime + dibsTimeLimit);
     const data = {
         isbn: book.isbn,
         book_name: book.book_name,
+        pick_up_before: pckpTime.toLocaleTimeString() + " " + pckpTime.toLocaleDateString(),
         verification_code
     }
 

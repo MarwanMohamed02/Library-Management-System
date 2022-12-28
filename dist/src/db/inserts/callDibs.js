@@ -51,9 +51,11 @@ function callDibs(isbn, member, socket) {
         callDibsSQL += (0, updateBook_1.updateBookData)(bookUpdates, Book_1.BookType.LIBRARY_BOOK);
         console.log(callDibsSQL);
         yield connect_1.db.query(callDibsSQL);
+        const pckpTime = new Date(currTime + dibsTimeLimit);
         const data = {
             isbn: book.isbn,
             book_name: book.book_name,
+            pick_up_before: pckpTime.toLocaleTimeString() + " " + pckpTime.toLocaleDateString(),
             verification_code
         };
         const confirmationNotification = yield (0, Notifications_1.createNotification)(data, "confirmation");

@@ -71,13 +71,18 @@ function verify_token(token) {
             jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET, (error, decoded) => __awaiter(this, void 0, void 0, function* () {
                 if (error)
                     reject(error);
-                const { rows } = yield connect_1.db.query((0, memberSearch_1.memberSearch)({ uuid: decoded.uuid, token: token }));
-                const member = rows[0];
-                // console.log(member);
-                if (!member) {
-                    reject(new Error("User Not Found!"));
+                try {
+                    const { rows } = yield connect_1.db.query((0, memberSearch_1.memberSearch)({ uuid: decoded.uuid, token: token }));
+                    const member = rows[0];
+                    if (!member) {
+                        reject(new Error("User Not Found!"));
+                    }
+                    resolve(member);
                 }
-                resolve(member);
+                catch (err) {
+                    reject(err);
+                }
+                // console.log(member);
             }));
         });
     });

@@ -31,6 +31,7 @@ const getAvailableWorkshops_1 = require("../db/queries/getAvailableWorkshops");
 const getEvents_1 = require("../db/queries/getEvents");
 const addReview_1 = require("../db/inserts/addReview");
 const index_1 = require("../index");
+const getReview_1 = require("../db/queries/getReview");
 const membersRouter = express_1.default.Router();
 exports.membersRouter = membersRouter;
 // GET
@@ -100,6 +101,54 @@ membersRouter.get("/events", auth_1.auth, (req, res) => __awaiter(void 0, void 0
         res.status(400).send();
     }
 }));
+membersRouter.get("/reviews/book", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _e;
+    const { isbn } = req.body;
+    try {
+        const reviews = yield (0, getReview_1.getReviews)((_e = req.member) === null || _e === void 0 ? void 0 : _e.uuid, isbn, "Books");
+        res.status(200).json({ reviews });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ err });
+    }
+}));
+membersRouter.get("/reviews/author", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _f;
+    const { author_id } = req.body;
+    try {
+        const reviews = yield (0, getReview_1.getReviews)((_f = req.member) === null || _f === void 0 ? void 0 : _f.uuid, author_id, "Author");
+        res.status(200).json({ reviews });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ err });
+    }
+}));
+membersRouter.get("/reviews/instructor", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _g;
+    const { instructor_id } = req.body;
+    try {
+        const reviews = yield (0, getReview_1.getReviews)((_g = req.member) === null || _g === void 0 ? void 0 : _g.uuid, instructor_id, "Instructor");
+        res.status(200).json({ reviews });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ err });
+    }
+}));
+membersRouter.get("/reviews/workshop", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _h;
+    const { workshop_title } = req.body;
+    try {
+        const reviews = yield (0, getReview_1.getReviews)((_h = req.member) === null || _h === void 0 ? void 0 : _h.uuid, workshop_title, "Workshop");
+        res.status(200).json({ reviews });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ err });
+    }
+}));
 // POST
 membersRouter.post("/members/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { firstname, lastname, email, phone_number } = req.body;
@@ -160,9 +209,9 @@ membersRouter.post("/members/login", (req, res) => __awaiter(void 0, void 0, voi
     }
 }));
 membersRouter.post("/members/logout", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _e;
+    var _j;
     try {
-        const removeTokenSQL = (0, updateMember_1.updateMember)({ uuid: (_e = req.member) === null || _e === void 0 ? void 0 : _e.uuid }, { token: null });
+        const removeTokenSQL = (0, updateMember_1.updateMember)({ uuid: (_j = req.member) === null || _j === void 0 ? void 0 : _j.uuid }, { token: null });
         yield connect_1.db.query(removeTokenSQL);
         res.status(200).send();
     }
@@ -188,11 +237,11 @@ membersRouter.post("/calldibs", auth_1.auth, (req, res) => __awaiter(void 0, voi
     }
 }));
 membersRouter.post("/review/instructor", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _f;
+    var _k;
     const { instructor_id, comment, rating } = req.body;
     try {
         console.log(rating);
-        yield (0, addReview_1.addReview)(instructor_id, "Instructor", (_f = req.member) === null || _f === void 0 ? void 0 : _f.uuid, comment, rating);
+        yield (0, addReview_1.addReview)(instructor_id, "Instructor", (_k = req.member) === null || _k === void 0 ? void 0 : _k.uuid, comment, rating);
         res.status(200).send();
     }
     catch (err) {
@@ -201,11 +250,11 @@ membersRouter.post("/review/instructor", auth_1.auth, (req, res) => __awaiter(vo
     }
 }));
 membersRouter.post("/review/author", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _g;
+    var _l;
     const { author_id, comment, rating } = req.body;
     try {
         console.log(rating);
-        yield (0, addReview_1.addReview)(author_id, "Author", (_g = req.member) === null || _g === void 0 ? void 0 : _g.uuid, comment, rating);
+        yield (0, addReview_1.addReview)(author_id, "Author", (_l = req.member) === null || _l === void 0 ? void 0 : _l.uuid, comment, rating);
         res.status(200).send();
     }
     catch (err) {
@@ -214,11 +263,11 @@ membersRouter.post("/review/author", auth_1.auth, (req, res) => __awaiter(void 0
     }
 }));
 membersRouter.post("/review/book", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _h;
+    var _m;
     const { isbn, comment, rating } = req.body;
     try {
         console.log(rating);
-        yield (0, addReview_1.addReview)(isbn, "Books", (_h = req.member) === null || _h === void 0 ? void 0 : _h.uuid, comment, rating);
+        yield (0, addReview_1.addReview)(isbn, "Books", (_m = req.member) === null || _m === void 0 ? void 0 : _m.uuid, comment, rating);
         res.status(200).send();
     }
     catch (err) {
@@ -227,11 +276,11 @@ membersRouter.post("/review/book", auth_1.auth, (req, res) => __awaiter(void 0, 
     }
 }));
 membersRouter.post("/review/workshop", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _j;
+    var _o;
     const { workshop_title, comment, rating } = req.body;
     try {
         console.log(rating);
-        yield (0, addReview_1.addReview)(workshop_title, "Workshop", (_j = req.member) === null || _j === void 0 ? void 0 : _j.uuid, comment, rating);
+        yield (0, addReview_1.addReview)(workshop_title, "Workshop", (_o = req.member) === null || _o === void 0 ? void 0 : _o.uuid, comment, rating);
         res.status(200).send();
     }
     catch (err) {

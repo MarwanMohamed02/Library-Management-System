@@ -22,7 +22,7 @@ export interface INotification {
 
 export async function createNotification(data: any, type: Notification_Types): Promise<INotification> {
     const currTime = new Date(Date.now());
-    const notification_time =currTime.toLocaleTimeString() + " " + currTime.toLocaleDateString()
+    const notification_time =currTime.toLocaleTimeString() + "$" + currTime.toLocaleDateString()
     
     if (!type.includes("penalty"))
         return { data, type, notification_time };

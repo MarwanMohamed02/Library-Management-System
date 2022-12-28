@@ -98,14 +98,15 @@ var selected_event: IEvents;
 reserveButton.onclick = async (e) => {
   // prevents refreshing
   e.preventDefault();
-
+  console.log("HII")
+  console.log(selected_library_Book.isbn)
   response = await fetch("/calldibs", {
     method: "POST",
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify({ isbn: reservedBook.isbn })
+    body: JSON.stringify({ isbn: selected_library_Book.isbn })
   })
 
   if (response.status == 400) {

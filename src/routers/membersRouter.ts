@@ -19,6 +19,7 @@ import { getAvailableWorkshops } from "../db/queries/getAvailableWorkshops";
 import { getEvents } from "../db/queries/getEvents";
 import { addReview } from "../db/inserts/addReview";
 import { currSocket } from "../index"
+import { getReviews } from "../db/queries/getReview";
 
 const membersRouter = express.Router();
 
@@ -101,6 +102,75 @@ membersRouter.get("/events", auth, async (req: AuthRequest, res) => {
         console.log(err);
         res.status(400).send();
     }
+})
+
+membersRouter.get("/reviews/book", auth, async (req: AuthRequest, res) => {
+    const { isbn } = req.body;
+
+    try {
+        const reviews = await getReviews(req.member?.uuid as string, isbn, "Books");
+
+        res.status(200).json({ reviews });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ err });
+    }
+
+
+
+
+})
+membersRouter.get("/reviews/author", auth, async (req: AuthRequest, res) => {
+    const { author_id } = req.body;
+
+    try {
+        const reviews = await getReviews(req.member?.uuid as string, author_id, "Author");
+
+        res.status(200).json({ reviews });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ err });
+    }
+
+
+
+
+})
+membersRouter.get("/reviews/instructor", auth, async (req: AuthRequest, res) => {
+    const { instructor_id } = req.body;
+
+    try {
+        const reviews = await getReviews(req.member?.uuid as string, instructor_id, "Instructor");
+
+        res.status(200).json({ reviews });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ err });
+    }
+
+
+
+
+})
+membersRouter.get("/reviews/workshop", auth, async (req: AuthRequest, res) => {
+    const { workshop_title } = req.body;
+
+    try {
+        const reviews = await getReviews(req.member?.uuid as string, workshop_title, "Workshop");
+
+        res.status(200).json({ reviews });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(400).json({ err });
+    }
+
+
+
+
 })
 
 // POST

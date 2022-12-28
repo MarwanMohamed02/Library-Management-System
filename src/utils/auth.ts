@@ -79,18 +79,23 @@ async function verify_token(token: string): Promise<IMember> {
             if (error) 
                 reject(error);
             
+            try {
 
-            const { rows } = await db.query(memberSearch({ uuid: decoded.uuid as string, token: token }))
+                const { rows } = await db.query(memberSearch({ uuid: decoded.uuid as string, token: token }))
+                const member: IMember = rows[0];
+                if (!member) {
+                    reject(new Error("User Not Found!"));
+                }
+    
+                resolve(member);
+            }
+            catch (err) {
+                reject(err);
+            }
 
-            const member: IMember = rows[0];
 
             // console.log(member);
 
-            if (!member) {
-                reject(new Error("User Not Found!"));
-            }
-
-            resolve(member);
 
         });
     })

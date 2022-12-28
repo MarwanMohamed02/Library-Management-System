@@ -1,7 +1,7 @@
-
+import { INotification } from "../src/db/interfaces/Notifications"
 const login_button = document.getElementById("login-button") as HTMLButtonElement;
 
-localStorage.clear();
+// localStorage.clear();
 
 console.log(login_button);
 
@@ -35,6 +35,12 @@ login_button.onclick = async () => {
         msg.innerText= error;
     } else {
         localStorage.setItem("token", token);
+
+        if (!localStorage.getItem("notifications")) {
+            let notifications: INotification[] = [];
+            localStorage.setItem("notifications",JSON.stringify(notifications));
+        }
+
         location.href = "./home";
     }
 

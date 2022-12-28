@@ -14,7 +14,7 @@ const connect_1 = require("../connect");
 function createNotification(data, type) {
     return __awaiter(this, void 0, void 0, function* () {
         const currTime = new Date(Date.now());
-        const notification_time = currTime.toLocaleTimeString() + " " + currTime.toLocaleDateString();
+        const notification_time = currTime.toLocaleTimeString() + "$" + currTime.toLocaleDateString();
         if (!type.includes("penalty"))
             return { data, type, notification_time };
         const penalty_type = type.replace(" penalty", "");

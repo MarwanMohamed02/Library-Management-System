@@ -1,36 +1,6 @@
 import { db } from "../connect";
+import { ReviewTables, getQueryParams } from "../interfaces/Reviews"
 
-interface QueryParams {
-    id_name?: string,
-    id_type?: string,
-    original_table_id?: string
-}
-
-type ReviewTables = "Author" | "Instructor" | "Workshop" | "Books";
-
-
-
-function getQueryParams(reviewedItemTable: ReviewTables): QueryParams {
-    let params: QueryParams = {};
-
-    switch (reviewedItemTable) {
-        case 'Author':
-            params = { id_name: "Author_ID", id_type: "::UUID::BYTES", original_table_id:"id" };
-            break;
-        case 'Instructor':
-            params = { id_name: "Instructor_ID", id_type: "::UUID::BYTES", original_table_id: "id" };
-            break;
-        case 'Workshop':
-            params = { id_name: "Workshop_Title", id_type: "", original_table_id: "Workshop_Title" };
-            break;
-        case 'Books':
-            params = { id_name: "Book_ISBN", id_type: "", original_table_id: "isbn" };
-            break;
-        
-    }
-
-    return params;
-}
 
 export async function addReview(reviewed_item_id: string, reviewedItemTable: ReviewTables, member_id: string, comment: string | null, rating: number) {
 
