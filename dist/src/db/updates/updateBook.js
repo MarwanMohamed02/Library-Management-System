@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateBookData = void 0;
 const Book_1 = require("../interfaces/Book");
 function updateBookData(updatedBookData, type) {
-    let { isbn, avg_rating, ratings_count } = updatedBookData;
+    let { isbn, avg_rating, reviews_count } = updatedBookData;
     let quantity, price;
     if (type === Book_1.BookType.LIBRARY_BOOK) {
         const { borrow_quantity } = updatedBookData;
@@ -16,8 +16,8 @@ function updateBookData(updatedBookData, type) {
     }
     console.log(quantity);
     let sql = "";
-    if (avg_rating || ratings_count) {
-        const updates = [avg_rating, ratings_count];
+    if (avg_rating || reviews_count) {
+        const updates = [avg_rating, reviews_count];
         const updatesNames = ["avg_rating", "ratings_count"];
         sql += `UPDATE Books \nSET `;
         for (let i = 0; i < updates.length; i++) {

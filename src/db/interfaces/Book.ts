@@ -12,7 +12,7 @@ export interface IBook {
     lastname: string,
     author_id: string,
     avg_rating: number,
-    ratings_count: number
+    reviews_count: number
 }
 
 

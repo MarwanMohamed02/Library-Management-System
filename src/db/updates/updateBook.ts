@@ -2,7 +2,7 @@ import { BookType, IBook, IBookstoreBook, ILibraryBook } from "../interfaces/Boo
 
 export function updateBookData(updatedBookData: any, type: BookType): string {
 
-    let { isbn, avg_rating, ratings_count } = updatedBookData as IBook;
+    let { isbn, avg_rating, reviews_count } = updatedBookData as IBook;
     let quantity , price;
     
     if (type === BookType.LIBRARY_BOOK) {
@@ -19,8 +19,8 @@ export function updateBookData(updatedBookData: any, type: BookType): string {
     
     let sql: string = "";
 
-    if (avg_rating || ratings_count) {
-        const updates = [avg_rating, ratings_count];
+    if (avg_rating || reviews_count) {
+        const updates = [avg_rating, reviews_count];
         const updatesNames = ["avg_rating", "ratings_count"];
         sql += `UPDATE Books \nSET `;
     

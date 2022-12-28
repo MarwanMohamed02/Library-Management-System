@@ -262,7 +262,7 @@ membersRouter.post("/review/book", auth, async (req: AuthRequest, res) => {
     const { isbn, comment, rating } = req.body;
     try {
         console.log(rating);
-        await addReview(isbn as string, "Book", req.member?.uuid as string, comment, rating);
+        await addReview(isbn as string, "Books", req.member?.uuid as string, comment, rating);
         res.status(200).send();
     }
     catch (err) {

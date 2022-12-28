@@ -17,7 +17,6 @@ const express_1 = __importDefault(require("express"));
 const connect_1 = require("../db/connect");
 const bookSearch_1 = require("../db/queries/bookSearch");
 const insertBooks_1 = require("../db/inserts/insertBooks");
-const callDibs_1 = require("../db/inserts/callDibs");
 const getMemberDibs_1 = require("../db/joins/getMemberDibs");
 const auth_1 = require("../utils/auth");
 const booksRouter = express_1.default.Router();
@@ -56,17 +55,6 @@ booksRouter.post("/books", auth_1.auth, (req, res) => __awaiter(void 0, void 0, 
     try {
         //const result = await db.query(sql);
         //res.status(201).json(result);
-    }
-    catch (err) {
-        res.status(400).json(err);
-    }
-}));
-booksRouter.post("/books/callDibs", auth_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { isbn, uuid } = req.body;
-    const sql = (0, callDibs_1.callDibs)(isbn, uuid);
-    try {
-        //await db.query(sql);
-        res.status(201).send();
     }
     catch (err) {
         res.status(400).json(err);

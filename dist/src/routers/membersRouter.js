@@ -218,7 +218,7 @@ membersRouter.post("/review/book", auth_1.auth, (req, res) => __awaiter(void 0, 
     const { isbn, comment, rating } = req.body;
     try {
         console.log(rating);
-        yield (0, addReview_1.addReview)(isbn, "Book", (_h = req.member) === null || _h === void 0 ? void 0 : _h.uuid, comment, rating);
+        yield (0, addReview_1.addReview)(isbn, "Books", (_h = req.member) === null || _h === void 0 ? void 0 : _h.uuid, comment, rating);
         res.status(200).send();
     }
     catch (err) {

@@ -70,19 +70,6 @@ booksRouter.post("/books", auth, async(req, res) => {
 
 })
 
-booksRouter.post("/books/callDibs", auth, async (req, res) => {
-    const { isbn, uuid } = req.body;
-    const sql = callDibs(isbn, uuid);
-
-    try {
-        //await db.query(sql);
-        res.status(201).send();
-    }
-    catch (err) {
-        res.status(400).json(err);
-    }
-})
-
 
 // PATCH
 booksRouter.patch("/books", async (req, res) => {
