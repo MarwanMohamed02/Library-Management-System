@@ -89,10 +89,10 @@ socket.on("penalties", (penalties: INotification[]) => {
 })
 
 socket.on("confirmation-notification", (confirmation: INotification) => {
-  
+
   notifications_array.push(confirmation);
   unseen_notifications_count++;
-  
+
   updateNotificationCount();
 })
 
@@ -164,8 +164,8 @@ let review_item2_btn = document.getElementById('review-item2-btn') as HTMLElemen
 let reviews_title_item1 = document.getElementById('reviews-title-item1') as HTMLElement;
 let reviews_title_item2 = document.getElementById('reviews-title-item2') as HTMLElement;
 
-let error_message_item1 = document.getElementById('error-msg-item1') as HTMLElement;
-let error_message_item2 = document.getElementById('error-msg-item2') as HTMLElement;
+let message_item1 = document.getElementById('msg-item1') as HTMLElement;
+let message_item2 = document.getElementById('msg-item2') as HTMLElement;
 
 let item1_reviews = document.getElementById('carousel-reviews-item1') as HTMLElement;
 let item2_reviews = document.getElementById('carousel-reviews-item2') as HTMLElement;
@@ -183,10 +183,10 @@ review_item1_btn.onclick = async (e) => {
   // prevents refreshing
   e.preventDefault();
   if (item1_review_comment.value === "" || item1_review_rating.value === "") {
-    error_message_item1.innerHTML = "Error. Please Fill Both Fields";
+    message_item1.innerHTML = "Error. Please Fill Both Fields";
     return;
   }
-  error_message_item1.innerHTML = "";
+  message_item1.innerHTML = "";
 
   switch (source) {
     case 'library books':
@@ -252,16 +252,17 @@ review_item1_btn.onclick = async (e) => {
       })
       break;
   }
+  message_item1.innerHTML = "Review Inserted Successfully"
 }
 
 review_item2_btn.onclick = async (e) => {
   // prevents refreshing
   e.preventDefault();
   if (item2_review_comment.value === "" || item2_review_rating.value === "") {
-    error_message_item2.innerHTML = "Error. Please Fill Both Fields";
+    message_item2.innerHTML = "Error. Please Fill Both Fields";
     return;
   }
-  error_message_item2.innerHTML = "";
+  message_item2.innerHTML = "";
 
   switch (source) {
 
@@ -326,6 +327,7 @@ review_item2_btn.onclick = async (e) => {
       })
       break;
   }
+  message_item2.innerHTML = "Review Inserted Successfully";
 }
 
 reserveButton.onclick = async (e) => {
@@ -1018,6 +1020,8 @@ reset?.addEventListener('click', function handlePress(event) {
   selected_item_3.innerHTML = "";
   selected_item_4.innerHTML = "";
   selected_item_5.innerHTML = "";
+  message_item1.innerHTML = "";
+  message_item2.innerHTML = "";
 
   reserve_div.style.display = 'none';
   accordion_selection.style.display = 'none';
