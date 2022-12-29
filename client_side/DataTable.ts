@@ -42,7 +42,7 @@ const socket = io({
     token
   }
 })
-});
+
 
 socket.on("ping", (time) => {
   socket.emit("pong", time);

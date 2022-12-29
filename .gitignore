@@ -5,3 +5,4 @@ config/
 prod.session.sql
 Schema.pdf
 Library.sql
+Stored Procedures.sql
