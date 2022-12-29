@@ -1,0 +1,29 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "dev",
+            "database": "Booker",
+            "username": "Marwan",
+            "password": "marwanisamazing"
+        },
+        {
+            "pgOptions": {
+                "ssl": true
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "askForPassword": true,
+            "driver": "CockroachDB",
+            "connectString": "postgresql://marwan02:DSnKKdpG9ZvsDr4h2l1Bdg@db-booker-6129.8nj.cockroachlabs.cloud:26257/booker?sslmode=verify-full",
+            "name": "prod"
+        }
+    ]
+}

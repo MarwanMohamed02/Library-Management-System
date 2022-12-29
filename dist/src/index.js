@@ -91,3 +91,4 @@ io.on("connection", (socket) => __awaiter(void 0, void 0, void 0, function* () {
     }
 }));
 server.listen(port, () => console.log(`Server is up on port ${port}`));
+module.exports = app;
