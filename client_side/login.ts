@@ -39,6 +39,11 @@ login_button.onclick = async () => {
             let notifications: INotification[] = [];
             localStorage.setItem("notifications", JSON.stringify(notifications));
         }
+        
+        if (!localStorage.getItem("unseen_notifications_count")) {
+            let reset = 0
+            localStorage.setItem("unseen_notifications_count", JSON.stringify(reset));
+        }
 
         location.href = "./home";
     }
