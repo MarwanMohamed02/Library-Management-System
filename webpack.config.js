@@ -2,7 +2,6 @@ const path = require("path")
 
 module.exports = {
     entry: {
-        index: "./client_side/index.ts",
         DataTable: "./client_side/DataTable.ts",
         navbar: "./client_side/navbar.ts",
         login: "./client_side/login.ts",
