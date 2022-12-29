@@ -64,7 +64,6 @@ export async function getEnrollments(uuid: string): Promise<IEnrollment[]> {
             instructor: `${instructor_firstname} ${instructor_lastname}`,
             instructor_id,
             instructor_email,
-            instructor_id,
             workshop_date,
             workshop_start_time,
             workshop_end_time,

@@ -33,8 +33,8 @@ membersRouter.get("/members", auth, async (req: AuthRequest, res) => {
     const sql = memberSearch(membersData);
 
     try {
-        const {rows}= await db.query(sql);
-        res.status(200).json({ members: rows });    
+        const { rows } = await db.query(sql);
+        res.status(200).json({ members: rows });
     }
     catch (err) {
         res.status(400).json(err);
@@ -46,7 +46,7 @@ membersRouter.get("/members", auth, async (req: AuthRequest, res) => {
 membersRouter.get("/mydibs", auth, async (req: AuthRequest, res) => {
     try {
         const dibs = await getDibs(req.member?.uuid as string);
-        
+
         res.status(200).json({ dibs });
     }
     catch (err) {
@@ -58,7 +58,7 @@ membersRouter.get("/mydibs", auth, async (req: AuthRequest, res) => {
 membersRouter.get("/myborrows", auth, async (req: AuthRequest, res) => {
     try {
         const borrows = await getBorrows(req.member?.uuid as string);
-        
+
         res.status(200).json({ borrows });
     }
     catch (err) {
@@ -70,7 +70,7 @@ membersRouter.get("/myborrows", auth, async (req: AuthRequest, res) => {
 membersRouter.get("/myenrollments", auth, async (req: AuthRequest, res) => {
     try {
         const enrollments = await getEnrollments(req.member?.uuid as string);
-        
+
         res.status(200).json({ enrollments });
     }
     catch (err) {
@@ -82,7 +82,7 @@ membersRouter.get("/myenrollments", auth, async (req: AuthRequest, res) => {
 membersRouter.get("/workshops", auth, async (req: AuthRequest, res) => {
     try {
         const availableWorkshops = await getAvailableWorkshops();
-        
+
         res.status(200).json({ availableWorkshops });
     }
     catch (err) {
@@ -95,7 +95,7 @@ membersRouter.get("/events", auth, async (req: AuthRequest, res) => {
     const { attended } = req.query;
     try {
         const events = attended ? await getEvents(req.member?.uuid) : await getEvents();
-        
+
         res.status(200).json({ events });
     }
     catch (err) {
@@ -177,20 +177,20 @@ membersRouter.get("/reviews/workshop", auth, async (req: AuthRequest, res) => {
 membersRouter.post("/members/signup", async (req, res) => {
 
     let { firstname, lastname, email, phone_number } = req.body as ISystemUser;
-    
-    
+
+
     try {
         const checkIfAlreadyExistsSQL = systemUserSearch({ email }) as string
-        
+
         const { rows } = await db.query(checkIfAlreadyExistsSQL);
-        
+
         let uuid = undefined;
 
         console.log()
-        
+
         // If this is the member's first time signing up, insert him/her into the System_User table 
         if (!rows[0]) {
-            
+
             // Setting up system user data
             const sysUser: ISystemUser = {
                 firstname,
@@ -200,30 +200,30 @@ membersRouter.post("/members/signup", async (req, res) => {
             }
 
             const sysSQL = insertSystemUser(sysUser);
-        
+
             // First inserting into System_Users
             const results = await db.query(sysSQL) as unknown as QueryResult[];
-        
+
             // If all is well, set up member data and insert into Members
             const { uuid: id } = results[1].rows[0];        // extracting uuid from second query
             uuid = id;
         }
-        else 
+        else
             uuid = rows[0].uuid;
-        
-        
-        const { username , pass } = req.body as IMember;
+
+
+        const { username, pass } = req.body as IMember;
 
 
         const member = {
             uuid,
             username,
-            pass, 
+            pass,
         }
 
         const memSQL = await insertMember(member as IMember);
         await db.query(memSQL);
-        
+
         // After successful insertion a token is assigned to the member
         const token = await assignToken(uuid);
 
@@ -233,7 +233,7 @@ membersRouter.post("/members/signup", async (req, res) => {
         console.log(err);
         res.status(400).json(err);
     }
-    
+
 })
 
 
@@ -248,10 +248,10 @@ membersRouter.post("/members/login", async (req, res) => {
         const token = await login(memberData);
 
         console.log(token);
-        
+
         if (token)
             res.status(201).send({ token });                                        // if token was returned send it to client for future requests
-        else 
+        else
             res.status(400).send({ error: "Username or password is incorrect" })    // in case of null, deny access and display error message
     }
     catch (err) {
@@ -266,7 +266,7 @@ membersRouter.post("/members/logout", auth, async (req: AuthRequest, res) => {
         const removeTokenSQL = updateMember({ uuid: req.member?.uuid }, { token: null }) as string;
 
         await db.query(removeTokenSQL);
-        
+
         res.status(200).send();
     }
     catch (err) {
@@ -276,27 +276,27 @@ membersRouter.post("/members/logout", auth, async (req: AuthRequest, res) => {
 
 
 membersRouter.post("/members/delete/account", auth, (req: AuthRequest, res) => {
-    
+
 })
 
 
-membersRouter.post("/calldibs", auth, async(req: AuthRequest, res) => {
+membersRouter.post("/calldibs", auth, async (req: AuthRequest, res) => {
     const { isbn } = req.body;
 
     try {
         console.log("HIII")
         // if (req.member?.warning_count as number >= 5)
         //     throw new Error("You cannot make any reservations until warnings are cleared");
-        
-        const {verification_code, error} = await callDibs(isbn, req.member as IMember, currSocket)
-        
+
+        const { verification_code, error } = await callDibs(isbn, req.member as IMember, currSocket)
+
         if (error)
             throw error;
-        
+
         res.status(201).json({ verification_code });
     }
     catch (err: any) {
-        res.status(400).json({error: err.message})
+        res.status(400).json({ error: err.message })
     }
 })
 

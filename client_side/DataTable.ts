@@ -89,6 +89,12 @@ var reserveButton = document.getElementById("reserve-btn") as HTMLButtonElement;
 let description_header = document.getElementById('description-header') as HTMLElement;
 let description = document.getElementById('description') as HTMLElement;
 
+let item1_review_comment = document.getElementById('item1-review-comment') as HTMLInputElement;
+let item1_review_rating = document.getElementById('item1-review-rating') as HTMLInputElement;
+
+let item2_review_comment = document.getElementById('item2-review-comment') as HTMLInputElement;
+let item2_review_rating = document.getElementById('item2-review-rating') as HTMLInputElement;
+
 let accordion_btn_item1 = document.getElementById('accordion-btn-item1') as HTMLElement;
 let accordion_btn_item2 = document.getElementById('accordion-btn-item2') as HTMLElement;
 
@@ -102,6 +108,9 @@ let review_item2_btn = document.getElementById('review-item2-btn') as HTMLElemen
 
 let reviews_title_item1 = document.getElementById('reviews-title-item1') as HTMLElement;
 let reviews_title_item2 = document.getElementById('reviews-title-item2') as HTMLElement;
+
+let error_message_item1 = document.getElementById('error-msg-item1') as HTMLElement;
+let error_message_item2 = document.getElementById('error-msg-item2') as HTMLElement;
 
 let item1_reviews = document.getElementById('carousel-reviews-item1') as HTMLElement;
 let item2_reviews = document.getElementById('carousel-reviews-item2') as HTMLElement;
@@ -118,23 +127,149 @@ var selected_event: IEvents;
 review_item1_btn.onclick = async (e) => {
   // prevents refreshing
   e.preventDefault();
+  if (item1_review_comment.value === "" || item1_review_rating.value === "") {
+    error_message_item1.innerHTML = "Error. Please Fill Both Fields";
+    return;
+  }
+  error_message_item1.innerHTML = "";
 
   switch (source) {
     case 'library books':
-
+      console.log("Review Test");
+      const library_book_review = {
+        isbn: selected_library_Book.isbn,
+        comment: item1_review_comment.value,
+        rating: item1_review_rating.value
+      }
+      console.log(library_book_review);
+      response = await fetch("/review/book", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(library_book_review)
+      })
       break;
     case 'bookstore books':
-
+      const bookstore_book_review = {
+        isbn: selected_bookstore_Book.isbn,
+        comment: item1_review_comment.value,
+        rating: item1_review_rating.value
+      }
+      response = await fetch("/review/book", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(bookstore_book_review)
+      })
       break;
     case 'workshops':
-
+      const workshop_review_data = {
+        workshop_title: selected_workshop.workshop_title,
+        comment: item1_review_comment.value,
+        rating: item1_review_rating.value
+      }
+      response = await fetch("/review/workshop", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(workshop_review_data)
+      })
       break;
     case 'enrollments':
-
+      const enrolled_workshop_review_data = {
+        workshop_title: selected_workshop.workshop_title,
+        comment: item1_review_comment.value,
+        rating: item1_review_rating.value
+      }
+      response = await fetch("/review/workshop", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(enrolled_workshop_review_data)
+      })
       break;
   }
-  if (response.status == 400) {
-    // show error messsage above the reserve button
+}
+
+review_item2_btn.onclick = async (e) => {
+  // prevents refreshing
+  e.preventDefault();
+  if (item2_review_comment.value === "" || item2_review_rating.value === "") {
+    error_message_item2.innerHTML = "Error. Please Fill Both Fields";
+    return;
+  }
+  error_message_item2.innerHTML = "";
+
+  switch (source) {
+
+    case 'library books':
+      const author_library_review = {
+        author_id: selected_library_Book.author_id,
+        comment: item2_review_comment.value,
+        rating: item2_review_rating.value
+      }
+      response = await fetch("/review/author", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(author_library_review)
+      })
+      break;
+    case 'bookstore books':
+      const author_bookstore_review = {
+        author_id: selected_bookstore_Book.author_id,
+        comment: item2_review_comment.value,
+        rating: item2_review_rating.value
+      }
+      response = await fetch("/review/author", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(author_bookstore_review)
+      })
+      break;
+    case 'workshops':
+      const instructor_review_data = {
+        instructor_id: selected_workshop.instructor_id,
+        comment: item2_review_comment.value,
+        rating: item2_review_rating.value
+      }
+      response = await fetch("/review/instructor", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(instructor_review_data)
+      })
+      break;
+    case 'enrollments':
+      const enrolled_instructor_review_data = {
+        instructor_id: selected_workshop.instructor_id,
+        comment: item2_review_comment.value,
+        rating: item2_review_rating.value
+      }
+      response = await fetch("/review/instructor", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(enrolled_instructor_review_data)
+      })
+      break;
   }
 }
 
@@ -373,7 +508,7 @@ function PrepareSelectedItemEvents() {
           selected_item_name.innerHTML = "Book Name: " + selected_library_Book.book_name;
           selected_item_1.innerHTML = "Author: " + selected_library_Book.firstname + " " + selected_library_Book.lastname;
           selected_item_2.innerHTML = "ISBN: " + selected_library_Book.isbn;
-          selected_item_3.innerHTML = "Average Rating: " + selected_library_Book.avg_rating.toString() + " (" + selected_library_Book.reviews_count + ")";
+          selected_item_3.innerHTML = "Average Rating: " + selected_library_Book.avg_rating.toFixed(1).toString() + " (" + selected_library_Book.reviews_count + ")";
           description.innerHTML = selected_library_Book.book_description;
 
           response = await fetch("/reviews/book?isbn=" + selected_library_Book.isbn, {
@@ -409,7 +544,7 @@ function PrepareSelectedItemEvents() {
           selected_item_name.innerHTML = "Book Name: " + selected_bookstore_Book.book_name;
           selected_item_1.innerHTML = "Author: " + selected_bookstore_Book.firstname + " " + selected_bookstore_Book.lastname;
           selected_item_2.innerHTML = "ISBN: " + selected_bookstore_Book.isbn;
-          selected_item_3.innerHTML = "Average Rating: " + selected_bookstore_Book.avg_rating.toString() + " (" + selected_bookstore_Book.reviews_count + ")";
+          selected_item_3.innerHTML = "Average Rating: " + selected_bookstore_Book.avg_rating.toFixed(1).toString() + " (" + selected_bookstore_Book.reviews_count + ")";
           selected_item_4.innerHTML = "Selling Price: $" + selected_bookstore_Book.price;
           description.innerHTML = selected_bookstore_Book.book_description;
 
@@ -465,7 +600,7 @@ function PrepareSelectedItemEvents() {
           selected_item_name.innerHTML = "Workshop Name: " + selected_workshop.workshop_title;
           selected_item_1.innerHTML = "Taught By: " + selected_workshop.instructor + ", Whose Email is " + selected_workshop.instructor_email;
           selected_item_2.innerHTML = "Sponsored By: " + selected_workshop.sponsor;
-          selected_item_3.innerHTML = "Average Rating: " + selected_workshop.avg_rating.toString() + " (" + selected_workshop.reviews_count + ")";
+          selected_item_3.innerHTML = "Average Rating: " + selected_workshop.avg_rating.toFixed(1).toString() + " (" + selected_workshop.reviews_count + ")";
           selected_item_4.innerHTML = "Enrollment Price: $" + selected_workshop.price;
           selected_item_5.innerHTML = "Hosted On " + selected_workshop.workshop_date + " From " + selected_workshop.workshop_start_time + " To " + selected_workshop.workshop_end_time;
 
@@ -500,7 +635,7 @@ function PrepareSelectedItemEvents() {
           selected_item_name.innerHTML = "Workshop Name: " + selected_enrollment.workshop_title;
           selected_item_1.innerHTML = "Taught By: " + selected_enrollment.instructor + ", Whose Email is " + selected_enrollment.instructor_email;
           selected_item_2.innerHTML = "Sponsored By: " + selected_enrollment.sponsor;
-          selected_item_3.innerHTML = "Average Rating: " + selected_enrollment.avg_rating.toString() + " (" + selected_enrollment.reviews_count + ")";
+          selected_item_3.innerHTML = "Average Rating: " + selected_enrollment.avg_rating.toFixed(1).toString() + " (" + selected_enrollment.reviews_count + ")";
           selected_item_4.innerHTML = "Enrollment Price: $" + selected_enrollment.price;
           selected_item_5.innerHTML = "Hosted On " + selected_enrollment.workshop_date + " From " + selected_enrollment.workshop_start_time + " To " + selected_enrollment.workshop_end_time;
 
@@ -534,7 +669,7 @@ function PrepareSelectedItemEvents() {
           selected_item_name.innerHTML = "Attending Author: " + selected_event.author_firstname + " " + selected_event.author_lastname;
           selected_item_1.innerHTML = "To Be Hosted On " + selected_event.event_date + " From " + selected_event.event_start_time + " To " + selected_event.event_end_time;
           selected_item_2.innerHTML = "Author Email: " + selected_event.author_email;
-          selected_item_3.innerHTML = "Author Average Rating: " + selected_event.author_avg_rating.toString() + " (" + selected_event.author_reviews_count + ")";
+          selected_item_3.innerHTML = "Author Average Rating: " + selected_event.author_avg_rating.toFixed(1).toString() + " (" + selected_event.author_reviews_count + ")";
 
           break;
 
@@ -545,7 +680,7 @@ function PrepareSelectedItemEvents() {
           selected_item_name.innerHTML = "Attending Author: " + selected_event.author_firstname + " " + selected_event.author_lastname;
           selected_item_1.innerHTML = "Was Hosted On " + selected_event.event_date + " From " + selected_event.event_start_time + " To " + selected_event.event_end_time;
           selected_item_2.innerHTML = "Author Email: " + selected_event.author_email;
-          selected_item_3.innerHTML = "Author Average Rating: " + selected_event.author_avg_rating.toString() + " (" + selected_event.author_reviews_count + ")";
+          selected_item_3.innerHTML = "Author Average Rating: " + selected_event.author_avg_rating.toFixed(1).toString() + " (" + selected_event.author_reviews_count + ")";
           break;
       }
     });
@@ -561,7 +696,7 @@ function Show() {
     case 'library books':
 
       displayedLibraryBooks.forEach((book) => {
-        table_body.innerHTML += "<tr> <td>" + book.isbn + "</td>" + "<td>" + book.book_name + "</td>" + "<td>" + book.genre + "</td>" + "<td>" + `${book.firstname} ${book.lastname}` + "</td>" + "<td>" + book.avg_rating + "</td>" + "<td>" + book.borrow_quantity + "</td>" + "</tr>";
+        table_body.innerHTML += "<tr> <td>" + book.isbn + "</td>" + "<td>" + book.book_name + "</td>" + "<td>" + book.genre + "</td>" + "<td>" + `${book.firstname} ${book.lastname}` + "</td>" + "<td>" + book.avg_rating.toFixed(1).toString() + "</td>" + "<td>" + book.borrow_quantity + "</td>" + "</tr>";
       })
 
       break;
@@ -569,7 +704,7 @@ function Show() {
     case 'bookstore books':
 
       displayedBookstoreBooks.forEach((book) => {
-        table_body.innerHTML += "<tr> <td>" + book.isbn + "</td>" + "<td>" + book.book_name + "</td>" + "<td>" + book.genre + "</td>" + "<td>" + `${book.firstname} ${book.lastname}` + "</td>" + "<td>" + book.avg_rating + "</td>" + "<td>" + book.price + "</td>" + "<td>" + book.selling_quantity + "</td>" + "</tr>";
+        table_body.innerHTML += "<tr> <td>" + book.isbn + "</td>" + "<td>" + book.book_name + "</td>" + "<td>" + book.genre + "</td>" + "<td>" + `${book.firstname} ${book.lastname}` + "</td>" + "<td>" + book.avg_rating.toFixed(1).toString() + "</td>" + "<td>" + book.price + "</td>" + "<td>" + book.selling_quantity + "</td>" + "</tr>";
       })
 
       break;
@@ -593,7 +728,7 @@ function Show() {
     case 'workshops':
 
       displayedWorkshops.forEach((workshop) => {
-        table_body.innerHTML += "<tr> <td>" + workshop.workshop_title + "</td>" + "<td>" + workshop.price + "</td>" + "<td>" + workshop.instructor + "</td>" + "<td>" + workshop.sponsor + "</td>" + "<td>" + workshop.avg_rating + "</td>";
+        table_body.innerHTML += "<tr> <td>" + workshop.workshop_title + "</td>" + "<td>" + workshop.price + "</td>" + "<td>" + workshop.instructor + "</td>" + "<td>" + workshop.sponsor + "</td>" + "<td>" + workshop.avg_rating.toFixed(1).toString() + "</td>";
       })
 
 
@@ -602,7 +737,7 @@ function Show() {
     case 'enrollments':
 
       displayedEnrollments.forEach((workshop) => {
-        table_body.innerHTML += "<tr> <td>" + workshop.workshop_title + "</td>" + "<td>" + workshop.price + "</td>" + "<td>" + workshop.instructor + "</td>" + "<td>" + workshop.sponsor + "</td>" + "<td>" + workshop.avg_rating + "</td>" + "<td>" + workshop.enrollment_date + "</td>";
+        table_body.innerHTML += "<tr> <td>" + workshop.workshop_title + "</td>" + "<td>" + workshop.price + "</td>" + "<td>" + workshop.instructor + "</td>" + "<td>" + workshop.sponsor + "</td>" + "<td>" + workshop.avg_rating.toFixed(1).toString() + "</td>" + "<td>" + workshop.enrollment_date + "</td>";
       })
 
       break;
